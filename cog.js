@@ -20,7 +20,8 @@ function login(username, password) {
 
 function login_success(data, status) {
     console.log("Status: " + status, ", Token: " + data.token);
-    $("output#error").text("Login Successfull")
+    $.cookie("cog_token", data.token, { path: '/' })
+    $("output#error").text("Login Successful")
 }
 
 function login_failure(xhr, status, error) {
