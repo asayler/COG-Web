@@ -12,9 +12,12 @@
 
     <h1>COG Submitter</h1>
 
-    Username: <input type="text" id="in_username"><br>
-    Password: <input type="password" id="in_password"></br>
-    <button id="btn_login">Login</button>      
+    <form name="loginform" id="login" action="javascript:void(0);">
+      Username: <input type="text" id="username"><br>
+      Password: <input type="password" id="password"></br>
+      <button id="login">Login</button></br>
+      <output id="error"></output>
+    </form>
 
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>

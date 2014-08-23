@@ -1,19 +1,7 @@
-// Get a handle on the first button element in the document.
-// var button = document.querySelector( "button" );
-
-// If a user clicks on it, say hello!
-// button.addEventListener( "click", function( ev ) {
-//     alert( "Hello" );
-// }, false);
-
 function make_base_auth(username, password) {
     var tok = username + ':' + password;
     var hash = btoa(tok);
     return 'Basic ' + hash;
-}
-
-function log_res(data, status) {
-    console.log("Data: " + data + ", Status: " + status);
 }
 
 function login(username, password) {
@@ -22,15 +10,30 @@ function login(username, password) {
         type: "GET",
         url: "https://api-cog.cs.colorado.edu/tokens/",
         async: false,
-        beforeSend: function (xhr) {
+        beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
         },
-        success: log_res
+        success: login_success,
+        error: login_failure
     });
 }
 
-$("#btn_login").click(function() {
-    var username = $("#in_username").val()
-    var password = $("#in_password").val()
+function login_success(data, status) {
+    console.log("Status: " + status, ", Token: " + data.token);
+    $("output#error").text("Login Successfull")
+}
+
+function login_failure(xhr, status, error) {
+    console.log("Status: " + status, ", Error: " + error);
+    $("output#error").text("Login Failed")
+}
+
+$("form#login").submit(function() {
+    var username = $("input#username").val()
+    var password = $("input#password").val()
     login(username, password)
 });
+
+function log_res(data, status) {
+    console.log("Data: " + data + ", Status: " + status);
+}
