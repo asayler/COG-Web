@@ -1,30 +1,28 @@
 <!doctype html>
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8" />
-    <title>Hello World</title>
-    
-    <!-- CSS for presentation. -->
-    <style>
-      h1 { font-size: 14px; color: hotpink; }
-      button { color: red; }
-    </style>
+    <title>COG Submitter</title>
+
   </head>
+
   <body>
-    <h1>Hello World</h1>
-    <button>Click Me!</button>
-    
-    <!-- JavaScript for interactivity. -->
+
+    <h1>COG Submitter</h1>
+
+    Username: <input type="text" id="in_username"><br>
+    Password: <input type="password" id="in_password"></br>
+    <button id="btn_login">Login</button>      
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script>
-      
-      // Get a handle on the first button element in the document.
-      var button = document.querySelector( "button" );
-      
-      // If a user clicks on it, say hello!
-      button.addEventListener( "click", function( ev ) {
-      alert( "Hello" );
-      }, false);
-      
+      $( document ).ready(function() {
+        $.getScript('cog.js');
+      })
     </script>
+
   </body>
+
 </html>
