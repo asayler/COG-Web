@@ -40,13 +40,13 @@ $("form#submit").submit(function() {
     var form_data = new FormData($('form#submit')[0]);
     console.log("Submitting File...")
     file_post(save_file_uuid, form_data);
-    console.log("File SUbmitted...")
+    console.log("File Submitted...")
 
     // Log to Console
-    consoel.log("asn_uuid = " + asn_uuid);
-    consoel.log("file_uuid = " + file_uuid);
-    consoel.log("sub_uuid = " + sub_uuid);
-    consoel.log("run_uuid = " + run_uuid);
+    console.log("asn_uuid = " + asn_uuid);
+    console.log("file_uuid = " + file_uuid);
+    console.log("sub_uuid = " + sub_uuid);
+    console.log("run_uuid = " + run_uuid);
     
 });
 
