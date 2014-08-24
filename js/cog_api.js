@@ -3,7 +3,7 @@ function get_auth(url, callback) {
     $.ajax({
         type: "GET",
         url: url,
-        async: true,
+        async: false,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
@@ -16,7 +16,7 @@ function post_auth(url, callback, data) {
     $.ajax({
         type: "POST",
         url: url,
-        async: true,
+        async: false,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
@@ -49,10 +49,6 @@ function file_post(callback, form_data) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
-        success: function(data) {
-            console.log('Upload Success!');
-            console.log('UUID = ' + data.files)
-        }
+        success: callback
     });
-    // post_auth(url, callback, data);
 }
