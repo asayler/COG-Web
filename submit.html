@@ -14,15 +14,25 @@
 
     <h2>Submit</h2>
 
+    <form name="submitform" id="submit" action="javascript:void(0);">
+      Select Assignment:
+      <select name="assignment" id="assignment">
+      </select>
+      <button id="Submit">Login</button></br>
+      <output id="error"></output>
+    </form>
+
     <button id="logout">Logout</button></br>
 
     <script src="./libs/jquery-2.1.1.min.js"></script>
     <script src="./libs/jquery.cookie.js"></script>
     <script src="./js/common.js"></script>
+    <script src="./js/cog_api.js"></script>
     <script src="./js/submit.js"></script>
     <script>
       $( document ).ready(function() {
         token_redirect();
+        submit_onload();
       })
     </script>
 
