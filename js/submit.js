@@ -3,7 +3,13 @@ function submit_onload() {
 }
 
 function update_asn_list(data, status) {
-    console.log(data.assignments)
+    var assignments = data.assignments
+    console.log("assignments = " + assignments)
+    $.each(assignments, function(value) {   
+        $("select#assignment")
+            .append($("<option>", { value : value})
+                    .text(value));
+    });
 }
 
 $("button#logout").click(function() {
