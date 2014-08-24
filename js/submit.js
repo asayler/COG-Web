@@ -1,3 +1,8 @@
+var asn_uuid = null;
+var file_uuid = null;
+var sub_uuid = null;
+var run_uuid = null;
+
 function submit_onload() {
     assignments_get(update_asn_list);
 }
@@ -31,10 +36,7 @@ function save_file_uuid(data, status) {
 
 $("form#submit").submit(function() {
     
-    var asn_uuid = $("select#assignment").val();
-    var file_uuid = null;
-    var sub_uuid = null;
-    var run_uuid = null;
+    asn_uuid = $("select#assignment").val();
 
     // Upload File
     var form_data = new FormData($('form#submit')[0]);
