@@ -6,9 +6,11 @@ var run_uuid = null;
 
 function submit_onload() {
     assignments_get(update_asn_list);
+    $("select#assignment").change();
 }
 
 function update_asn_list(data, status) {
+    $("select#assignment").empty()
     var assignments = data.assignments;
     console.log("assignments = " + assignments);
     $.each(assignments, function(key, value) {
@@ -18,11 +20,8 @@ function update_asn_list(data, status) {
 }
 
 function update_asn_list_item(data, status) {
-    console.log("data = " + data);
     keys = Object.keys(data);
-    console.log("keys = " + keys);
     uuid = keys[0];
-    console.log("uuid = " + uuid);
     var assignment = data[uuid]
     $("select#assignment")
         .append($("<option>", { value : uuid})
@@ -30,6 +29,7 @@ function update_asn_list_item(data, status) {
 }
 
 function update_tst_list(data, status) {
+    $("select#test").empty()
     var tests = data.tests;
     console.log("tests = " + tests);
     $.each(tests, function(key, value) {
@@ -39,11 +39,8 @@ function update_tst_list(data, status) {
 }
 
 function update_tst_list_item(data, status) {
-    console.log("data = " + data);
     keys = Object.keys(data);
-    console.log("keys = " + keys);
     uuid = keys[0];
-    console.log("uuid = " + uuid);
     var test = data[uuid]
     $("select#test")
         .append($("<option>", { value : uuid})
@@ -55,13 +52,28 @@ function save_file_uuid(data, status) {
 }
 
 $("select#assignment").change(function() {
-    assigment_tests_get(update_tst_list, $("select#assignment").val());
+    assignment_tests_get(update_tst_list, $("select#assignment").val());
 });
 
 $("form#submit").submit(function() {
     
+    // Get Input
     asn_uuid = $("select#assignment").val();
     tst_uuid = $("select#test").val();
+
+    // Validate Data
+    if((!asn_uuid) || (asn_uuid.length != 36)) {
+	$("output#asn_error").text("Assignment Required");
+	return false
+    }
+    if((!tst_uuid) || (tst_uuid.length != 36)) {
+	$("output#tst_error").text("Test Required");
+	return false
+    }
+    if($("input#file").val().length == 0) {
+	$("output#fle_error").text("File Required");
+	return false
+    }
 
     // Upload File
     var form_data = new FormData($('form#submit')[0]);
@@ -78,7 +90,7 @@ $("form#submit").submit(function() {
     // Log to Console
     console.log("asn_uuid = " + asn_uuid);
     console.log("tst_uuid = " + tst_uuid);
-    console.log("fle_uuid = " + file_uuid);
+    console.log("fle_uuid = " + fle_uuid);
     console.log("sub_uuid = " + sub_uuid);
     console.log("run_uuid = " + run_uuid);
     

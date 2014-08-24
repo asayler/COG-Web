@@ -15,11 +15,17 @@
     <h2>Submit</h2>
 
     <form name="submitform" id="submit" action="javascript:void(0);">
-      Select Assignment: <select name="assignment" id="assignment"></select></br>
-      Select Test: <select name="test" id="test"></select></br>
-      File: <input type="file" name="submission" id="file"></br>
+      Select Assignment: <select name="assignment" id="assignment"></select>
+      <output id="asn_error"></output> 
+      </br>
+      Select Test: <select name="test" id="test"></select>
+      <output id="tst_error"></output> 
+      </br>
+      File: <input type="file" name="submission" id="file">
+      <output id="fle_error"></output> 
+      </br>
       <button id="Submit">Submit</button></br>
-      <output id="error"></output>
+      <output id="error"></output></br>
     </form>
 
     <button id="logout">Logout</button></br>
