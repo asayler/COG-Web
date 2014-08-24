@@ -13,11 +13,11 @@ function update_asn_list(data, status) {
 
 function update_asn_list_item(data, status) {
 
-    console.log["data = " + data]
+    console.log("data = " + data)
     keys = Object.keys(data)
-    console.log["keys = " + keys]
+    console.log("keys = " + keys)
     uuid = keys[0]
-    console.log["uuid = " + uuid]
+    console.log("uuid = " + uuid)
     var assignment = data[uuid]
     $("select#assignment")
         .append($("<option>", { value : uuid})
