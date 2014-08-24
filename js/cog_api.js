@@ -37,5 +37,5 @@ function assignment_get(callback, uuid) {
 
 function file_post(callback, data) {
     var url = "https://api-cog.cs.colorado.edu/files/";
-    
+    post_auth(url, callback, data);
 }
