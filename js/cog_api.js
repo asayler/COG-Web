@@ -37,6 +37,7 @@ function assignment_get(callback, uuid) {
 
 function file_post(callback, form_data) {
     var url = "https://api-cog.cs.colorado.edu/files/";
+    var token = $.cookie("cog_token");
     $.ajax({
         type: 'POST',
         url: url,
@@ -45,6 +46,9 @@ function file_post(callback, form_data) {
         cache: false,
         processData: false,
         async: false,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
+        },
         success: function(data) {
             console.log('Upload Success!');
             console.log('UUID = ' + data.files)
