@@ -25,8 +25,8 @@ function update_asn_list_item(data, status) {
 
 }
 
-function get_file_uuid(data, status) {
-    file_uuid = data.files[0]
+function save_file_uuid(data, status) {
+    file_uuid = data.files[0];
 }
 
 $("form#submit").submit(function() {
@@ -38,14 +38,15 @@ $("form#submit").submit(function() {
 
     // Upload File
     var form_data = new FormData($('form#submit')[0]);
-    console.log("Submitting...")
-    file_post(get_file_uuid, form_data);
+    console.log("Submitting File...")
+    file_post(save_file_uuid, form_data);
+    console.log("File SUbmitted...")
 
     // Log to Console
-    consoel.log("asn_uuid = " + asn_uuid)
-    consoel.log("file_uuid = " + file_uuid)
-    consoel.log("sub_uuid = " + sub_uuid)
-    consoel.log("run_uuid = " + run_uuid)
+    consoel.log("asn_uuid = " + asn_uuid);
+    consoel.log("file_uuid = " + file_uuid);
+    consoel.log("sub_uuid = " + sub_uuid);
+    consoel.log("run_uuid = " + run_uuid);
     
 });
 
