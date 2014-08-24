@@ -25,6 +25,11 @@ function update_asn_list_item(data, status) {
 
 }
 
+$("form#submit").submit(function() {
+    var form_data = new FormData($('form#submit')[0]);
+    console.log("form_data = " + form_data)
+});
+
 $("button#logout").click(function() {
     logout()
 });
