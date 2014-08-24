@@ -25,9 +25,13 @@ function update_asn_list_item(data, status) {
 
 }
 
+function file_uuid(data, status) {
+    console.log("File UUID = " + data.files)
+}
+
 $("form#submit").submit(function() {
     var form_data = new FormData($('form#submit')[0]);
-    console.log("form_data = " + form_data)
+    file_post(file_uuid, form_data)
 });
 
 $("button#logout").click(function() {
