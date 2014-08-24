@@ -47,8 +47,12 @@ function update_tst_list_item(data, status) {
                 .text(test.name));
 }
 
-function save_file_uuid(data, status) {
+function save_fle_uuid(data, status) {
     fle_uuid = data.files[0];
+}
+
+function save_sub_uuid(data, status) {
+    sub_uuid = data.submissions[0];
 }
 
 $("select#assignment").change(function() {
@@ -60,6 +64,11 @@ $("form#submit").submit(function() {
     // Get Input
     asn_uuid = $("select#assignment").val();
     tst_uuid = $("select#test").val();
+
+    // Reset Errors
+    $("output#asn_error").text("");
+    $("output#tst_error").text("");
+    $("output#fle_error").text("");
 
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
@@ -77,15 +86,12 @@ $("form#submit").submit(function() {
 
     // Upload File
     var form_data = new FormData($('form#submit')[0]);
-    console.log("Submitting File...")
-    file_post(save_file_uuid, form_data);
-    console.log("File Submitted...")
+    console.log("Submitting File...");
+    file_post(save_fle_uuid, form_data);
 
     // Create Submission
-    var form_data = new FormData($('form#submit')[0]);
-    console.log("Submitting File...")
-    file_post(save_file_uuid, form_data);
-    console.log("File Submitted...")
+    console.log("Creating Submission...");
+    assignment_submission_create(save_sub_uuid, asn_uuid);
 
     // Log to Console
     console.log("asn_uuid = " + asn_uuid);

@@ -25,26 +25,6 @@ function post_auth(url, callback, data) {
     });
 }
 
-function assignments_get(callback) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/";
-    get_auth(url, callback);
-}
-
-function assignment_get(callback, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/";
-    get_auth(url, callback);
-}
-
-function assignment_tests_get(callback, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/tests/";
-    get_auth(url, callback);
-}
-
-function test_get(callback, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/tests/" + uuid + "/";
-    get_auth(url, callback);
-}
-
 function file_post(callback, form_data) {
     var url = "https://api-cog.cs.colorado.edu/files/";
     var token = $.cookie("cog_token");
@@ -62,3 +42,29 @@ function file_post(callback, form_data) {
         success: callback
     });
 }
+
+function assignments_get(callback) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/";
+    get_auth(url, callback);
+}
+
+function assignment_get(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/";
+    get_auth(url, callback);
+}
+
+function assignment_tests_get(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/tests/";
+    get_auth(url, callback);
+}
+
+function assignment_submission_create(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/submissions/";
+    post_auth(url, callback, "{}");
+}
+
+function test_get(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/tests/" + uuid + "/";
+    get_auth(url, callback);
+}
+
