@@ -15,3 +15,8 @@ function assignments_get(callback) {
     var url = "https://api-cog.cs.colorado.edu/assignments/"
     get_auth(url, callback)
 }
+
+function assignment_get(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/"
+    get_auth(url, callback)
+}
