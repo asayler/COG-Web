@@ -5,7 +5,7 @@ function submit_onload() {
 function update_asn_list(data, status) {
     var assignments = data.assignments
     console.log("assignments = " + assignments)
-    $.each(assignments, function(value) {   
+    $.each(assignments, function(key, value) {   
         $("select#assignment")
             .append($("<option>", { value : value})
                     .text(value));
