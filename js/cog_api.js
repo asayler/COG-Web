@@ -35,7 +35,20 @@ function assignment_get(callback, uuid) {
     get_auth(url, callback);
 }
 
-function file_post(callback, data) {
+function file_post(callback, form_data) {
     var url = "https://api-cog.cs.colorado.edu/files/";
-    post_auth(url, callback, data);
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: form_data,
+        contentType: false,
+        cache: false,
+        processData: false,
+        async: false,
+        success: function(data) {
+            console.log('Upload Success!');
+            console.log('UUID = ' + data.files)
+        }
+    });
+    // post_auth(url, callback, data);
 }
