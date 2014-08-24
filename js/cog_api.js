@@ -1,5 +1,5 @@
 function get_auth(url, callback) {
-    var token = $.cookie("cog_token")
+    var token = $.cookie("cog_token");
     $.ajax({
         type: "GET",
         url: url,
@@ -12,7 +12,7 @@ function get_auth(url, callback) {
 }
 
 function post_auth(url, callback, data) {
-    var token = $.cookie("cog_token")
+    var token = $.cookie("cog_token");
     $.ajax({
         type: "POST",
         url: url,
@@ -26,16 +26,16 @@ function post_auth(url, callback, data) {
 }
 
 function assignments_get(callback) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/"
-    get_auth(url, callback)
+    var url = "https://api-cog.cs.colorado.edu/assignments/";
+    get_auth(url, callback);
 }
 
 function assignment_get(callback, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/"
-    get_auth(url, callback)
+    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/";
+    get_auth(url, callback);
 }
 
 function file_post(callback, data) {
-    var url = "https://api-cog.cs.colorado.edu/files/"
+    var url = "https://api-cog.cs.colorado.edu/files/";
     
 }

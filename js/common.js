@@ -38,21 +38,21 @@ function login(username, password) {
 }
 
 function logout() {
-    $.removeCookie("cog_token", { path: '/' })
+    $.removeCookie("cog_token", { path: '/' });
     window.location.replace(LOGIN_URL);
 }
 
 function login_success(data, status) {
     console.log("Status: " + status, ", Token: " + data.token);
-    $.cookie("cog_token", data.token, { path: '/' })
+    $.cookie("cog_token", data.token, { path: '/' });
     window.location.replace(SUBMIT_URL);
 }
 
 function login_failure(xhr, status, error) {
     console.log("Status: " + status, ", Error: " + error);
-    $("input#username").val("")
-    $("input#password").val("")
-    $("output#error").text("Login Failed")
+    $("input#username").val("");
+    $("input#password").val("");
+    $("output#error").text("Login Failed");
 }
 
 function log_res(data, status) {
