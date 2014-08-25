@@ -94,3 +94,8 @@ function test_get(callback, uuid) {
     var url = "https://api-cog.cs.colorado.edu/tests/" + uuid + "/";
     get_auth(url, callback);
 }
+
+function run_get(callback, uuid) {
+    var url = "https://api-cog.cs.colorado.edu/runs/" + uuid + "/";
+    get_auth(url, callback);
+}

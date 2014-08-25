@@ -12,7 +12,11 @@
 
     <h1>COG Submitter</h1>
 
-    <h2>Submit</h2>
+    <button id="logout">Logout</button>
+
+    <h2>Submit Your Solution</h2>
+
+    <h3>Submission</h3>
 
     <form name="submitform" id="submit" action="javascript:void(0);">
       Select Assignment: <select name="assignment" id="assignment"></select>
@@ -28,7 +32,15 @@
       <output id="error"></output></br>
     </form>
 
-    <button id="logout">Logout</button></br>
+    <h3>Results</h3>
+
+    <p>
+      <strong>Status:</strong> <span id=run_status></span></br>
+      <strong>Score:</strong> <span id=run_score></span></br>
+      <strong>Return Code:</strong> <span id=run_retcode></span></br>
+      <strong>Output:</strong></br>
+      <pre id="run_output"></pre>
+    </p>    
 
     <script src="./libs/jquery-2.1.1.min.js"></script>
     <script src="./libs/jquery.cookie.js"></script>

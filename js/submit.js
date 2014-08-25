@@ -20,8 +20,8 @@ function update_asn_list(data, status) {
 }
 
 function update_asn_list_item(data, status) {
-    keys = Object.keys(data);
-    uuid = keys[0];
+    var keys = Object.keys(data);
+    var uuid = keys[0];
     var assignment = data[uuid]
     $("select#assignment")
         .append($("<option>", { value : uuid})
@@ -39,8 +39,8 @@ function update_tst_list(data, status) {
 }
 
 function update_tst_list_item(data, status) {
-    keys = Object.keys(data);
-    uuid = keys[0];
+    var keys = Object.keys(data);
+    var uuid = keys[0];
     var test = data[uuid]
     $("select#test")
         .append($("<option>", { value : uuid})
@@ -61,6 +61,16 @@ function save_run_uuid(data, status) {
 
 function chk_added_files(data, status) {
     console.log("Added files: " + data.files)
+}
+
+function update_results(data, status) {
+    var keys = Object.keys(data);
+    var uuid = keys[0];
+    var run = data[uuid]
+    $("span#run_status").text(run.status);
+    $("span#run_score").text(run.score);
+    $("span#run_retcode").text(run.retcode);
+    $("pre#run_output").text(run.output);
 }
 
 $("select#assignment").change(function() {
@@ -102,14 +112,14 @@ $("form#submit").submit(function() {
     assignment_submission_create(save_sub_uuid, asn_uuid);
 
     // Add Files to Submission
-    file_lst = [fle_uuid]
+    file_lst = [fle_uuid];
     console.log("Adding Files...");
-    submission_add_files(chk_added_files, sub_uuid, file_lst)
+    submission_add_files(chk_added_files, sub_uuid, file_lst);
 
     // Launch Test Run
     file_lst = [fle_uuid]
     console.log("Starting Test Run...");
-    submission_run_test(save_run_uuid, sub_uuid, tst_uuid)
+    submission_run_test(save_run_uuid, sub_uuid, tst_uuid);
 
     // Log to Console
     console.log("asn_uuid = " + asn_uuid);
@@ -117,6 +127,9 @@ $("form#submit").submit(function() {
     console.log("fle_uuid = " + fle_uuid);
     console.log("sub_uuid = " + sub_uuid);
     console.log("run_uuid = " + run_uuid);
+
+    // Get Results
+    run_get(update_results, run_uuid)
     
 });
 
