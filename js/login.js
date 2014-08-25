@@ -1,8 +1,3 @@
-function login_success(data, status) {
-    $.cookie("cog_token", data.token, { path: '/' });
-    window.location.replace(SUBMIT_URL);
-}
-
 function login_failure(xhr, status, error) {
     console.log("Status: " + status, ", Error: " + error);
     $("input#username").val("");
@@ -27,6 +22,6 @@ $("form#login").submit(function() {
     }
 
     // Login
-    login(username, password, login_success, login_failure);
+    try_login(username, password, login_failure);
 
 });

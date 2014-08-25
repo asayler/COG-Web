@@ -1,5 +1,7 @@
 var SUBMIT_URL = "submit.html";
 var LOGIN_URL = "login.html";
+var COOKIE_PARAMS = { expires: 1, path: '/', secure: true }
+var COOKIE_NAME = "cog_token"
 
 function token_redirect() {
     var token = $.cookie('cog_token');
@@ -23,7 +25,7 @@ function make_base_auth(username, password) {
     return 'Basic ' + hash;
 }
 
-function login(username, password, success, failure) {
+function try_login(username, password, success, failure) {
     $.ajax({
         type: "GET",
         url: "https://api-cog.cs.colorado.edu/tokens/",
@@ -31,12 +33,17 @@ function login(username, password, success, failure) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
         },
-        success: success,
+        success: login,
         error: failure
     });
 }
 
+function login(data, status) {
+    $.cookie(COOKIE_NAME, data.token, COOKIE_PARAMS);
+    window.location.replace(SUBMIT_URL);
+}
+
 function logout() {
-    $.removeCookie("cog_token", { path: '/' });
+    $.removeCookie(COOKIE_NAME, COOKIE_PARAMS);
     window.location.replace(LOGIN_URL);
 }
