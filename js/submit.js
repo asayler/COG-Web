@@ -55,6 +55,14 @@ function save_sub_uuid(data, status) {
     sub_uuid = data.submissions[0];
 }
 
+function save_run_uuid(data, status) {
+    run_uuid = data.runs[0];
+}
+
+function chk_added_files(data, status) {
+    console.log("Added files: " + data.files)
+}
+
 $("select#assignment").change(function() {
     assignment_tests_get(update_tst_list, $("select#assignment").val());
 });
@@ -92,6 +100,16 @@ $("form#submit").submit(function() {
     // Create Submission
     console.log("Creating Submission...");
     assignment_submission_create(save_sub_uuid, asn_uuid);
+
+    // Add Files to Submission
+    file_lst = [fle_uuid]
+    console.log("Adding Files...");
+    submission_add_files(chk_added_files, sub_uuid, file_lst)
+
+    // Launch Test Run
+    file_lst = [fle_uuid]
+    console.log("Starting Test Run...");
+    submission_run_test(save_run_uuid, sub_uuid, tst_uuid)
 
     // Log to Console
     console.log("asn_uuid = " + asn_uuid);
