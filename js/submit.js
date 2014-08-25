@@ -10,7 +10,7 @@ function submit_onload() {
 }
 
 function update_asn_list(data, status) {
-    $("select#assignment").empty()
+    $("select#assignment").empty();
     var assignments = data.assignments;
     console.log("assignments = " + assignments);
     $.each(assignments, function(key, value) {
@@ -22,14 +22,14 @@ function update_asn_list(data, status) {
 function update_asn_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
-    var assignment = data[uuid]
+    var assignment = data[uuid];
     $("select#assignment")
         .append($("<option>", { value : uuid})
                 .text(assignment.name));
 }
 
 function update_tst_list(data, status) {
-    $("select#test").empty()
+    $("select#test").empty();
     var tests = data.tests;
     console.log("tests = " + tests);
     $.each(tests, function(key, value) {
@@ -41,7 +41,7 @@ function update_tst_list(data, status) {
 function update_tst_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
-    var test = data[uuid]
+    var test = data[uuid];
     $("select#test")
         .append($("<option>", { value : uuid})
                 .text(test.name));
@@ -60,13 +60,20 @@ function save_run_uuid(data, status) {
 }
 
 function chk_added_files(data, status) {
-    console.log("Added files: " + data.files)
+    console.log("Added files: " + data.files);
+}
+
+function update_max_score(data, status) {
+    var keys = Object.keys(data);
+    var uuid = keys[0];
+    var tst = data[uuid];
+    $("span#max_score").text(tst.maxscore);
 }
 
 function update_results(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
-    var run = data[uuid]
+    var run = data[uuid];
     $("span#run_status").text(run.status);
     $("span#run_score").text(run.score);
     $("span#run_retcode").text(run.retcode);
@@ -75,13 +82,18 @@ function update_results(data, status) {
 
 $("select#assignment").change(function() {
     assignment_tests_get(update_tst_list, $("select#assignment").val());
+    $("select#test").change();
+});
+
+$("select#test").change(function() {
+    test_get(update_max_score, $("select#test").val());
 });
 
 $("form#submit").submit(function() {
     
     // Get Input
-    asn_uuid = $("select#assignment").val();
-    tst_uuid = $("select#test").val();
+    var asn_uuid = $("select#assignment").val();
+    var tst_uuid = $("select#test").val();
 
     // Reset Errors
     $("output#asn_error").text("");
@@ -91,15 +103,15 @@ $("form#submit").submit(function() {
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
 	$("output#asn_error").text("Assignment Required");
-	return false
+	return false;
     }
     if((!tst_uuid) || (tst_uuid.length != 36)) {
 	$("output#tst_error").text("Test Required");
-	return false
+	return false;
     }
     if($("input#file").val().length == 0) {
 	$("output#fle_error").text("File Required");
-	return false
+	return false;
     }
 
     // Upload File
@@ -112,12 +124,11 @@ $("form#submit").submit(function() {
     assignment_submission_create(save_sub_uuid, asn_uuid);
 
     // Add Files to Submission
-    file_lst = [fle_uuid];
+    var file_lst = [fle_uuid];
     console.log("Adding Files...");
     submission_add_files(chk_added_files, sub_uuid, file_lst);
 
     // Launch Test Run
-    file_lst = [fle_uuid]
     console.log("Starting Test Run...");
     submission_run_test(save_run_uuid, sub_uuid, tst_uuid);
 
@@ -129,7 +140,7 @@ $("form#submit").submit(function() {
     console.log("run_uuid = " + run_uuid);
 
     // Get Results
-    run_get(update_results, run_uuid)
+    run_get(update_results, run_uuid);
     
 });
 

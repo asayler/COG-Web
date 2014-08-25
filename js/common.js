@@ -1,8 +1,8 @@
-var SUBMIT_URL = "submit.html"
-var LOGIN_URL = "login.html"
+var SUBMIT_URL = "submit.html";
+var LOGIN_URL = "login.html";
 
 function token_redirect() {
-    token = $.cookie('cog_token');
+    var token = $.cookie('cog_token');
     if(token) {
         if(document.URL.indexOf(SUBMIT_URL) == -1) {
             console.log("Redirecting to " + SUBMIT_URL + " from " + document.URL);
@@ -18,43 +18,25 @@ function token_redirect() {
 }
 
 function make_base_auth(username, password) {
-    var tok = username + ':' + password;
-    var hash = btoa(tok);
+    var token = username + ':' + password;
+    var hash = btoa(token);
     return 'Basic ' + hash;
 }
 
-function login(username, password) {
-    console.log("Username: " + username + ", Password: " + password)
+function login(username, password, success, failure) {
     $.ajax({
         type: "GET",
         url: "https://api-cog.cs.colorado.edu/tokens/",
-        async: false,
+        async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
         },
-        success: login_success,
-        error: login_failure
+        success: success,
+        error: failure
     });
 }
 
 function logout() {
     $.removeCookie("cog_token", { path: '/' });
     window.location.replace(LOGIN_URL);
-}
-
-function login_success(data, status) {
-    console.log("Status: " + status, ", Token: " + data.token);
-    $.cookie("cog_token", data.token, { path: '/' });
-    window.location.replace(SUBMIT_URL);
-}
-
-function login_failure(xhr, status, error) {
-    console.log("Status: " + status, ", Error: " + error);
-    $("input#username").val("");
-    $("input#password").val("");
-    $("output#error").text("Login Failed");
-}
-
-function log_res(data, status) {
-    console.log("Data: " + data + ", Status: " + status);
 }

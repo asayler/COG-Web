@@ -12,6 +12,17 @@
 
     <h1>COG Submitter</h1>
 
+    <p>
+      <em>Beta Release (a.k.a. It's ugly, but it works.)</em>
+    </p>
+    <p>
+      Please report bugs to <a href="mailto:andy.sayler@colorado.edu"
+      target="_blank">andy.sayler@colorado.edu</a>.</br>  Code and
+      license available
+      on <a href="https://github.com/asayler/COG-Web"
+      target="_blank">GitHub</a>. Patches and improvements welcome.
+    </p>
+
     <button id="logout">Logout</button>
 
     <h2>Submit Your Solution</h2>
@@ -28,15 +39,14 @@
       File: <input type="file" name="submission" id="file">
       <output id="fle_error"></output> 
       </br>
-      <button id="Submit">Submit</button></br>
-      <output id="error"></output></br>
+      <button id="Submit">Submit</button>
     </form>
 
     <h3>Results</h3>
 
     <p>
+      <strong>Score:</strong> <span id=run_score>0</span> of <span id=max_score>0</span></br>
       <strong>Status:</strong> <span id=run_status></span></br>
-      <strong>Score:</strong> <span id=run_score></span></br>
       <strong>Return Code:</strong> <span id=run_retcode></span></br>
       <strong>Output:</strong></br>
       <pre id="run_output"></pre>
