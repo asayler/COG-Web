@@ -10,12 +10,10 @@ Status
 COG-Web is currently running in Beta in production. Bug reports,
 patches, and comments welcome.
 
-[![Build Status](https://drone.io/github.com/asayler/CU-Online-Grading/status.png)](https://drone.io/github.com/asayler/CU-Online-Grading/latest)
-
 Related
 -------
 
- * [COG-API](https://github.com/asayler/COG-API): COG Backend API
+ * [COG](https://github.com/asayler/COG): COG Backend and API
  (This is where the magic is.)
  * [COG-CLI](https://github.com/asayler/COG-CLI): CLI Front-end
 
