@@ -25,7 +25,7 @@ function make_base_auth(username, password) {
     return 'Basic ' + hash;
 }
 
-function try_login(username, password, success, failure) {
+function try_login(username, password, failure) {
     $.ajax({
         type: "GET",
         url: "https://api-cog.cs.colorado.edu/tokens/",
