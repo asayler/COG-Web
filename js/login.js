@@ -22,6 +22,7 @@ $("form#login").submit(function() {
     }
 
     // Login
+    console.log("Trying loging...")
     try_login(username, password, login_failure);
-
+    
 });
