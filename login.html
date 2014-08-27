@@ -35,9 +35,9 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="submit.html">Submit</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#contact">Help</a></li>
           </ul>
         </div>
       </div>
@@ -46,22 +46,8 @@
 
     <!-- Body -->
     <div class="container">
-
-      <!-- <h1>COG Submitter</h1> -->
-
-      <!-- <p> -->
-      <!--   <em>Beta Release (a.k.a. It's ugly, but it works.)</em> -->
-      <!-- </p> -->
-      <!-- <p> -->
-      <!--   Please report bugs -->
-      <!--   to <a href="mailto:andy.sayler@colorado.edu" target="_blank">andy.sayler@colorado.edu</a>.</br> -->
-      <!--   Code and license available -->
-      <!--   on <a href="https://github.com/asayler/COG-Web" -->
-                   <!--         target="_blank">GitHub</a>. Patches and improvements welcome. -->
-                   <!-- </p> -->
       
-      <form class="form-login" role="form" name="loginform"
-            id="login" action="javascript:void(0);">
+      <form class="form-login" role="form" name="loginform" id="login" action="">
         <h2 class="form-login-heading">Please Login</h2>
         <p>
           <em>
@@ -75,21 +61,33 @@
         </p>
         <input class="form-control" id="username" type="text"
                placeholder="Username" required autofocus>
-        <!-- <output id="username_error"></output>  -->
-        <!-- </br> -->
         <input class="form-control" id="password" type="password"
                placeholder="Password" required>
-        <!-- <output id="password_error"></output>  -->
-        <!-- </br> -->
         <button class="btn btn-lg btn-primary btn-block" id="login"
         type="submit">Login</button>
-        <p>
-          <output id="error"></output>
-        </p>
+        <p><output class="form-login-error" id="loginerror"></output></p>
       </form>
 
     </div>
       
+    <!-- Footer -->
+    <div class="footer">
+
+      <div class="container">
+        <p class="text-muted">
+          COG-Web Beta:
+          <em>
+            Code and license available on
+            <a href="https://github.com/asayler/COG-Web"
+               target="_blank">GitHub</a>.
+            Patches, bug reports, and feature requests welcome.
+          </em>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Scripts -->
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script src="js/bootstrap.min.js"></script>

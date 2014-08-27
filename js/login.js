@@ -1,8 +1,8 @@
 function login_failure(xhr, status, error) {
     console.log("Status: " + status, ", Error: " + error);
-    $("input#username").val("");
-    $("input#password").val("");
-    $("output#error").text("Login Failed");
+    $("#username").val("");
+    $("#password").val("");
+    $("#loginerror").text("Login Failed: " + error);
 }
 
 $("form#login").submit(function() {
@@ -13,16 +13,16 @@ $("form#login").submit(function() {
 
     // Validate Data
     if(username.length == 0) {
-	$("output#username_error").text("Username Required");
-	return false;
+	    $("#loginerror").text("Username Required");
+	    return false;
     }
     if(password.length == 0) {
-	$("output#password_error").text("Password Required");
-	return false;
+	    $("#loginerror").text("Password Required");
+	    return false;
     }
 
     // Login
-    console.log("Trying loging...")
     try_login(username, password, login_failure);
+    return false
     
 });

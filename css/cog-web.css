@@ -1,7 +1,21 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
     padding-top: 50px;
-    padding-bottom: 40px;
+    padding-bottom: 0px;
+    margin-bottom: 50px;
     background-color: #eee;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #333;
 }
 
 .form-login {
@@ -10,9 +24,13 @@ body {
     margin: 0 auto;
 }
 
-.form-login .form-login-heading,
-.form-login .checkbox {
+.form-login .form-login-heading{
     margin-bottom: 10px;
+}
+
+.form-login .form-login-error{
+    margin-top: 10px;
+    color: #CC0033;
 }
 
 .form-login .form-control {
@@ -29,7 +47,7 @@ body {
     z-index: 2;
 }
 
-.form-login input[type="email"] {
+.form-login input[type="text"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -39,4 +57,14 @@ body {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.container .text-muted {
+    margin: 15px 0;
+    color: #777;
+}
+
+.footer > .container {
+    padding-right: 10px;
+    padding-left: 10px;
 }
