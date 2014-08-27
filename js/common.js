@@ -1,7 +1,9 @@
 var SUBMIT_URL = "submit.html";
 var LOGIN_URL = "login.html";
-var COOKIE_PARAMS = { expires: 1, path: '/', secure: true }
-var COOKIE_NAME = "cog_token"
+var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
+var COOKIE_USER_NAME = "cog_user"
+var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
+var COOKIE_TOKEN_NAME = "cog_token"
 
 function token_redirect() {
     var token = $.cookie('cog_token');
@@ -33,17 +35,21 @@ function try_login(username, password, failure) {
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
         },
-        success: login,
+        success: function(data, status) {
+            login(data, status, username)
+        },
         error: failure
     });
 }
 
-function login(data, status) {
-    $.cookie(COOKIE_NAME, data.token, COOKIE_PARAMS);
+function login(data, status, username) {
+    $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
+    $.cookie(COOKIE_TOKEN_NAME, data.token, COOKIE_TOKEN_PARAMS);
     window.location.replace(SUBMIT_URL);
 }
 
 function logout() {
-    $.removeCookie(COOKIE_NAME, COOKIE_PARAMS);
+    $.removeCookie(COOKIE_TOKEN_NAME, COOKIE_TOKEN_PARAMS);
+    $.removeCookie(COOKIE_USER_NAME, COOKIE_USER_PARAMS);
     window.location.replace(LOGIN_URL);
 }

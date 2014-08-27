@@ -5,6 +5,7 @@ var sub_uuid = null;
 var run_uuid = null;
 
 function submit_onload() {
+    $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
     assignments_get(update_asn_list);
     $("select#assignment").change();
 }

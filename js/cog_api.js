@@ -1,5 +1,5 @@
 function get_auth(url, callback) {
-    var token = $.cookie(COOKIE_NAME);
+    var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
         type: "GET",
         url: url,
@@ -12,7 +12,7 @@ function get_auth(url, callback) {
 }
 
 function post_auth(url, callback, data) {
-    var token = $.cookie(COOKIE_NAME);
+    var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
         type: "POST",
         url: url,
@@ -26,7 +26,7 @@ function post_auth(url, callback, data) {
 }
 
 function put_auth(url, callback, data) {
-    var token = $.cookie(COOKIE_NAME);
+    var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
         type: "PUT",
         url: url,
@@ -41,7 +41,7 @@ function put_auth(url, callback, data) {
 
 function file_post(callback, form_data) {
     var url = "https://api-cog.cs.colorado.edu/files/";
-    var token = $.cookie(COOKIE_NAME);
+    var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
         type: 'POST',
         url: url,
