@@ -59,6 +59,10 @@ body {
     border-top-right-radius: 0;
 }
 
+.form-submit-error{
+    color: #CC0033;
+}
+
 .container .text-muted {
     margin: 15px 0;
     color: #777;
@@ -67,4 +71,15 @@ body {
 .footer > .container {
     padding-right: 10px;
     padding-left: 10px;
+}
+
+.row-stats {
+    margin-bottom: 10px;
+}
+
+.page-header {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    padding-bottom: 0px;
+    border-bottem: 0px;
 }
