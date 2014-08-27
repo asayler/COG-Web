@@ -5,7 +5,9 @@ function login_failure(xhr, status, error) {
     $("#loginerror").text("Login Failed: " + error);
 }
 
-$("form#login").submit(function() {
+$("form#loginform").submit(function() {
+
+    // Prevent Default Action
 
     // Get Input
     var username = $("input#username").val();

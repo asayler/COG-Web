@@ -90,33 +90,28 @@ $("select#test").change(function() {
     test_get(update_max_score, $("select#test").val());
 });
 
-$("form#submit").submit(function() {
+$("form#submitform").submit(function() {
     
     // Get Input
     var asn_uuid = $("select#assignment").val();
     var tst_uuid = $("select#test").val();
 
-    // Reset Errors
-    $("output#asn_error").text("");
-    $("output#tst_error").text("");
-    $("output#fle_error").text("");
-
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
-	$("output#asn_error").text("Assignment Required");
-	return false;
+	    console.log("Valid Assignment UUID Required");
+	    return false;
     }
     if((!tst_uuid) || (tst_uuid.length != 36)) {
-	$("output#tst_error").text("Test Required");
-	return false;
+	    console.log("Valid Test UUID Required");
+	    return false;
     }
     if($("input#file").val().length == 0) {
-	$("output#fle_error").text("File Required");
-	return false;
+	    console.log("Valid File Required");
+	    return false;
     }
 
     // Upload File
-    var form_data = new FormData($('form#submit')[0]);
+    var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
     file_post(save_fle_uuid, form_data);
 
@@ -142,6 +137,7 @@ $("form#submit").submit(function() {
 
     // Get Results
     run_get(update_results, run_uuid);
+    return false
     
 });
 
