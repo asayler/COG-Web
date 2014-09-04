@@ -111,8 +111,16 @@ $("form#submitform").submit(function() {
     }
 
     // Upload File
-    var file_ext = $("select#file").val().split('.').pop();
+    var file_name = $("input#file").val();
+    console.log("File Name = " + file_name);
+    var file_ext = file_name.split('.').pop();
     console.log("File Extension = " + file_ext);
+    if(file_ext == "zip") {
+	$("input#file").attr('name', 'extract')
+    }
+    else {
+	$("input#file").attr('name', 'submission')
+    }
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
     file_post(save_fle_uuid, form_data);
