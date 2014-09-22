@@ -1,8 +1,8 @@
-var asn_uuid = null;
-var tst_uuid = null;
-var fle_uuid = null;
-var sub_uuid = null;
-var run_uuid = null;
+var asn_uuid  = null;
+var tst_uuid  = null;
+var fle_uuids = null;
+var sub_uuid  = null;
+var run_uuid  = null;
 
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
@@ -48,8 +48,8 @@ function update_tst_list_item(data, status) {
                 .text(test.name));
 }
 
-function save_fle_uuid(data, status) {
-    fle_uuid = data.files[0];
+function save_fle_uuids(data, status) {
+    fle_uuids = data.files;
 }
 
 function save_sub_uuid(data, status) {
@@ -123,14 +123,14 @@ $("form#submitform").submit(function() {
     }
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
-    file_post(save_fle_uuid, form_data);
+    file_post(save_fle_uuids, form_data);
 
     // Create Submission
     console.log("Creating Submission...");
     assignment_submission_create(save_sub_uuid, asn_uuid);
 
     // Add Files to Submission
-    var file_lst = [fle_uuid];
+    var file_lst = fle_uuids;
     console.log("Adding Files...");
     submission_add_files(chk_added_files, sub_uuid, file_lst);
 
@@ -139,11 +139,11 @@ $("form#submitform").submit(function() {
     submission_run_test(save_run_uuid, sub_uuid, tst_uuid);
 
     // Log to Console
-    console.log("asn_uuid = " + asn_uuid);
-    console.log("tst_uuid = " + tst_uuid);
-    console.log("fle_uuid = " + fle_uuid);
-    console.log("sub_uuid = " + sub_uuid);
-    console.log("run_uuid = " + run_uuid);
+    console.log("asn_uuid  = " + asn_uuid);
+    console.log("tst_uuid  = " + tst_uuid);
+    console.log("fle_uuids = " + fle_uuids);
+    console.log("sub_uuid  = " + sub_uuid);
+    console.log("run_uuid  = " + run_uuid);
 
     // Get Results
     run_get(update_results, run_uuid);
