@@ -98,6 +98,7 @@ function update_results(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var run = data[uuid];
+    $("span#run_uuid").text(uuid);
     $("span#run_status").text(run.status);
     $("span#run_score").text(run.score);
     $("span#run_retcode").text(run.retcode);
@@ -108,6 +109,7 @@ function clear_results() {
     $("span#run_status").text("TBD");
     $("span#run_score").text("TBD");
     $("span#run_retcode").text("TBD");
+    $("span#run_uuid").text("TBD");
     $("pre#run_output").text("Grading output will appear here...");
 }
 
