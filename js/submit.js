@@ -42,7 +42,7 @@ function update_tst_list(data, status) {
     $("select#test").empty();
     var tests = data.tests;
     console.log("tests = " + tests);
-    if(assignments.length > 0) {
+    if(tests.length > 0) {
 	$.each(tests, function(key, value) {
             var uuid = value;
             test_get(update_tst_list_item, uuid);
