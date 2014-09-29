@@ -62,6 +62,11 @@ function assignments_get(callback) {
     get_auth(url, callback);
 }
 
+function assignments_get_submitable(callback) {
+    var url = "https://api-cog.cs.colorado.edu/assignments/submitable/";
+    get_auth(url, callback);
+}
+
 function assignment_get(callback, uuid) {
     var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/";
     get_auth(url, callback);

@@ -6,7 +6,7 @@ var run_uuid  = null;
 
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
-    assignments_get(update_asn_list);
+    assignments_get_submitable(update_asn_list);
     $("select#assignment").change();
 }
 
@@ -14,10 +14,18 @@ function update_asn_list(data, status) {
     $("select#assignment").empty();
     var assignments = data.assignments;
     console.log("assignments = " + assignments);
-    $.each(assignments, function(key, value) {
-        var uuid = value;
-        assignment_get(update_asn_list_item, uuid);
-    });
+    if(assignments.length > 0) {
+        $.each(assignments, function(key, value) {
+            var uuid = value;
+            assignment_get(update_asn_list_item, uuid);
+        });
+    }
+    else {
+        $("select#assignment")
+            .append($("<option>", { value : ""})
+                    .text("No Submitable Assignments"));
+        
+    }
 }
 
 function update_asn_list_item(data, status) {
@@ -82,8 +90,11 @@ function update_results(data, status) {
 }
 
 $("select#assignment").change(function() {
-    assignment_tests_get(update_tst_list, $("select#assignment").val());
-    $("select#test").change();
+    var uuid = $("select#assignment").val();
+    if(uuid.length > 0) {
+        assignment_tests_get(update_tst_list, uuid);
+        $("select#test").change();
+    }
 });
 
 $("select#test").change(function() {
