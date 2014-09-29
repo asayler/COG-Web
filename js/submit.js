@@ -59,6 +59,7 @@ function update_tst_list(data, status) {
 	$("input#file").prop("disabled", true);
 	$("button#submit").prop("disabled", true);
     }
+    clear_results()
 }
 
 function update_tst_list_item(data, status) {
@@ -101,6 +102,13 @@ function update_results(data, status) {
     $("span#run_score").text(run.score);
     $("span#run_retcode").text(run.retcode);
     $("pre#run_output").text(run.output);
+}
+
+function clear_results() {
+    $("span#run_status").text("TBD");
+    $("span#run_score").text("TBD");
+    $("span#run_retcode").text("TBD");
+    $("pre#run_output").text("Grading output will appear here...");
 }
 
 $("select#assignment").change(function() {
