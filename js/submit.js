@@ -19,12 +19,13 @@ function update_asn_list(data, status) {
             var uuid = value;
             assignment_get(update_asn_list_item, uuid);
         });
+	$("select#assignment").prop("disabled", false);
     }
     else {
         $("select#assignment")
             .append($("<option>", { value : ""})
-                    .text("No Submitable Assignments"));
-        
+                    .text("No Assignments Accepting Submissions"));
+	$("select#assignment").prop("disabled", true);
     }
 }
 
@@ -41,10 +42,23 @@ function update_tst_list(data, status) {
     $("select#test").empty();
     var tests = data.tests;
     console.log("tests = " + tests);
-    $.each(tests, function(key, value) {
-        var uuid = value;
-        test_get(update_tst_list_item, uuid);
-    });
+    if(assignments.length > 0) {
+	$.each(tests, function(key, value) {
+            var uuid = value;
+            test_get(update_tst_list_item, uuid);
+	});
+	$("select#test").prop("disabled", false);
+	$("input#file").prop("disabled", false);
+	$("button#submit").prop("disabled", false);
+    }
+    else {
+        $("select#test")
+            .append($("<option>", { value : ""})
+                    .text("No Tests Accepting Submissions"));
+	$("select#test").prop("disabled", true);
+	$("input#file").prop("disabled", true);
+	$("button#submit").prop("disabled", true);
+    }
 }
 
 function update_tst_list_item(data, status) {
@@ -98,7 +112,10 @@ $("select#assignment").change(function() {
 });
 
 $("select#test").change(function() {
-    test_get(update_max_score, $("select#test").val());
+    var uuid = $("select#test").val();
+    if(uuid.length > 0) {    
+	test_get(update_max_score, uuid);
+    }
 });
 
 $("form#submitform").submit(function() {
