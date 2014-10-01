@@ -3,6 +3,7 @@ var tst_uuid  = null;
 var fle_uuids = null;
 var sub_uuid  = null;
 var run_uuid  = null;
+var poll_results = null;
 
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
@@ -120,8 +121,52 @@ function run_test_callback(data, status) {
     console.log("sub_uuid  = " + sub_uuid);
     console.log("run_uuid  = " + run_uuid);
 
+    // Output UUID
+    $("span#run_uuid").text(run_uuid);
+
+    // Check Results
+    poll_results_callback()
+
+}
+
+function poll_results_callback() {
+
+    // Stop Polling
+    if(poll_results != null) {
+	clearInterval(poll_results);
+	poll_results = null;
+    }
+
     // Update Results
-    run_get(update_results, run_uuid);
+    console.log("Getting Run Results...");
+    run_get(check_result_callback, run_uuid);    
+
+}
+
+function check_result_callback(data, status) {
+
+    // Extract Results
+    var keys = Object.keys(data);
+    var uuid = keys[0];
+    var run = data[uuid];
+
+    // Update Status
+    $("span#run_status").text(run.status);
+
+    if(run.status.indexOf("complete") == 0) {
+
+	// Output Results
+	$("span#run_score").text(run.score);
+	$("span#run_retcode").text(run.retcode);
+	$("pre#run_output").text(run.output);
+
+    }
+    else {
+
+	// Start Polling
+	poll_results = setInterval(poll_results_callback, 1000);
+
+    }
 
 }
 
@@ -130,17 +175,6 @@ function update_max_score(data, status) {
     var uuid = keys[0];
     var tst = data[uuid];
     $("span#max_score").text(tst.maxscore);
-}
-
-function update_results(data, status) {
-    var keys = Object.keys(data);
-    var uuid = keys[0];
-    var run = data[uuid];
-    $("span#run_uuid").text(uuid);
-    $("span#run_status").text(run.status);
-    $("span#run_score").text(run.score);
-    $("span#run_retcode").text(run.retcode);
-    $("pre#run_output").text(run.output);
 }
 
 function clear_results() {
