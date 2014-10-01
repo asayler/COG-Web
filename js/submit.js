@@ -7,7 +7,6 @@ var run_uuid  = null;
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
     assignments_get_submitable(update_asn_list);
-    $("select#assignment").change();
 }
 
 function update_asn_list(data, status) {
@@ -19,7 +18,6 @@ function update_asn_list(data, status) {
             var uuid = value;
             assignment_get(update_asn_list_item, uuid);
         });
-	$("select#assignment").prop("disabled", false);
     }
     else {
         $("select#assignment")
@@ -36,6 +34,8 @@ function update_asn_list_item(data, status) {
     $("select#assignment")
         .append($("<option>", { value : uuid})
                 .text(assignment.name));
+    $("select#assignment").change();
+    $("select#assignment").prop("disabled", false);
 }
 
 function update_tst_list(data, status) {
@@ -47,9 +47,6 @@ function update_tst_list(data, status) {
             var uuid = value;
             test_get(update_tst_list_item, uuid);
 	});
-	$("select#test").prop("disabled", false);
-	$("input#file").prop("disabled", false);
-	$("button#submit").prop("disabled", false);
     }
     else {
         $("select#test")
@@ -69,6 +66,10 @@ function update_tst_list_item(data, status) {
     $("select#test")
         .append($("<option>", { value : uuid})
                 .text(test.name));
+    $("select#test").change();
+    $("select#test").prop("disabled", false);
+    $("input#file").prop("disabled", false);
+    $("button#submit").prop("disabled", false);
 }
 
 // Submission Sequence
@@ -154,7 +155,6 @@ $("select#assignment").change(function() {
     var uuid = $("select#assignment").val();
     if(uuid.length > 0) {
         assignment_tests_get(update_tst_list, uuid);
-        $("select#test").change();
     }
 });
 
