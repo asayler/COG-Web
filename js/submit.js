@@ -160,6 +160,13 @@ function check_result_callback(data, status) {
 	$("span#run_retcode").text(run.retcode);
 	$("pre#run_output").text(run.output);
 
+	// Unlock Form
+	$("select#assignment").prop("disabled", false);
+	$("select#test").prop("disabled", false);
+	$("input#file").prop("disabled", false);
+	$("button#submit").prop("disabled", false);
+	$("button#submit").html("Submit");
+
     }
     else {
 
@@ -200,6 +207,9 @@ $("select#test").change(function() {
 });
 
 $("form#submitform").submit(function() {
+
+    // Lock Button
+    $("button#submit").prop("disabled", true);
     
     // Get Input
     asn_uuid = $("select#assignment").val();
@@ -207,16 +217,19 @@ $("form#submitform").submit(function() {
 
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
-	    console.log("Valid Assignment UUID Required");
-	    return false;
+	console.log("Valid Assignment UUID Required");
+	$("button#submit").prop("disabled", false);
+	return false;
     }
     if((!tst_uuid) || (tst_uuid.length != 36)) {
-	    console.log("Valid Test UUID Required");
-	    return false;
+	console.log("Valid Test UUID Required");
+	$("button#submit").prop("disabled", false);
+	return false;
     }
     if($("input#file").val().length == 0) {
-	    console.log("Valid File Required");
-	    return false;
+	console.log("Valid File Required");
+	$("button#submit").prop("disabled", false);
+	return false;
     }
 
     // Upload File
@@ -233,6 +246,12 @@ $("form#submitform").submit(function() {
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
     file_post(upload_fle_callback, form_data);
+
+    // Lock Form
+    $("select#assignment").prop("disabled", true);
+    $("select#test").prop("disabled", true);
+    $("input#file").prop("disabled", true);
+    $("button#submit").html("Running...");
 
     // Return
     return false
