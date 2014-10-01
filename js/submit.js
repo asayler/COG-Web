@@ -71,20 +71,57 @@ function update_tst_list_item(data, status) {
                 .text(test.name));
 }
 
-function save_fle_uuids(data, status) {
+// Submission Sequence
+
+function upload_fle_callback(data, status) {
+
+    // Save Files UUIDs
     fle_uuids = data.files;
+
+    // Create Submission
+    console.log("Creating Submission...");
+    assignment_submission_create(create_sub_callback, asn_uuid);
+
 }
 
-function save_sub_uuid(data, status) {
+function create_sub_callback(data, status) {
+ 
+    // Save Submission UUID
     sub_uuid = data.submissions[0];
+
+    // Add Files to Submission
+    var file_lst = fle_uuids;
+    console.log("Adding Files...");
+    submission_add_files(add_files_callback, sub_uuid, file_lst);
+
 }
 
-function save_run_uuid(data, status) {
-    run_uuid = data.runs[0];
-}
-
-function chk_added_files(data, status) {
+function add_files_callback(data, status) {
+    
+    // Check Files
     console.log("Added files: " + data.files);
+
+    // Launch Test Run
+    console.log("Starting Test Run...");
+    submission_run_test(run_test_callback, sub_uuid, tst_uuid);
+
+}
+
+function run_test_callback(data, status) {
+
+    // Save Run UUID
+    run_uuid = data.runs[0];
+
+    // Log to Console
+    console.log("asn_uuid  = " + asn_uuid);
+    console.log("tst_uuid  = " + tst_uuid);
+    console.log("fle_uuids = " + fle_uuids);
+    console.log("sub_uuid  = " + sub_uuid);
+    console.log("run_uuid  = " + run_uuid);
+
+    // Update Results
+    run_get(update_results, run_uuid);
+
 }
 
 function update_max_score(data, status) {
@@ -131,8 +168,8 @@ $("select#test").change(function() {
 $("form#submitform").submit(function() {
     
     // Get Input
-    var asn_uuid = $("select#assignment").val();
-    var tst_uuid = $("select#test").val();
+    asn_uuid = $("select#assignment").val();
+    tst_uuid = $("select#test").val();
 
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
@@ -161,30 +198,9 @@ $("form#submitform").submit(function() {
     }
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
-    file_post(save_fle_uuids, form_data);
+    file_post(upload_fle_callback, form_data);
 
-    // Create Submission
-    console.log("Creating Submission...");
-    assignment_submission_create(save_sub_uuid, asn_uuid);
-
-    // Add Files to Submission
-    var file_lst = fle_uuids;
-    console.log("Adding Files...");
-    submission_add_files(chk_added_files, sub_uuid, file_lst);
-
-    // Launch Test Run
-    console.log("Starting Test Run...");
-    submission_run_test(save_run_uuid, sub_uuid, tst_uuid);
-
-    // Log to Console
-    console.log("asn_uuid  = " + asn_uuid);
-    console.log("tst_uuid  = " + tst_uuid);
-    console.log("fle_uuids = " + fle_uuids);
-    console.log("sub_uuid  = " + sub_uuid);
-    console.log("run_uuid  = " + run_uuid);
-
-    // Get Results
-    run_get(update_results, run_uuid);
+    // Return
     return false
     
 });
