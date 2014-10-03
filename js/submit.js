@@ -24,7 +24,7 @@ function update_asn_list(data, status) {
         $("select#assignment")
             .append($("<option>", { value : ""})
                     .text("No Assignments Accepting Submissions"));
-	$("select#assignment").prop("disabled", true);
+        $("select#assignment").prop("disabled", true);
     }
 }
 
@@ -44,18 +44,18 @@ function update_tst_list(data, status) {
     var tests = data.tests;
     console.log("tests = " + tests);
     if(tests.length > 0) {
-	$.each(tests, function(key, value) {
+        $.each(tests, function(key, value) {
             var uuid = value;
             test_get(update_tst_list_item, uuid);
-	});
+        });
     }
     else {
         $("select#test")
             .append($("<option>", { value : ""})
                     .text("No Tests Accepting Submissions"));
-	$("select#test").prop("disabled", true);
-	$("input#file").prop("disabled", true);
-	$("button#submit").prop("disabled", true);
+        $("select#test").prop("disabled", true);
+        $("input#file").prop("disabled", true);
+        $("button#submit").prop("disabled", true);
     }
     clear_results()
 }
@@ -87,7 +87,7 @@ function upload_fle_callback(data, status) {
 }
 
 function create_sub_callback(data, status) {
- 
+    
     // Save Submission UUID
     sub_uuid = data.submissions[0];
 
@@ -149,24 +149,24 @@ function check_result_callback(data, status) {
 
     if(run.status.indexOf("complete") == 0) {
 
-	    // Output Results
-	    $("span#run_score").text(run.score);
-	    $("span#run_retcode").text(run.retcode);
-	    $("pre#run_output").text(run.output);
+        // Output Results
+        $("span#run_score").text(run.score);
+        $("span#run_retcode").text(run.retcode);
+        $("pre#run_output").text(run.output);
 
-	    // Unlock Form
-	    $("select#assignment").prop("disabled", false);
-	    $("select#test").prop("disabled", false);
-	    $("input#file").prop("disabled", false);
-	    $("button#submit").prop("disabled", false);
-	    $("button#submit").html("Submit");
+        // Unlock Form
+        $("select#assignment").prop("disabled", false);
+        $("select#test").prop("disabled", false);
+        $("input#file").prop("disabled", false);
+        $("button#submit").prop("disabled", false);
+        $("button#submit").html("Submit");
 
     }
     else {
 
-	    // Start Polling
+        // Start Polling
         console.log("Waiting...");
-	    timeout = setTimeout(poll_results_callback, 1000);
+        timeout = setTimeout(poll_results_callback, 1000);
 
     }
 
@@ -197,7 +197,7 @@ $("select#assignment").change(function() {
 $("select#test").change(function() {
     var uuid = $("select#test").val();
     if(uuid.length > 0) {    
-	test_get(update_max_score, uuid);
+        test_get(update_max_score, uuid);
     }
 });
 
@@ -212,19 +212,19 @@ $("form#submitform").submit(function() {
 
     // Validate Data
     if((!asn_uuid) || (asn_uuid.length != 36)) {
-	console.log("Valid Assignment UUID Required");
-	$("button#submit").prop("disabled", false);
-	return false;
+        console.log("Valid Assignment UUID Required");
+        $("button#submit").prop("disabled", false);
+        return false;
     }
     if((!tst_uuid) || (tst_uuid.length != 36)) {
-	console.log("Valid Test UUID Required");
-	$("button#submit").prop("disabled", false);
-	return false;
+        console.log("Valid Test UUID Required");
+        $("button#submit").prop("disabled", false);
+        return false;
     }
     if($("input#file").val().length == 0) {
-	console.log("Valid File Required");
-	$("button#submit").prop("disabled", false);
-	return false;
+        console.log("Valid File Required");
+        $("button#submit").prop("disabled", false);
+        return false;
     }
 
     // Upload File
@@ -233,10 +233,10 @@ $("form#submitform").submit(function() {
     var file_ext = file_name.split('.').pop();
     console.log("File Extension = " + file_ext);
     if(file_ext == "zip") {
-	$("input#file").attr('name', 'extract')
+        $("input#file").attr('name', 'extract')
     }
     else {
-	$("input#file").attr('name', 'submission')
+        $("input#file").attr('name', 'submission')
     }
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
