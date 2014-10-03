@@ -21,27 +21,6 @@ function token_redirect() {
     }
 }
 
-function make_base_auth(username, password) {
-    var token = username + ':' + password;
-    var hash = btoa(token);
-    return 'Basic ' + hash;
-}
-
-function try_login(username, password, failure) {
-    $.ajax({
-        type: "GET",
-        url: "https://api-cog.cs.colorado.edu/tokens/",
-        async: true,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', make_base_auth(username, password));
-        },
-        success: function(data, status) {
-            login(data, status, username)
-        },
-        error: failure
-    });
-}
-
 function login(data, status, username) {
     $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
     $.cookie(COOKIE_TOKEN_NAME, data.token, COOKIE_TOKEN_PARAMS);

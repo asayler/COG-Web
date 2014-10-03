@@ -13,6 +13,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="dist/ladda-themeless.min.css" rel="stylesheet">
     <link href="css/cog-web.css" rel="stylesheet">
 
     <script>
@@ -73,8 +74,10 @@
                placeholder="Username" required autofocus>
         <input class="form-control" id="password" type="password"
                placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" id="login"
-                type="submit">Login</button>
+        <button class="btn btn-primary btn-block ladda-button" id="login"
+                type="submit" data-style="expand-left">
+          <span class="ladda-label">Login</span>
+	</button>
         <p><output class="form-login-error" id="loginerror"></output></p>
       </form>
 
@@ -101,11 +104,15 @@
     <script src="js/jquery-2.1.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="dist/spin.min.js"></script>
+    <script src="dist/ladda.min.js"></script>
     <script src="js/common.js"></script>
+    <script src="js/cog_api.js"></script>
     <script src="js/login.js"></script>
     <script>
       $( document ).ready(function() {
         token_redirect();
+        login_onload();
       })
     </script>
 
