@@ -149,23 +149,24 @@ function check_result_callback(data, status) {
 
     if(run.status.indexOf("complete") == 0) {
 
-	// Output Results
-	$("span#run_score").text(run.score);
-	$("span#run_retcode").text(run.retcode);
-	$("pre#run_output").text(run.output);
+	    // Output Results
+	    $("span#run_score").text(run.score);
+	    $("span#run_retcode").text(run.retcode);
+	    $("pre#run_output").text(run.output);
 
-	// Unlock Form
-	$("select#assignment").prop("disabled", false);
-	$("select#test").prop("disabled", false);
-	$("input#file").prop("disabled", false);
-	$("button#submit").prop("disabled", false);
-	$("button#submit").html("Submit");
+	    // Unlock Form
+	    $("select#assignment").prop("disabled", false);
+	    $("select#test").prop("disabled", false);
+	    $("input#file").prop("disabled", false);
+	    $("button#submit").prop("disabled", false);
+	    $("button#submit").html("Submit");
 
     }
     else {
 
-	// Start Polling
-	timeout = setTimeout(poll_results_callback, 1000);
+	    // Start Polling
+        console.log("Waiting...");
+	    timeout = setTimeout(poll_results_callback, 1000);
 
     }
 
