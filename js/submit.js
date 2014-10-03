@@ -4,9 +4,11 @@ var fle_uuids = null;
 var sub_uuid  = null;
 var run_uuid  = null;
 var timeout = null;
+var ladda_submit = null;
 
 function submit_onload() {
-    $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
+    $("span#current_user").text($.cookie(COOKIE_USER_NAME));
+    ladda_submit = Ladda.create(document.querySelector("button#submit"));
     assignments_get_submitable(update_asn_list);
 }
 
@@ -158,8 +160,8 @@ function check_result_callback(data, status) {
         $("select#assignment").prop("disabled", false);
         $("select#test").prop("disabled", false);
         $("input#file").prop("disabled", false);
-        $("button#submit").prop("disabled", false);
-        $("button#submit").html("Submit");
+	ladda_submit.stop();
+        $("button#submit").children("span.ladda-label").html("Submit");
 
     }
     else {
@@ -203,8 +205,9 @@ $("select#test").change(function() {
 
 $("form#submitform").submit(function() {
 
-    // Lock Button
-    $("button#submit").prop("disabled", true);
+    // Start Button Animation
+    ladda_submit.start();
+    $("button#submit").children("span.ladda-label").html("Running...");
     
     // Get Input
     asn_uuid = $("select#assignment").val();
@@ -246,7 +249,6 @@ $("form#submitform").submit(function() {
     $("select#assignment").prop("disabled", true);
     $("select#test").prop("disabled", true);
     $("input#file").prop("disabled", true);
-    $("button#submit").html("Running...");
 
     // Return
     return false
