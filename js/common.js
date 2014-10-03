@@ -5,6 +5,12 @@ var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_TOKEN_NAME = "cog_token"
 
+function make_base_auth(username, password) {
+    var token = username + ':' + password;
+    var hash = btoa(token);
+    return 'Basic ' + hash;
+}
+
 function token_redirect() {
     var token = $.cookie('cog_token');
     if(token) {

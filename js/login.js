@@ -4,12 +4,6 @@ function login_onload() {
     ladda_login = Ladda.create(document.querySelector("button#login"));
 }
 
-function make_base_auth(username, password) {
-    var token = username + ':' + password;
-    var hash = btoa(token);
-    return 'Basic ' + hash;
-}
-
 function try_login(username, password) {
 
     console.log("Attempting Login: " + username);
