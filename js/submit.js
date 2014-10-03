@@ -3,7 +3,7 @@ var tst_uuid  = null;
 var fle_uuids = null;
 var sub_uuid  = null;
 var run_uuid  = null;
-var poll_results = null;
+var timeout = null;
 
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));    
@@ -131,12 +131,6 @@ function run_test_callback(data, status) {
 
 function poll_results_callback() {
 
-    // Stop Polling
-    if(poll_results != null) {
-	clearInterval(poll_results);
-	poll_results = null;
-    }
-
     // Update Results
     console.log("Getting Run Results...");
     run_get(check_result_callback, run_uuid);    
@@ -171,7 +165,7 @@ function check_result_callback(data, status) {
     else {
 
 	// Start Polling
-	poll_results = setInterval(poll_results_callback, 1000);
+	timeout = setTimeout(poll_results_callback, 1000);
 
     }
 
