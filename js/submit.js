@@ -187,12 +187,12 @@ function submit_error_callback(xhr, status, error) {
     console.log("Status: " + status, ", Error: " + error);
 
     // Update Status
-    $("span#run_status").text("API Error " + status);
+    $("span#run_status").text("API Error: " + error);
 
     // Output Results
     $("span#run_score").text("N/A");
     $("span#run_retcode").text("N/A");
-    $("pre#run_output").text("API Error: " + status, " - " + error);
+    $("pre#run_output").text(xhr.responseText);
 
     // Unlock Form
     $("select#assignment").prop("disabled", false);
@@ -209,12 +209,12 @@ function setup_error_callback(xhr, status, error) {
     console.log("Status: " + status, ", Error: " + error);
 
     // Update Status
-    $("span#run_status").text("API Error " + status);
+    $("span#run_status").text("API Error: " + error);
 
     // Output Results
     $("span#run_score").text("N/A");
     $("span#run_retcode").text("N/A");
-    $("pre#run_output").text("API Error: " + status, " - " + error);
+    $("pre#run_output").text(xhr.responseText);
 
 }
 
