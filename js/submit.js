@@ -9,7 +9,7 @@ var ladda_submit = null;
 function submit_onload() {
     $("span#current_user").text($.cookie(COOKIE_USER_NAME));
     ladda_submit = Ladda.create(document.querySelector("button#submit"));
-    assignments_get_submitable(update_asn_list);
+    assignments_get_submitable(update_asn_list, setup_error_callback);
 }
 
 function update_asn_list(data, status) {
@@ -19,7 +19,7 @@ function update_asn_list(data, status) {
     if(assignments.length > 0) {
         $.each(assignments, function(key, value) {
             var uuid = value;
-            assignment_get(update_asn_list_item, uuid);
+            assignment_get(update_asn_list_item, setup_error_callback, uuid);
         });
     }
     else {
@@ -48,7 +48,7 @@ function update_tst_list(data, status) {
     if(tests.length > 0) {
         $.each(tests, function(key, value) {
             var uuid = value;
-            test_get(update_tst_list_item, uuid);
+            test_get(update_tst_list_item, setup_error_callback, uuid);
         });
     }
     else {
@@ -84,7 +84,7 @@ function upload_fle_callback(data, status) {
 
     // Create Submission
     console.log("Creating Submission...");
-    assignment_submission_create(create_sub_callback, asn_uuid);
+    assignment_submission_create(create_sub_callback, submit_error_callback, asn_uuid);
 
 }
 
@@ -96,7 +96,7 @@ function create_sub_callback(data, status) {
     // Add Files to Submission
     var file_lst = fle_uuids;
     console.log("Adding Files...");
-    submission_add_files(add_files_callback, sub_uuid, file_lst);
+    submission_add_files(add_files_callback, submit_error_callback, sub_uuid, file_lst);
 
 }
 
@@ -107,7 +107,7 @@ function add_files_callback(data, status) {
 
     // Launch Test Run
     console.log("Starting Test Run...");
-    submission_run_test(run_test_callback, sub_uuid, tst_uuid);
+    submission_run_test(run_test_callback, submit_error_callback, sub_uuid, tst_uuid);
 
 }
 
@@ -135,7 +135,7 @@ function poll_results_callback() {
 
     // Update Results
     console.log("Getting Run Results...");
-    run_get(check_result_callback, run_uuid);    
+    run_get(check_result_callback, submit_error_callback, run_uuid);
 
 }
 
@@ -181,6 +181,43 @@ function update_max_score(data, status) {
     $("span#max_score").text(tst.maxscore);
 }
 
+function submit_error_callback(xhr, status, error) {
+
+    // Log Error
+    console.log("Status: " + status, ", Error: " + error);
+
+    // Update Status
+    $("span#run_status").text("API Error " + status);
+
+    // Output Results
+    $("span#run_score").text("N/A");
+    $("span#run_retcode").text("N/A");
+    $("pre#run_output").text("API Error: " + status, " - " + error);
+
+    // Unlock Form
+    $("select#assignment").prop("disabled", false);
+    $("select#test").prop("disabled", false);
+    $("input#file").prop("disabled", false);
+	ladda_submit.stop();
+    $("button#submit").children("span.ladda-label").html("Submit");
+
+}
+
+function setup_error_callback(xhr, status, error) {
+
+    // Log Error
+    console.log("Status: " + status, ", Error: " + error);
+
+    // Update Status
+    $("span#run_status").text("API Error " + status);
+
+    // Output Results
+    $("span#run_score").text("N/A");
+    $("span#run_retcode").text("N/A");
+    $("pre#run_output").text("API Error: " + status, " - " + error);
+
+}
+
 function clear_results() {
     $("span#run_status").text("TBD");
     $("span#run_score").text("TBD");
@@ -192,14 +229,14 @@ function clear_results() {
 $("select#assignment").change(function() {
     var uuid = $("select#assignment").val();
     if(uuid.length > 0) {
-        assignment_tests_get(update_tst_list, uuid);
+        assignment_tests_get(update_tst_list, setup_error_callback, uuid);
     }
 });
 
 $("select#test").change(function() {
     var uuid = $("select#test").val();
     if(uuid.length > 0) {    
-        test_get(update_max_score, uuid);
+        test_get(update_max_score, setup_error_callback, uuid);
     }
 });
 
@@ -230,6 +267,11 @@ $("form#submitform").submit(function() {
         return false;
     }
 
+    // Lock Form
+    $("select#assignment").prop("disabled", true);
+    $("select#test").prop("disabled", true);
+    $("input#file").prop("disabled", true);
+
     // Upload File
     var file_name = $("input#file").val();
     console.log("File Name = " + file_name);
@@ -243,12 +285,7 @@ $("form#submitform").submit(function() {
     }
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
-    file_post(upload_fle_callback, form_data);
-
-    // Lock Form
-    $("select#assignment").prop("disabled", true);
-    $("select#test").prop("disabled", true);
-    $("input#file").prop("disabled", true);
+    file_post(upload_fle_callback, submit_error_callback, form_data);
 
     // Return
     return false
