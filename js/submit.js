@@ -160,7 +160,7 @@ function check_result_callback(data, status) {
         $("select#assignment").prop("disabled", false);
         $("select#test").prop("disabled", false);
         $("input#file").prop("disabled", false);
-	ladda_submit.stop();
+	    ladda_submit.stop();
         $("button#submit").children("span.ladda-label").html("Submit");
 
     }
