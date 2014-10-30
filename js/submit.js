@@ -284,11 +284,6 @@ $("form#submitform").submit(function() {
         return false;
     }
 
-    // Lock Form
-    $("select#assignment").prop("disabled", true);
-    $("select#test").prop("disabled", true);
-    $("input#file").prop("disabled", true);
-
     // Upload File
     var file_name = $("input#file").val();
     console.log("File Name = " + file_name);
@@ -303,6 +298,11 @@ $("form#submitform").submit(function() {
     var form_data = new FormData($('form#submitform')[0]);
     console.log("Submitting File...");
     file_post(upload_fle_callback, submit_error_callback, form_data);
+
+    // Lock Form
+    $("select#assignment").prop("disabled", true);
+    $("select#test").prop("disabled", true);
+    $("input#file").prop("disabled", true);
 
     // Return
     return false
