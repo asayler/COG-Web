@@ -80,7 +80,7 @@ function update_tst_list_item(data, status) {
 function upload_fle_callback(data, status) {
 
     // Log Data
-    console.log("data = " + data);
+    console.log("data = " + JSON.stringify(data));
 
     // Save Files UUIDs
     fle_uuids = data.files;
@@ -94,7 +94,7 @@ function upload_fle_callback(data, status) {
 function create_sub_callback(data, status) {
 
     // Log Data
-    console.log("data = " + data);
+    console.log("data = " JSON.stringify(data));
     
     // Save Submission UUID
     sub_uuid = data.submissions[0];
@@ -109,7 +109,7 @@ function create_sub_callback(data, status) {
 function add_files_callback(data, status) {
 
     // Log Data
-    console.log("data = " + data);
+    console.log("data = " JSON.stringify(data));
     
     // Check Files
     console.log("Added files: " + data.files);
@@ -123,7 +123,7 @@ function add_files_callback(data, status) {
 function run_test_callback(data, status) {
 
     // Log Data
-    console.log("data = " + data);
+    console.log("data = " JSON.stringify(data));
 
     // Save Run UUID
     run_uuid = data.runs[0];
@@ -154,7 +154,7 @@ function poll_results_callback() {
 function check_result_callback(data, status) {
 
     // Log Data
-    console.log("data = " + data);
+    console.log("data = " JSON.stringify(data));
 
     // Extract Results
     var keys = Object.keys(data);
@@ -191,7 +191,6 @@ function check_result_callback(data, status) {
 
 function update_max_score(data, status) {
 
-    console.log("data = " + data);
     var keys = Object.keys(data);
     var uuid = keys[0];
     var tst = data[uuid];
