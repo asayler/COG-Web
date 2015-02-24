@@ -1,0 +1,20 @@
+# Site settings
+title: "COG Web Interface"
+email: "andy.sayler@gmail.com"
+description: "Web UI for COG"
+baseurl: "/"
+url: "https://web-cog.cs.colorado.edu"
+google_analytics_key: "UA-54269747-1"
+
+# Build settings
+markdown: kramdown
+highlighter: pygments
+exclude: [README.md, .gitignore, .git]
+permalink: / ## disables post output
+timezone: America/Denver
+lsi: false 
+
+# Serve Settings
+port: 4000
+host: 0.0.0.0
+safe: false
