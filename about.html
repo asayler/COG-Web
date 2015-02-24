@@ -1,129 +1,46 @@
-<!doctype html>
-<html lang="en">
+---
+layout: default
+---
 
-  <head>
+<!-- Local Content -->
+<div class="container">
 
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <div class="page-header">
+    <h1>About</h1>
+  </div>
 
-    <title>COG Submiterator</title>
+  <p class="lead">
+    This is the web front-end for the University of Colorado,
+    Boulder's COG (Computerized Online Grading) System. COG is a
+    system for providing rapid feedback on programming assignments and
+    for automatically assessing assignment submission grades. As of
+    the Fall 2014 semester, COG is in Beta.
+  </p>
+  <p>
+    This front-end and the associated COG backend are both licensed
+    under the AGPLv3, the full text of which can be found in the
+    associated <a href="COPYING">COPYING</a> file. The source code is
+    available via
+    <a href="https://github.com/asayler/COG-Web" target="_blank">
+      GitHub</a>.
+    COG-Web uses the
+    <a href="http://getbootstrap.com/" target="_blank">
+      Bootstrap web framework</a>, provided under the terms of the MIT
+    license. It also uses the
+    <a href="http://jquery.com/" target="_blank">
+      jquery JS library</a>, provided under the terms of the MIT
+    license.
+  </p>
+  <p>
+    You may also be interested in the
+    <a href="https://github.com/asayler/COG" target="_blank">
+      COG API and backend</a> (where all the magic happens). There is
+    also a
+    <a href="https://github.com/asayler/COG-CLI" target="_blank">
+      CLI-based front-end</a> that may be used as an alternative to
+    this web-based front-end.
+  </p>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/cog-web.css" rel="stylesheet">
+</div>
 
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
-      Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-54269747-1', 'auto');
-      ga('require', 'displayfeatures');
-      ga('require', 'linkid', 'linkid.js');
-      ga('send', 'pageview');
-    </script>
-
-  </head>
-
-  <body>
-
-    <!-- Navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle"
-                  data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">COG Submiterator</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="submit.html">Submit</a></li>
-            <li class="active"><a href="about.html">About</a></li>
-            <li><a href="help.html">Help</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Body -->
-    <div class="container">
-
-      <div class="page-header">
-        <h1>About</h1>
-      </div>
-
-      <p class="lead">
-        This is the web front-end for the University of Colorado,
-        Boulder's COG (Computerized Online Grading) System. COG is a
-        system for providing rapid feedback on programming assignments
-        and for automatically assessing assignment submission
-        grades. As of the Fall 2014 semester, COG is in Beta.
-      </p>
-      <p>
-        This front-end and the associated COG backend are both licensed
-        under the AGPLv3, the full text of which can be found in the
-        associated <a href="COPYING">COPYING</a> file. The source code
-        is available via
-        <a href="https://github.com/asayler/COG-Web" target="_blank">
-          GitHub</a>.
-        COG-Web uses the
-        <a href="http://getbootstrap.com/" target="_blank">
-          Bootstrap web framework</a>,
-        provided under the terms of the MIT license. It also uses the
-        <a href="http://jquery.com/" target="_blank">
-          jquery JS library</a>,
-        provided under the terms of the MIT license.
-      </p>
-      <p>
-        You may also be interested in the
-        <a href="https://github.com/asayler/COG" target="_blank">
-          COG API and backend</a> (where all the magic happens). There
-        is also a
-        <a href="https://github.com/asayler/COG-CLI" target="_blank">
-          CLI-based front-end</a>
-        that may be used as an alternative to
-        this web-based front-end.
-      </p>
-
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <div class="container">
-        <p class="text-muted">
-          COG-Web Beta:
-          <em>
-            Code and license available on
-            <a href="https://github.com/asayler/COG-Web" target="_blank">GitHub</a>.
-            Patches, bug reports, and feature requests welcome.
-            Built by
-	    <a href="http://www.andysayler.com" target="_blank">Andy Sayler</a>
-	    in Boulder, CO.
-          </em>
-        </p>
-      </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="js/jquery-2.1.1.min.js"></script>
-    <script src="js/jquery.cookie.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/common.js"></script>
-    </script>
-
-  </body>
-
-</html>
-
-<!--  LocalWords:  Submiterator GitHub AGPLv jquery JS
- -->
+<!--  LocalWords:  GitHub AGPLv jquery JS -->

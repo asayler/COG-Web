@@ -1,177 +1,91 @@
-<!doctype html>
-<html lang="en">
+---
+layout: default
+---
 
-  <head>
+<!-- Local Content -->
+<div class="container">
 
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <div class="page-header">
+    <h1>Submit Your Solution</h1>
+  </div>
 
-    <title>COG Submiterator</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="dist/ladda-themeless.min.css" rel="stylesheet">
-    <link href="css/cog-web.css" rel="stylesheet">
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
-      Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-54269747-1', 'auto');
-      ga('require', 'displayfeatures');
-      ga('require', 'linkid', 'linkid.js');
-      ga('send', 'pageview');
-    </script>
-
-  </head>
-
-  <body>
-
-    <!-- Navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle"
-                  data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">COG Submiterator</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="submit.html">Submit</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="help.html">Help</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><span class="navbar-text">Logged in as <span id="current_user"></span></span></li>
-            <li><button class="btn btn-default navbar-btn" id="logout">Logout</button></li>
-          </ul>
-        </div>
-      </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">Submission</h2>
     </div>
-
-    <!-- Body -->
-    <div class="container">
-
-     <div class="page-header">
-       <h1>Submit Your Solution</h1>
-     </div>
-
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h2 class="panel-title">Submission</h2>
-        </div>
-        <div class="panel-body">
-          <form class="form-horizontal" role="form" name="submitform" id="submitform" action="">
-            <div class="form-group">
-              <label class="col-md-2 control-label" for="assignment">Assignment:</label>
-              <div class="col-md-10">
-                <select class="form-control" id="assignment"
-                        name="assignment" required autofocus disabled></select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-2" for="test">Test:</label>
-              <div class="col-md-10">
-                <select class="form-control" id="test"
-                        name="test" required disabled></select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-md-2" for="file">Submission File:</label>
-              <div class="col-md-10">
-                <input class="form-control" type="file" id="file"
-                       name="submission" required disabled>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-md-offset-2 col-md-10">
-                <button class="btn btn-primary btn-block ladda-button" id="submit"
-                        type="submit" data-style="expand-left" disabled>
-                  <span class="ladda-label">Submit</span>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h2 class="panel-title">Results</h2>
-        </div>
-        <div class="panel-body results">
-          <div class="row row-stats">
-            <div class="col-md-2">
-              <strong>Score:</strong>
-              <span id="run_score">TBD</span> of <span id="max_score">0</span>
-            </div>
-            <div class="col-md-2">
-              <strong>Return Code:</strong>
-              <span id="run_retcode">TBD</span>
-            </div>
-            <div class="col-md-4">
-              <strong>Status:</strong>
-              <span id="run_status">TBD</span>
-            </div>
-            <div class="col-md-4">
-              <strong>Run UUID:</strong>
-              <span id="run_uuid">TBD</span>
-            </div>
-          </div>
-          <div class="row row-output">
-            <div class="col-md-12">
-              <pre class="pre-scrollable" id="run_output">Grading output will appear here...</pre>
-            </div>
+    <div class="panel-body">
+      <form class="form-horizontal" role="form" name="submitform" id="submitform" action="">
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="assignment">Assignment:</label>
+          <div class="col-md-10">
+            <select class="form-control" id="assignment"
+                    name="assignment" required autofocus disabled></select>
           </div>
         </div>
-      </div>
-
+        <div class="form-group">
+          <label class="control-label col-md-2" for="test">Test:</label>
+          <div class="col-md-10">
+            <select class="form-control" id="test"
+                    name="test" required disabled></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-2" for="file">Submission File:</label>
+          <div class="col-md-10">
+            <input class="form-control" type="file" id="file"
+                   name="submission" required disabled>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <button class="btn btn-primary btn-block ladda-button" id="submit"
+                    type="submit" data-style="expand-left" disabled>
+              <span class="ladda-label">Submit</span>
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <div class="footer">
-      <div class="container">
-        <p class="text-muted">
-          COG-Web Beta:
-          <em>
-            Code and license available on
-            <a href="https://github.com/asayler/COG-Web" target="_blank">GitHub</a>.
-            Patches, bug reports, and feature requests welcome.
-            Built by
-            <a href="http://www.andysayler.com" target="_blank">Andy Sayler</a>
-            in Boulder, CO.
-          </em>
-        </p>
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h2 class="panel-title">Results</h2>
+    </div>
+    <div class="panel-body results">
+      <div class="row row-stats">
+        <div class="col-md-2">
+          <strong>Score:</strong>
+          <span id="run_score">TBD</span> of <span id="max_score">0</span>
+        </div>
+        <div class="col-md-2">
+          <strong>Return Code:</strong>
+          <span id="run_retcode">TBD</span>
+        </div>
+        <div class="col-md-4">
+          <strong>Status:</strong>
+          <span id="run_status">TBD</span>
+        </div>
+        <div class="col-md-4">
+          <strong>Run UUID:</strong>
+          <span id="run_uuid">TBD</span>
+        </div>
+      </div>
+      <div class="row row-output">
+        <div class="col-md-12">
+          <pre class="pre-scrollable" id="run_output">Grading output will appear here...</pre>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Scripts -->
-    <script src="js/jquery-2.1.1.min.js"></script>
-    <script src="js/jquery.cookie.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="dist/spin.min.js"></script>
-    <script src="dist/ladda.min.js"></script>
-    <script src="js/common.js"></script>
-    <script src="js/cog_api.js"></script>
-    <script src="js/submit.js"></script>
-    <script>
-      $( document ).ready(function() {
-        token_redirect();
-        submit_onload();
-      })
-    </script>
+</div>
 
-  </body>
-
-</html>
+<!-- Local Scripts -->
+<script src="js/submit.js"></script>
+<script>
+  $( document ).ready(function() {
+  token_redirect();
+  submit_onload();
+  })
+</script>
