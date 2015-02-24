@@ -1,11 +1,11 @@
 # Site settings
-title: "COG Submitterator"
-email: "andy.sayler@gmail.com"
+title: ""
+email: ""
 description: "Web UI for COG"
 baseurl: "/"
-url: "https://web-cog.cs.colorado.edu"
-google_analytics_key: "UA-54269747-1"
-cog_api_url: "https://api-cog.cs.colorado.edu"
+url: ""
+google_analytics_key: ""
+cog_api_url: ""
 
 # Build settings
 markdown: kramdown
