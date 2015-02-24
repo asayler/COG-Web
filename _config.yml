@@ -1,5 +1,5 @@
 # Site settings
-title: "COG Web Interface"
+title: "COG Submitterator"
 email: "andy.sayler@gmail.com"
 description: "Web UI for COG"
 baseurl: "/"
@@ -10,7 +10,7 @@ cog_api_url: "https://api-cog.cs.colorado.edu"
 # Build settings
 markdown: kramdown
 highlighter: pygments
-exclude: [README.md, .gitignore, .git]
+exclude: [COPYING, README.md, .gitignore, .git]
 permalink: / ## disables post output
 timezone: America/Denver
 lsi: false 
