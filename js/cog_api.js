@@ -1,3 +1,6 @@
+---
+---
+
 function get_auth(url, callback, callback_error) {
     var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
@@ -43,7 +46,7 @@ function put_auth(url, callback, callback_error, data) {
 }
 
 function file_post(callback, callback_error, form_data) {
-    var url = "https://api-cog.cs.colorado.edu/files/";
+    var url = "{{ site.cog_api_url }}/files/";
     var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
         type: 'POST',
@@ -62,49 +65,49 @@ function file_post(callback, callback_error, form_data) {
 }
 
 function assignments_get(callback, callback_error) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/";
+    var url = "{{ site.cog_api_url }}/assignments/";
     get_auth(url, callback, callback_error);
 }
 
 function assignments_get_submitable(callback, callback_error) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/submitable/";
+    var url = "{{ site.cog_api_url }}/assignments/submitable/";
     get_auth(url, callback, callback_error);
 }
 
 function assignment_get(callback, callback_error, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/";
+    var url = "{{ site.cog_api_url }}/assignments/" + uuid + "/";
     get_auth(url, callback, callback_error);
 }
 
 function assignment_tests_get(callback, callback_error, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/tests/";
+    var url = "{{ site.cog_api_url }}/assignments/" + uuid + "/tests/";
     get_auth(url, callback, callback_error);
 }
 
 function assignment_submission_create(callback, callback_error, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/assignments/" + uuid + "/submissions/";
+    var url = "{{ site.cog_api_url }}/assignments/" + uuid + "/submissions/";
     var data = {};
     post_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
 function submission_add_files(callback, callback_error, uuid, file_lst) {
-    var url = "https://api-cog.cs.colorado.edu/submissions/" + uuid + "/files/";
+    var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/files/";
     var data = {'files': file_lst};
     put_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
 function submission_run_test(callback, callback_error, uuid_sub, uuid_tst) {
-    var url = "https://api-cog.cs.colorado.edu/submissions/" + uuid_sub + "/runs/";
+    var url = "{{ site.cog_api_url }}/submissions/" + uuid_sub + "/runs/";
     var data = {'test': uuid_tst};
     post_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
 function test_get(callback, callback_error, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/tests/" + uuid + "/";
+    var url = "{{ site.cog_api_url }}/tests/" + uuid + "/";
     get_auth(url, callback, callback_error);
 }
 
 function run_get(callback, callback_error, uuid) {
-    var url = "https://api-cog.cs.colorado.edu/runs/" + uuid + "/";
+    var url = "{{ site.cog_api_url }}/runs/" + uuid + "/";
     get_auth(url, callback, callback_error);
 }

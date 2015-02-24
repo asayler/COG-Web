@@ -5,6 +5,7 @@ description: "Web UI for COG"
 baseurl: "/"
 url: "https://web-cog.cs.colorado.edu"
 google_analytics_key: "UA-54269747-1"
+cog_api_url: "https://api-cog.cs.colorado.edu"
 
 # Build settings
 markdown: kramdown
