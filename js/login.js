@@ -10,7 +10,7 @@ function try_login(username, password) {
 
     $.ajax({
         type: "GET",
-        url: "https://api-cog.cs.colorado.edu/tokens/",
+        url: "{{ site.cog_api_url }}/tokens/",
         async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
