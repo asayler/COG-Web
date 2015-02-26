@@ -4,6 +4,7 @@
 var ladda_login = null;
 
 function login_onload() {
+    console.log("Loaded Login");
     ladda_login = Ladda.create(document.querySelector("button#login"));
 }
 

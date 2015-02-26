@@ -38,3 +38,26 @@ function logout() {
     $.removeCookie(COOKIE_USER_NAME, COOKIE_USER_PARAMS);
     window.location.replace(LOGIN_URL);
 }
+
+function update_auth_state() {
+    var token = $.cookie('cog_token');
+    if(token) {
+	$("span#auth_state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
+	$("button#auth_button").text("Logout");
+    }
+    else {
+	$("span#auth_state").text("");
+	$("button#auth_button").text("Login");
+    }
+}
+
+$("button#auth_button").click(function() {
+    console.log("Clicked auth_button");
+    var token = $.cookie('cog_token');
+    if(token) {
+	logout();
+    }
+    else {
+        window.location.replace(LOGIN_URL); 
+    }
+});

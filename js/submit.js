@@ -7,7 +7,6 @@ var timeout = null;
 var ladda_submit = null;
 
 function submit_onload() {
-    $("span#current_user").text($.cookie(COOKIE_USER_NAME));
     ladda_submit = Ladda.create(document.querySelector("button#submit"));
     assignments_get_submitable(update_asn_list, setup_error_callback);
 }
@@ -307,8 +306,4 @@ $("form#submitform").submit(function() {
     // Return
     return false
     
-});
-
-$("button#logout").click(function() {
-    logout();
 });

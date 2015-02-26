@@ -1,8 +1,15 @@
 ---
 layout: default
+
+extra_scripts:
+  - js/login.js
+
+ready_script: |
+  token_redirect();
+  update_auth_state();
+  login_onload();
 ---
 
-<!-- Local Content -->
 <div class="container">
   <form class="form-login" role="form" name="loginform" id="loginform" action="">
     <h2 class="form-login-heading">Please Login</h2>
@@ -27,13 +34,3 @@ layout: default
     <p><output class="form-login-error" id="loginerror"></output></p>
   </form>
 </div>
-
-
-<!-- Local Scripts -->
-<script src="js/login.js"></script>
-<script>
-  $( document ).ready(function() {
-  token_redirect();
-  login_onload();
-  })
-</script>

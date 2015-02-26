@@ -1,8 +1,16 @@
 ---
 layout: default
+
+extra_scripts:
+  - js/submit.js
+
+ready_script: |
+  token_redirect();
+  $("li#nav_submit").addClass("active");
+  update_auth_state();
+  submit_onload();
 ---
 
-<!-- Local Content -->
 <div class="container">
 
   <div class="page-header">
@@ -80,12 +88,3 @@ layout: default
   </div>
 
 </div>
-
-<!-- Local Scripts -->
-<script src="js/submit.js"></script>
-<script>
-  $( document ).ready(function() {
-  token_redirect();
-  submit_onload();
-  })
-</script>
