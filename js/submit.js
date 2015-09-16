@@ -20,6 +20,7 @@ function update_asn_list(data, status) {
             var uuid = value;
             assignment_get(update_asn_list_item, setup_error_callback, uuid);
         });
+        $("select#assignment").change();
     }
     else {
         $("select#assignment")
@@ -36,7 +37,6 @@ function update_asn_list_item(data, status) {
     $("select#assignment")
         .append($("<option>", { value : uuid})
                 .text(assignment.name));
-    $("select#assignment").change();
     $("select#assignment").prop("disabled", false);
 }
 
@@ -49,6 +49,7 @@ function update_tst_list(data, status) {
             var uuid = value;
             test_get(update_tst_list_item, setup_error_callback, uuid);
         });
+        $("select#test").change();
     }
     else {
         $("select#test")
@@ -68,7 +69,6 @@ function update_tst_list_item(data, status) {
     $("select#test")
         .append($("<option>", { value : uuid})
                 .text(test.name));
-    $("select#test").change();
     $("select#test").prop("disabled", false);
     $("input#file").prop("disabled", false);
     $("button#submit").prop("disabled", false);
