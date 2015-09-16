@@ -1,27 +1,27 @@
-var asn_cnt   = null;
-var asn_uuid  = null;
-var tst_cnt   = null;
-var tst_uuid  = null;
-var fle_uuids = null;
-var sub_uuid  = null;
-var run_uuid  = null;
-var timeout = null;
+var asn_cnt      = null;
+var asn_uuid     = null;
+var tst_cnt      = null;
+var tst_uuid     = null;
+var fle_uuids    = null;
+var sub_uuid     = null;
+var run_uuid     = null;
+var timeout      = null;
 var ladda_submit = null;
 
 function add_option_alpha(select, option) {
     var inserted = false;
     select.children("option").each(function() {
-	if (option.text() < this.text) {
-	    console.log("Inserting " + option.text());
-	    option.insertBefore(this);
-	    inserted = true;
-	    return false;
+	    if (option.text() < this.text) {
+	        console.log("Inserting " + option.text());
+	        option.insertBefore(this);
+	        inserted = true;
+	        return false;
         }
     });
     if ( inserted == false ) {
-	console.log("Appending " + option.text());
-	select.append(option);
-	inserted = true;
+	    console.log("Appending " + option.text());
+	    select.append(option);
+	    inserted = true;
     }
 }
 
@@ -31,21 +31,21 @@ function submit_onload() {
 }
 
 function update_asn_list(data, status) {
-    $("select#assignment").empty();
     var assignments = data.assignments;
+    var select = $("select#assignment");
+    select.empty();
     asn_cnt = assignments.length;
-    console.log("assignments = " + assignments);
     console.log("asn_cnt = " + asn_cnt);
+    console.log("assignments = " + assignments);
     if(asn_cnt > 0) {
-        $.each(assignments, function(key, value) {
-            var uuid = value;
+        $.each(assignments, function(key, uuid) {
             assignment_get(update_asn_list_item, setup_error_callback, uuid);
         });
     }
     else {
-	var option = $("<option>", { value : ""}).text("No Assignments Accepting Submissions");
-        $("select#assignment").append(option);
-        $("select#assignment").prop("disabled", true);
+	    var option = $("<option>", { value : ""}).text("No Assignments Accepting Submissions");
+        select.append(option);
+        select.prop("disabled", true);
     }
 }
 
@@ -53,32 +53,32 @@ function update_asn_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var assignment = data[uuid];
-    var option = $("<option>", { value : uuid}).text(assignment.name);
     var select = $("select#assignment");
+    var option = $("<option>", { value : uuid}).text(assignment.name);
     add_option_alpha(select, option);
-    if ($("select#assignment option").size() == asn_cnt) {
-	$("select#assignment").val($("select#assignment option:last").val());
-        $("select#assignment").change();
-        $("select#assignment").prop("disabled", false);
+    if ( select.children("option").size() == asn_cnt ) {
+	    select.val(select.children("option:last").val());
+        select.change();
+        select.prop("disabled", false);
     }
 }
 
 function update_tst_list(data, status) {
-    $("select#test").empty();
     var tests = data.tests;
+    var select = $("select#test");
+    select.empty();
     tst_cnt = tests.length;
-    console.log("tests = " + tests);
     console.log("tst_cnt = " + tst_cnt);
+    console.log("tests = " + tests);
     if(tst_cnt > 0) {
-        $.each(tests, function(key, value) {
-            var uuid = value;
+        $.each(tests, function(key, uuid) {
             test_get(update_tst_list_item, setup_error_callback, uuid);
         });
     }
     else {
-	var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
-        $("select#test").append(option);
-        $("select#test").prop("disabled", true);
+	    var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
+        select.append(option);
+        select.prop("disabled", true);
         $("input#file").prop("disabled", true);
         $("button#submit").prop("disabled", true);
     }
@@ -89,13 +89,13 @@ function update_tst_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var test = data[uuid];
-    var option = $("<option>", { value : uuid}).text(test.name);
     var select = $("select#test");
+    var option = $("<option>", { value : uuid}).text(test.name);
     add_option_alpha(select, option);
-    if ($("select#test option").size() == tst_cnt) {
-	$("select#test").val($("select#test option:last").val());
-        $("select#test").change();
-        $("select#test").prop("disabled", false);
+    if (select.children("option").size() == tst_cnt) {
+	    select.val(select.children("option:last").val());
+        select.change();
+        select.prop("disabled", false);
         $("input#file").prop("disabled", false);
         $("button#submit").prop("disabled", false);
     }
