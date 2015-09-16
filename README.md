@@ -10,11 +10,19 @@ Status
 COG-Web is currently running in Beta in production. Bug reports,
 patches, and comments welcome.
 
+Prereq
+------
+
+```
+$ sudo gem install jekyll
+$ sudo gem install jekyll-git_metadata
+```
+
 Setup
 -----
 
 This site is built using Jekyll. To setup, copy `_defaults.yml` to
-`config.yml`. Then run `jekyll build`. Then deploy the resulting
+`_config.yml`. Then run `jekyll build`. Then deploy the resulting
 `_site` directory.
 
 Related
