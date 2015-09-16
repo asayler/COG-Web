@@ -1,4 +1,6 @@
+var asn_cnt   = null;
 var asn_uuid  = null;
+var tst_cnt   = null;
 var tst_uuid  = null;
 var fle_uuids = null;
 var sub_uuid  = null;
@@ -31,8 +33,10 @@ function submit_onload() {
 function update_asn_list(data, status) {
     $("select#assignment").empty();
     var assignments = data.assignments;
+    asn_cnt = assignments.length;
     console.log("assignments = " + assignments);
-    if(assignments.length > 0) {
+    console.log("asn_cnt = " + asn_cnt);
+    if(asn_cnt > 0) {
         $.each(assignments, function(key, value) {
             var uuid = value;
             assignment_get(update_asn_list_item, setup_error_callback, uuid);
@@ -62,8 +66,10 @@ function update_asn_list_item(data, status) {
 function update_tst_list(data, status) {
     $("select#test").empty();
     var tests = data.tests;
+    tst_cnt = tests.length;
     console.log("tests = " + tests);
-    if(tests.length > 0) {
+    console.log("tst_cnt = " + tst_cnt);
+    if(tst_cnt > 0) {
         $.each(tests, function(key, value) {
             var uuid = value;
             test_get(update_tst_list_item, setup_error_callback, uuid);
