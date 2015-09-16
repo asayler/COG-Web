@@ -6,6 +6,23 @@ var run_uuid  = null;
 var timeout = null;
 var ladda_submit = null;
 
+function add_option_alpha(select, option) {
+    var inserted = false;
+    select.children("option").each(function() {
+	if (option.text() < this.text) {
+	    console.log("Inserting " + option.text());
+	    option.insertBefore(this);
+	    inserted = true;
+	    return false;
+        }
+    });
+    if ( inserted == false ) {
+	console.log("Appending " + option.text());
+	select.append(option);
+	inserted = true;
+    }
+}
+
 function submit_onload() {
     ladda_submit = Ladda.create(document.querySelector("button#submit"));
     assignments_get_submitable(update_asn_list, setup_error_callback);
