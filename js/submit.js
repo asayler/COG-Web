@@ -121,7 +121,7 @@ function create_sub_callback(data, status) {
 
     // Log Data
     console.log("data = " + JSON.stringify(data));
-    
+
     // Save Submission UUID
     sub_uuid = data.submissions[0];
 
@@ -136,7 +136,7 @@ function add_files_callback(data, status) {
 
     // Log Data
     console.log("data = " + JSON.stringify(data));
-    
+
     // Check Files
     console.log("Added files: " + data.files);
 
@@ -280,7 +280,7 @@ $("select#assignment").change(function() {
 $("select#test").change(function() {
     var uuid = $("select#test").val();
     console.log("Test changed to " + uuid)
-    if(uuid.length > 0) {    
+    if(uuid.length > 0) {
         test_get(update_max_score, setup_error_callback, uuid);
     }
 });
@@ -290,7 +290,7 @@ $("form#submitform").submit(function() {
     // Start Button Animation
     ladda_submit.start();
     $("button#submit").children("span.ladda-label").html("Running...");
-    
+
     // Get Input
     asn_uuid = $("select#assignment").val();
     tst_uuid = $("select#test").val();
@@ -334,5 +334,5 @@ $("form#submitform").submit(function() {
 
     // Return
     return false
-    
+
 });
