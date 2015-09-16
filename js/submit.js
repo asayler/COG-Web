@@ -271,6 +271,7 @@ function clear_results() {
 
 $("select#assignment").change(function() {
     var uuid = $("select#assignment").val();
+    console.log("Assignment changed to " + uuid)
     if(uuid.length > 0) {
         assignment_tests_get(update_tst_list, setup_error_callback, uuid);
     }
@@ -278,6 +279,7 @@ $("select#assignment").change(function() {
 
 $("select#test").change(function() {
     var uuid = $("select#test").val();
+    console.log("Test changed to " + uuid)
     if(uuid.length > 0) {    
         test_get(update_max_score, setup_error_callback, uuid);
     }
