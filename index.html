@@ -1,15 +1,10 @@
 ---
 layout: default
+
+ready_script: |
+  token_redirect();
+  update_auth_state();
 ---
 
-<!-- Local Content -->
 <div class="container">
 </div>
-
-<!-- Local Scripts -->
-<script src="js/index.js"></script>
-<script>
-  $( document ).ready(function() {
-  token_redirect();
-  })
-</script>
