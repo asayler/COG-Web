@@ -53,12 +53,13 @@ function update_asn_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var assignment = data[uuid];
-    $("select#assignment")
-        .append($("<option>", { value : uuid})
-                .text(assignment.name));
-    if ($("select#assignment").prop("disabled")) {
-        $("select#assignment").prop("disabled", false);
+    var option = $("<option>", { value : uuid}).text(assignment.name);
+    var select = $("select#assignment");
+    add_option_alpha(select, option);
+    if ($("select#assignment option").size() == asn_cnt) {
+	$("select#assignment").val($("select#assignment option:last").val());
         $("select#assignment").change();
+        $("select#assignment").prop("disabled", false);
     }
 }
 
@@ -88,14 +89,15 @@ function update_tst_list_item(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var test = data[uuid];
-    $("select#test")
-        .append($("<option>", { value : uuid})
-                .text(test.name));
-    if ($("select#test").prop("disabled")) {
+    var option = $("<option>", { value : uuid}).text(test.name);
+    var select = $("select#test");
+    add_option_alpha(select, option);
+    if ($("select#test option").size() == tst_cnt) {
+	$("select#test").val($("select#test option:last").val());
+        $("select#test").change();
         $("select#test").prop("disabled", false);
         $("input#file").prop("disabled", false);
         $("button#submit").prop("disabled", false);
-        $("select#test").change();
     }
 }
 
