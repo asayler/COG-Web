@@ -43,9 +43,8 @@ function update_asn_list(data, status) {
         });
     }
     else {
-        $("select#assignment")
-            .append($("<option>", { value : ""})
-                    .text("No Assignments Accepting Submissions"));
+	var option = $("<option>", { value : ""}).text("No Assignments Accepting Submissions");
+        $("select#assignment").append(option);
         $("select#assignment").prop("disabled", true);
     }
 }
@@ -76,9 +75,8 @@ function update_tst_list(data, status) {
         });
     }
     else {
-        $("select#test")
-            .append($("<option>", { value : ""})
-                    .text("No Tests Accepting Submissions"));
+	var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
+        $("select#test").append(option);
         $("select#test").prop("disabled", true);
         $("input#file").prop("disabled", true);
         $("button#submit").prop("disabled", true);
