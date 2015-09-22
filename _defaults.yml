@@ -1,11 +1,12 @@
 # Site settings
 title: "COG Submitterator"
-email: ""
 description: "Web UI for COG"
 baseurl: "/"
+repo_url: "https://github.com/asayler/COG-Web"
 url: ""
-google_analytics_key: ""
 cog_api_url: ""
+google_analytics_key: ""
+email: ""
 
 # Build settings
 markdown: kramdown
