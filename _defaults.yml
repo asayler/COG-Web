@@ -16,6 +16,7 @@ exclude: [COPYING, README.md, .gitignore, .git]
 permalink: / ## disables post output
 timezone: America/Denver
 lsi: false 
+destination: ./_site
 
 # Serve Settings
 port: 4000
