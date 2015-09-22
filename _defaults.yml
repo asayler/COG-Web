@@ -14,7 +14,7 @@ login_note: ""
 # Build settings
 markdown: kramdown
 highlighter: pygments
-exclude: [COPYING, README.md, .gitignore, .git]
+exclude: [README.md, .gitignore, .git]
 permalink: / ## disables post output
 timezone: America/Denver
 lsi: false 
