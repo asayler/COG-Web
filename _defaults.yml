@@ -7,6 +7,7 @@ url: ""
 cog_api_url: ""
 google_analytics_key: ""
 email: ""
+login_note: ""
 
 # Build settings
 markdown: kramdown
