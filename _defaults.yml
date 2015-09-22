@@ -1,5 +1,5 @@
 # Site settings
-title: ""
+title: "COG Submitterator"
 email: ""
 description: "Web UI for COG"
 baseurl: "/"
