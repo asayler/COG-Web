@@ -35,7 +35,7 @@ Related
 Licensing
 ---------
 
-Copyright 2014 by Andy Sayler
+Copyright 2014, 2015 by Andy Sayler
 
 This file is part of COG-Web.
  

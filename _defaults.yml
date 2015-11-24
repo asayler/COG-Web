@@ -1,19 +1,24 @@
 # Site settings
-title: ""
-email: ""
+title: "COG Submitterator"
 description: "Web UI for COG"
 baseurl: "/"
+web_repo_url: "https://github.com/asayler/COG-Web"
+api_repo_url: "https://github.com/asayler/COG"
+cli_repo_url: "https://github.com/asayler/COG-CLI"
 url: ""
-google_analytics_key: ""
 cog_api_url: ""
+google_analytics_key: ""
+email: ""
+login_note: ""
 
 # Build settings
 markdown: kramdown
 highlighter: pygments
-exclude: [COPYING, README.md, .gitignore, .git]
+exclude: [README.md, .gitignore, .git]
 permalink: / ## disables post output
 timezone: America/Denver
 lsi: false 
+destination: ./_site
 
 # Serve Settings
 port: 4000
