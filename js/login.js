@@ -14,7 +14,7 @@ function try_login(username, password) {
 
     $.ajax({
         type: "GET",
-        url: "{{ site.cog_api_url }}/tokens/",
+        url: "{{ site.cog_api_url }}/my/token/",
         async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(username, password));
