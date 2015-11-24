@@ -82,7 +82,6 @@ function update_tst_list(data, status) {
         $("input#file").prop("disabled", true);
         $("button#submit").prop("disabled", true);
     }
-    clear_results()
 }
 
 function update_tst_list_item(data, status) {
@@ -281,6 +280,7 @@ $("select#test").change(function() {
     var uuid = $("select#test").val();
     console.log("Test changed to " + uuid)
     if(uuid.length > 0) {
+        clear_results();
         test_get(update_max_score, setup_error_callback, uuid);
     }
 });
