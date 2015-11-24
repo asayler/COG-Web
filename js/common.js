@@ -42,12 +42,12 @@ function logout() {
 function update_auth_state() {
     var token = $.cookie('cog_token');
     if(token) {
-	$("span#auth_state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
-	$("button#auth_button").text("Logout");
+	    $("span#auth_state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
+	    $("button#auth_button").text("Logout");
     }
     else {
-	$("span#auth_state").text("");
-	$("button#auth_button").text("Login");
+	    $("span#auth_state").text("");
+	    $("button#auth_button").text("Login");
     }
 }
 
