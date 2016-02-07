@@ -26,7 +26,7 @@ function add_option_alpha(select, option) {
 }
 
 function submit_onload() {
-    ladda_submit = Ladda.create(document.querySelector("button#submit"));
+    ladda_submit = $("button#submit").ladda();
     assignments_get_submitable(update_asn_list, setup_error_callback);
 }
 
@@ -177,7 +177,6 @@ function poll_results_callback() {
 }
 
 function check_result_callback(data, status) {
-
     // Log Data
     console.log("data = " + JSON.stringify(data));
 
@@ -189,7 +188,7 @@ function check_result_callback(data, status) {
     // Update Status
     $("span#run_status").text(run.status);
 
-    if(run.status.indexOf("complete") == 0) {
+    if (run.status.indexOf("complete") === 0) {
 
         // Output Results
         $("span#run_score").text(run.score);
@@ -200,27 +199,21 @@ function check_result_callback(data, status) {
         $("select#assignment").prop("disabled", false);
         $("select#test").prop("disabled", false);
         $("input#file").prop("disabled", false);
-	    ladda_submit.stop();
+	    ladda_submit.ladda("stop");
         $("button#submit").children("span.ladda-label").html("Submit");
 
-    }
-    else {
-
+    } else {
         // Start Polling
         console.log("Waiting...");
         timeout = setTimeout(poll_results_callback, 1000);
-
     }
-
 }
 
 function update_max_score(data, status) {
-
     var keys = Object.keys(data);
     var uuid = keys[0];
     var tst = data[uuid];
     $("span#max_score").text(tst.maxscore);
-
 }
 
 function submit_error_callback(xhr, status, error) {
@@ -240,7 +233,7 @@ function submit_error_callback(xhr, status, error) {
     $("select#assignment").prop("disabled", false);
     $("select#test").prop("disabled", false);
     $("input#file").prop("disabled", false);
-	ladda_submit.stop();
+	ladda_submit.ladda("stop");
     $("button#submit").children("span.ladda-label").html("Submit");
 
 }
@@ -285,10 +278,11 @@ $("select#test").change(function() {
     }
 });
 
-$("form#submitform").submit(function() {
+$("form#submitform").submit(function(event) {
+    event.preventDefault();
 
     // Start Button Animation
-    ladda_submit.start();
+    ladda_submit.ladda("start");
     $("button#submit").children("span.ladda-label").html("Running...");
 
     // Get Input
@@ -296,43 +290,44 @@ $("form#submitform").submit(function() {
     tst_uuid = $("select#test").val();
 
     // Validate Data
-    if((!asn_uuid) || (asn_uuid.length != 36)) {
+    if (!asn_uuid || asn_uuid.length !== 36) {
         console.log("Valid Assignment UUID Required");
         $("button#submit").prop("disabled", false);
-        return false;
+        return;
     }
-    if((!tst_uuid) || (tst_uuid.length != 36)) {
+
+    if (!tst_uuid || tst_uuid.length !== 36) {
         console.log("Valid Test UUID Required");
         $("button#submit").prop("disabled", false);
-        return false;
+        return;
     }
-    if($("input#file").val().length == 0) {
+
+    if ($("input#file").val().length === 0) {
         console.log("Valid File Required");
         $("button#submit").prop("disabled", false);
-        return false;
+        return;
     }
 
     // Upload File
     var file_name = $("input#file").val();
     console.log("File Name = " + file_name);
-    var file_ext = file_name.split('.').pop();
+
+    var file_ext = file_name.split(".").pop();
     console.log("File Extension = " + file_ext);
-    if(file_ext == "zip") {
-        $("input#file").attr('name', 'extract')
+
+    if (file_ext === "zip") {
+        $("input#file").attr("name", "extract")
+    } else {
+        $("input#file").attr("name", "submission")
     }
-    else {
-        $("input#file").attr('name', 'submission')
-    }
-    var form_data = new FormData($('form#submitform')[0]);
+
+    var form_data = new FormData($("form#submitform")[0]);
     console.log("Submitting File...");
+
     file_post(upload_fle_callback, submit_error_callback, form_data);
 
     // Lock Form
     $("select#assignment").prop("disabled", true);
     $("select#test").prop("disabled", true);
     $("input#file").prop("disabled", true);
-
-    // Return
-    return false
-
 });
