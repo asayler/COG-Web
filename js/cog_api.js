@@ -6,7 +6,6 @@ function get_auth(url, callback, callback_error) {
     $.ajax({
         type: "GET",
         url: url,
-        async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
@@ -20,7 +19,6 @@ function post_auth(url, callback, callback_error, data) {
     $.ajax({
         type: "POST",
         url: url,
-        async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
@@ -35,7 +33,6 @@ function put_auth(url, callback, callback_error, data) {
     $.ajax({
         type: "PUT",
         url: url,
-        async: true,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
@@ -55,7 +52,6 @@ function file_post(callback, callback_error, form_data) {
         contentType: false,
         cache: false,
         processData: false,
-        async: false,
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', make_base_auth(token, ""));
         },
