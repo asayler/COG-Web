@@ -202,6 +202,10 @@ function check_result_callback(data, status) {
 	    ladda_submit.ladda("stop");
         $("button#submit").children("span.ladda-label").html("Submit");
 
+        // Hide progress bar and revert to waiting status
+        $('div#file-progress').toggleClass('hidden');
+        $('div#file-waiting').toggleClass('hidden');
+
     } else {
         // Start Polling
         console.log("Waiting...");
@@ -324,7 +328,13 @@ $("form#submitform").submit(function(event) {
     var form_data = new FormData($("form#submitform")[0]);
     console.log("Submitting File...");
 
-    file_post(upload_fle_callback, submit_error_callback, form_data);
+    $('div#file-progress').toggleClass('hidden');
+    $('div#file-waiting').toggleClass('hidden');
+
+    file_post(upload_fle_callback, submit_error_callback, function(percent) {
+        // Report file upload progress to the user
+        $('span#upload-progress').text(percent);
+    }, form_data);
 
     // Lock Form
     $("select#assignment").prop("disabled", true);

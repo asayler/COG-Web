@@ -42,10 +42,28 @@ function put_auth(url, callback, callback_error, data) {
     });
 }
 
-function file_post(callback, callback_error, form_data) {
+function file_post(callback, callback_error, progress, form_data) {
     var url = "{{ site.cog_api_url }}/files/";
     var token = $.cookie(COOKIE_TOKEN_NAME);
+
+    // Reset upload progress bar
+    $('span#upload-progress').text(0);
+
     $.ajax({
+        xhr: function() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (!evt.lengthComputable) return;
+
+                var percentComplete = evt.loaded / evt.total;
+                percentComplete = parseInt(percentComplete * 100);
+
+                progress(percentComplete);
+            }, false);
+
+            return xhr;
+        },
         type: 'POST',
         url: url,
         data: form_data,
