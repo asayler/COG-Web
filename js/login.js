@@ -5,7 +5,7 @@ var ladda_login = null;
 
 function login_onload() {
     console.log("Loaded Login");
-    ladda_login = Ladda.create(document.querySelector("button#login"));
+    ladda_login = $("button#login").ladda();
 }
 
 function try_login(username, password) {
@@ -30,7 +30,7 @@ function try_login(username, password) {
 function login_failure(xhr, status, error) {
 
     // Stop Login Button Animation
-    ladda_login.stop();
+    ladda_login.ladda('stop');
     $("button#login").children("span.ladda-label").html("Login");
 
     // Log Error
@@ -44,7 +44,7 @@ function login_failure(xhr, status, error) {
 $("form#loginform").submit(function() {
 
     // Start Login Button Animation
-    ladda_login.start();
+    ladda_login.ladda('start');
     $("button#login").children("span.ladda-label").html("Logging In...");
 
     // Get Input
