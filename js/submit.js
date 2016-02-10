@@ -188,6 +188,20 @@ function check_result_callback(data, status) {
     // Update Status
     $("span#run_status").text(run.status);
 
+    // Define colors for each type of status
+    var colors = {
+        "exception": "bg-warning",
+        "error": "bg-danger"
+    };
+
+    // Apply relevant background color to status
+    var sub = run.status.split('-');
+    if (sub.length > 1) {
+        var type = sub[1];
+        console.log('Received competion error: ' + type);
+        $("span#run_status").toggleClass(colors[type]);
+    }
+
     if (run.status.indexOf("complete") === 0) {
 
         // Output Results
@@ -258,6 +272,11 @@ function setup_error_callback(xhr, status, error) {
 }
 
 function clear_results() {
+    // Remove status color from previous runs
+    $("span#run_status").removeClass(function (index, css) {
+        return (css.match (/(^|\s)bg-\S+/g) || []).join(' ');
+    });
+
     $("span#run_status").text("TBD");
     $("span#run_score").text("TBD");
     $("span#run_retcode").text("TBD");
