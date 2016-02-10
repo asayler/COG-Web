@@ -190,8 +190,9 @@ function check_result_callback(data, status) {
 
     // Define colors for each type of status
     var colors = {
-        "exception": "bg-warning",
-        "error": "bg-danger"
+        "none" : "text-success",
+        "exception": "text-warning",
+        "error": "text-danger"
     };
 
     // Apply relevant background color to status
@@ -200,6 +201,8 @@ function check_result_callback(data, status) {
         var type = sub[1];
         console.log('Received competion error: ' + type);
         $("span#run_status").toggleClass(colors[type]);
+    } else {
+        $("span#run_status").toggleClass(colors["none"]);
     }
 
     if (run.status.indexOf("complete") === 0) {
@@ -274,7 +277,7 @@ function setup_error_callback(xhr, status, error) {
 function clear_results() {
     // Remove status color from previous runs
     $("span#run_status").removeClass(function (index, css) {
-        return (css.match (/(^|\s)bg-\S+/g) || []).join(' ');
+        return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
     });
 
     $("span#run_status").text("TBD");
