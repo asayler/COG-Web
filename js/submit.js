@@ -190,9 +190,16 @@ function check_result_callback(data, status) {
 
     // Define colors for each type of status
     var colors = {
-        "none" : "text-success",
-        "exception": "text-warning",
-        "error": "text-danger"
+        text: {
+            "success" : "text-success",
+            "exception": "text-warning",
+            "error": "text-danger"
+        },
+        bg: {
+            "success": "#edf7f2",
+            "exception": "#f7f7ed",
+            "error": "#f7edf2"
+        }
     };
 
     // Apply relevant background color to status
@@ -200,9 +207,12 @@ function check_result_callback(data, status) {
     if (sub.length > 1) {
         var type = sub[1];
         console.log('Received competion error: ' + type);
-        $("span#run_status").toggleClass(colors[type]);
+
+        $("span#run_status").addClass(colors.text[type]);
+        $("pre#run_output").css("background-color", colors.bg[type]);
     } else {
-        $("span#run_status").toggleClass(colors["none"]);
+        $("span#run_status").addClass(colors.text["success"]);
+        $("pre#run_output").css("background-color", colors.bg["success"]);
     }
 
     if (run.status.indexOf("complete") === 0) {
@@ -279,6 +289,9 @@ function clear_results() {
     $("span#run_status").removeClass(function (index, css) {
         return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
     });
+
+    // Reset run output background
+    $("pre#run_output").css("background-color", "#f5f5f5");
 
     $("span#run_status").text("TBD");
     $("span#run_score").text("TBD");
