@@ -24,7 +24,3 @@ destination: ./_site
 port: 4000
 host: 0.0.0.0
 safe: false
-
-# Extra Gems
-gems:
-  - jekyll-git_metadata
