@@ -1,5 +1,5 @@
-var SUBMIT_URL = "submit.html";
-var LOGIN_URL = "login.html";
+var SUBMIT_URL = "/submit";
+var LOGIN_URL = "/login";
 var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
