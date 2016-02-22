@@ -1,4 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '~>2.5'
-gem 'jekyll-git_metadata'
+gem 'jekyll', '~>3.1.1'

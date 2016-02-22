@@ -14,8 +14,7 @@ Prereq
 ------
 
 ```
-$ sudo gem install jekyll
-$ sudo gem install jekyll-git_metadata
+$ gem install bundler && bundle install
 ```
 
 Setup
