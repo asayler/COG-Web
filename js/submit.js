@@ -202,11 +202,16 @@ function check_result_callback(data, status) {
         }
     };
 
+    // Drop text classes before another is applied
+    $("span#run_status").removeClass(function(index, css) {
+        return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
+    });
+
     // Apply relevant background color to status
     var sub = run.status.split('-');
     if (sub.length > 1) {
         var type = sub[1];
-        console.log('Received competion error: ' + type);
+        console.log('Received completion error: ' + type);
 
         $("span#run_status").addClass(colors.text[type]);
         $("pre#run_output").css("background-color", colors.bg[type]);
@@ -286,7 +291,7 @@ function setup_error_callback(xhr, status, error) {
 
 function clear_results() {
     // Remove status color from previous runs
-    $("span#run_status").removeClass(function (index, css) {
+    $("span#run_status").removeClass(function(index, css) {
         return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
     });
 
