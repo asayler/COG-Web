@@ -14,7 +14,8 @@ Prereq
 ------
 
 ```
-$ gem install bundler && bundle install
+$ sudo gem2.0 install bundler
+$ bundle install
 ```
 
 Setup
