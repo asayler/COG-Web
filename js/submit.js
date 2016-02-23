@@ -8,8 +8,6 @@ var run_uuid     = null;
 var timeout      = null;
 var ladda_submit = null;
 
-//dummy line
-
 function add_option_alpha(select, option) {
     var inserted = false;
     select.children("option").each(function() {

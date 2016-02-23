@@ -104,6 +104,11 @@ function assignment_submission_create(callback, callback_error, uuid) {
     post_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
+function history_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/submissions/";
+    get_auth(url, callback, callback_error);
+}
+
 function submission_add_files(callback, callback_error, uuid, file_lst) {
     var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/files/";
     var data = {'files': file_lst};

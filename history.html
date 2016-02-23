@@ -1,0 +1,48 @@
+---
+layout: default
+
+extra_scripts:
+  - /js/history.js
+
+ready_script: |
+  history_token_redirect();
+  $("li#nav_history").addClass("active");
+  update_auth_state();
+  show_history();
+---
+
+<div class="container">
+
+  <div class="page-header">
+    <h1>Your Submission History</h1>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">Previous Submissions</h2>
+    </div>
+
+    <div class="panel-body">
+      <span id="past_submissions">TBD</span>
+      <div class="row row-stats">
+        <div class="col-md-2">
+          <strong><p>Submission Time</p></strong>
+          <span id="sub_time"> - </span>
+        </div>
+        <div class="col-md-4">
+          <strong><p>Assignment</p></strong>
+          <span id="assignment_name"> - </span>
+        </div>
+        <div class="col-md-4">
+          <strong><p>Submitted Files</p></strong>
+          <span id="assignment_files"> - </span>
+        </div>
+        <div class="col-md-2">
+          <strong><p>Grade</p></strong>
+          <span id="assignment_grade"> - </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

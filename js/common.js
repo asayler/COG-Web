@@ -1,5 +1,6 @@
 var SUBMIT_URL = "/submit";
 var LOGIN_URL = "/login";
+var HISTORY_URL = "/history";
 var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
@@ -26,6 +27,23 @@ function token_redirect() {
         }
     }
 }
+
+function history_token_redirect() {
+    var token = $.cookie('cog_token');
+    if(token) {
+        if (document.URL.indexOf(HISTORY_URL) == -1) {
+            console.log("Redirecting to " + HISTORY_URL + " from " + document.URL);
+            window.location.replace(HISTORY_URL);
+        }
+    }
+    else {
+        if(document.URL.indexOf(LOGIN_URL) == -1) {
+            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
+            window.location.replace(LOGIN_URL); 
+        }
+    }
+}
+
 
 function login(data, status, username) {
     $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
