@@ -104,8 +104,8 @@ function assignment_submission_create(callback, callback_error, uuid) {
     post_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
-function history_get(callback, callback_error, uuid) {
-    var url = "{{ site.cog_api_url }}/submissions/";
+function file_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/files/" + uuid + "/";
     get_auth(url, callback, callback_error);
 }
 
@@ -113,6 +113,26 @@ function submission_add_files(callback, callback_error, uuid, file_lst) {
     var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/files/";
     var data = {'files': file_lst};
     put_auth(url, callback, callback_error, JSON.stringify(data));
+}
+
+function submission_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/";
+    get_auth(url, callback, callback_error);
+}
+
+function submission_get_files(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/files/";
+    get_auth(url, callback, callback_error);
+}
+
+function submission_get_test(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/runs/";
+    get_auth(url, callback, callback_error);
+}
+
+function submissions_get(callback, callback_error) {
+    var url = "{{ site.cog_api_url }}/submissions/";
+    get_auth(url, callback, callback_error);
 }
 
 function submission_run_test(callback, callback_error, uuid_sub, uuid_tst) {
