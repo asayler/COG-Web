@@ -104,6 +104,12 @@ function assignment_submission_create(callback, callback_error, uuid) {
     post_auth(url, callback, callback_error, JSON.stringify(data));
 }
 
+function assignment_submission_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/assignments/" + uuid + "/submissions/";
+    var data = {};
+    get_auth(url, callback, callback_error);
+}
+
 function file_get(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/files/" + uuid + "/";
     get_auth(url, callback, callback_error);
