@@ -1,7 +1,9 @@
 var SUBMIT_URL = "/submit";
 var LOGIN_URL = "/login";
 var HISTORY_URL = "/history";
-var OUTPUT_URL = "/output";
+var SUBMISSION_URL = "/submission";
+var DOWNLOAD_URL = "/download";
+var RUN_URL = "/run";
 var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
@@ -45,12 +47,44 @@ function history_token_redirect() {
     }
 }
 
-function output_token_redirect() {
+function submission_token_redirect() {
     var token = $.cookie('cog_token');
     if(token) {
-        if (document.URL.indexOf(OUTPUT_URL) == -1) {
-            console.log("Redirecting to " + OUTPUT_URL + " from " + document.URL);
-            window.location.replace(OUTPUT_URL);
+        if (document.URL.indexOf(SUBMISSION_URL) == -1) {
+            console.log("Redirecting to " + SUBMISSION_URL + " from " + document.URL);
+            window.location.replace(SUBMISSION_URL);
+        }
+    }
+    else {
+        if(document.URL.indexOf(LOGIN_URL) == -1) {
+            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
+            window.location.replace(LOGIN_URL); 
+        }
+    }
+}
+
+function run_token_redirect() {
+    var token = $.cookie('cog_token');
+    if(token) {
+        if (document.URL.indexOf(RUN_URL) == -1) {
+            console.log("Redirecting to " + RUN_URL + " from " + document.URL);
+            window.location.replace(RUN_URL);
+        }
+    }
+    else {
+        if(document.URL.indexOf(LOGIN_URL) == -1) {
+            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
+            window.location.replace(LOGIN_URL); 
+        }
+    }
+}
+
+function download_token_redirect() {
+    var token = $.cookie('cog_token');
+    if(token) {
+        if (document.URL.indexOf(DOWNLOAD_URL) == -1) {
+            console.log("Redirecting to " + DOWNLOAD_URL + " from " + document.URL);
+            window.location.replace(DOWNLOAD_URL);
         }
     }
     else {

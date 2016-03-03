@@ -1,0 +1,23 @@
+---
+layout: default
+
+extra_scripts:
+  - /js/download.js
+
+ready_script: |
+  download_token_redirect();
+  update_auth_state();
+  initiate_download();
+---
+<div class="container">
+  <div class="page-header">
+    <h1>Download</h1>
+  </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-body download">
+        <strong>Your file should be downloading!</strong>
+      </div>
+    </div> 
+
+</div>

@@ -3,9 +3,7 @@ layout: default
 
 extra_scripts:
   - /js/history.js
-  - /js/dist/jquery-latest.js
-  - /js/dist/jquery.tablesorter.js
-
+  
 ready_script: |
   history_token_redirect();
   $("li#nav_history").addClass("active");
@@ -54,17 +52,21 @@ ready_script: |
 	  </div>
 	</div>
 
-  <div class="panel panel-primary">
+    <div class="panel panel-info">
+	  <div class="panel-heading">
+	    <h2 class="panel-title">Results</h2>
+	  </div>
+
     <div class="panel-body">
 	  <div class="table-responsive">         
 	  	  <table class="table table-hover" id="history_table">
 		    <thead>
 		      <tr>
 		        <th class="col-md-3">Time</th>
-		        <th class="col-md-2">Score</th>
+		        <th class="col-md-2">Score out of <span id="max_score">TBD</span></th>
 		        <th class="col-md-2">Return Code</th>
 		        <th class="col-md-3">Status</th>
-		        <th class="col-md-2">Results</th>
+		        <th class="col-md-2">More Information</th>
 		      </tr>
 		    </thead>
 		    <tbody>
@@ -72,8 +74,6 @@ ready_script: |
 		  </table>
 	  </div>
     </div>
-
-
   </div>
 
 </div>

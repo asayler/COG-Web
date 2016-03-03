@@ -1,4 +1,4 @@
-var NUM_ROW_ENTRIES  = 7;
+var NUM_ROW_ENTRIES  = 8;
 var rows             = [];
 var num_disp_subm    = 0;
 var num_added_subm   = 0;
@@ -19,98 +19,93 @@ function show_history() {
 }
 
 function display_my_history() {
-	assignment_submission_get(find_submissions, submit_error_callback, asn_uuid);
+	my_assignment_submission_get(find_submissions, submit_error_callback, asn_uuid);
 }
 
 function find_submissions(data, status) {
 	num_subm = data.submissions.length;
 
+	if (num_subm == 0) {
+		stop_spin();
+	}
+
 	$.each(data.submissions, function(index, uuid) {
-		submission_get(append_table_entry, submit_error_callback, uuid);
+		console.log("Getting submssion: " + uuid);
+		submission_get(get_sub_test, submit_error_callback, uuid);
 	});
 }
 
-function append_table_entry(data, status) {
+function get_sub_test(data, status) {
 	var uuid = Object.keys(data)[0];
-	var new_row = {};
 
-	new_row.uuid = uuid;
+	submission_get_test(get_test_run, submit_error_callback, uuid);
+}
+
+function get_test_run(data, status) {
+	$.each(data.runs, function(index, uuid) {
+		console.log("Getting run: " + uuid);
+		run_get(get_run_info, submit_error_callback, uuid);
+	});
+}
+
+function get_run_info(data, status) {
+	var uuid = Object.keys(data)[0];
+	var run = data[uuid];
+	var new_row = {};		
 
 	// Get the time
-	append_time(data[uuid]);
+	var mseconds= run.modified_time;
+	var mtime = new Date(0);
+	mtime.setUTCSeconds(mseconds);
 
-	function append_time(submission) {
-		var mseconds= submission.modified_time;
-		var mtime = new Date(0);
-		mtime.setUTCSeconds(mseconds);
+	new_row.mtime = mtime;
 
-		new_row.mtime = mtime; //.toLocaleString();
+	console.log(JSON.stringify(data));
 
-		if (Object.keys(new_row).length == NUM_ROW_ENTRIES) {
-			create_row(new_row);
+	// Get run info
+	new_row.suuid = run.submssion;
+	new_row.ruuid = uuid;
+	new_row.score = run.score;
+	new_row.retcode = run.retcode;
+	new_row.status = run.status;
+	new_row.test = run.test;
+
+	// Define colors for each type of status
+    var colors = {
+        text: {
+            "success" : "text-success",
+            "warning": "text-warning",
+            "exception": "text-danger",
+            "error": "text-danger"
+        }
+    };
+
+	// Set status color
+	var color;
+
+	if (new_row.status) {
+	    var sub = new_row.status.split('-');
+
+	    if (sub.length > 1) {
+		    var type = sub[1];
+
+		    color = colors.text[type];
+		} else {
+			color = colors.text.success;
 		}
+
+	} else {
+		color = "#000000";
 	}
 
-	// Get retcode, score and status
-	submission_get_test(get_run_info, submit_error_callback, uuid);
+	new_row.color = color;
 
-	function get_run_info(data, status) {
-		run_get(append_run_info, submit_error_callback, data.runs);
-
-		function append_run_info(data, status) {
-			var uuid = Object.keys(data)[0];
-			var color;
-
-			new_row.score = data[uuid].score;
-			new_row.retcode = data[uuid].retcode;
-			new_row.status = data[uuid].status;
-			new_row.test = data[uuid].test;
-
-			// Define colors for each type of status
-		    var colors = {
-		        text: {
-		            "success" : "text-success",
-		            "warning": "text-warning",
-		            "exception": "text-danger",
-		            "error": "text-danger"
-		        },
-		        bg: {
-		            "success": "#edf7f2",
-		            "warning": "#f7f7ed",
-		            "exception": "#f7edf2",
-		            "error": "#f7edf2"
-		        }
-		    };
-
-		    var color;
-
-			// Set status color
-			if (new_row.status) {
-			    var sub = new_row.status.split('-');
-
-			    if (sub.length > 1) {
-				    var type = sub[1];
-
-				    color = colors.text[type];
-				} else {
-					color = colors.text.success;
-				}
-
-			} else {
-				color = "#000000";
-			}
-
-			new_row.color = color;
-
-			if (Object.keys(new_row).length == NUM_ROW_ENTRIES) {
-				create_row(new_row);
-			}
-		}
-	}
+	create_row(new_row);
 }
 
 // Create the row array
 function create_row(row) {
+	console.log("Creating Row:" + JSON.stringify(row));
 	rows.push(row);
 
 	num_added_subm++;
@@ -122,15 +117,17 @@ function create_row(row) {
 
 // Create the HTML for the row
 function append_row(row) {
-	var sub = encodeURI("?sub=" + row.uuid);
-	var url = "/output.html" + sub;
-	console.log(url);
+	var sub = encodeURI("?uuid=" + row.suuid);
+	var run = encodeURI("?uuid=" + row.ruuid);
+	var sub_url = "/submission.html" + sub;
+	var run_url = "/run.html" + run;
 
-	var see_more = "<a href='" + url + "'>More Information</a>";
+	var see_sub = "<a href='" + sub_url + "'>Submission</a> or ";
+	var see_run = "<a href='" + run_url + "'>Run</a>";
 
 	var row_entry = "<tr><td>" + row.mtime.toLocaleString() + "</td><td>" + row.score + "</td><td>" 
 			+ row.retcode + "</td><td class='" + row.color + "'>" + row.status 
-			+ "</td><td>" + see_more + "</td></tr>";
+			+ "</td><td>" + see_sub + see_run + "</td></tr>";
 
 	if (row.test == tst_uuid) {
 		$("#history_table").append(row_entry);
@@ -156,6 +153,8 @@ function sort_table() {
 	$.each(rows, function(index, row) {
 		append_row(row);
 	});
+
+	console.log("Sorted Table");
 }
 
 function stop_spin() {
@@ -165,6 +164,18 @@ function stop_spin() {
     ladda_submit.ladda("stop");
 
     $("button#submit").children("span.ladda-label").html("Search");
+}
+
+function get_max_score() {
+	test_get(update_max_score, submit_error_callback, tst_uuid);
+}
+
+function update_max_score(data, status) {
+	var uuid = Object.keys(data)[0];
+
+	$("span#max_score").text(data[uuid].maxscore);
+
+	console.log("Updated submission maxscore");
 }
 
 // Duplicate code from submit.js
@@ -263,8 +274,8 @@ function setup_error_callback(xhr, status, error) {
 function submit_error_callback(xhr, status, error) {
     // Log Error
     console.log("Status: " + status, ", Error: " + error);
+    stop_spin();
 }
-
 
 $("select#assignment").change(function() {
     var uuid = $("select#assignment").val();
@@ -293,6 +304,9 @@ $("form#submitform").submit(function(event) {
     // Get Input
     asn_uuid = $("select#assignment").val();
     tst_uuid = $("select#test").val();
+
+    // Updated Max Score
+	get_max_score();
 
     // Validate Data
     if (!asn_uuid || asn_uuid.length !== 36) {

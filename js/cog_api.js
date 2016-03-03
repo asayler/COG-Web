@@ -115,6 +115,17 @@ function file_get(callback, callback_error, uuid) {
     get_auth(url, callback, callback_error);
 }
 
+function file_get_contents(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/files/" + uuid + "/contents/";
+    get_auth(url, callback, callback_error);
+}
+
+function my_assignment_submission_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/my/assignments/" + uuid + "/submissions/";
+    var data = {};
+    get_auth(url, callback, callback_error);
+}
+
 function submission_add_files(callback, callback_error, uuid, file_lst) {
     var url = "{{ site.cog_api_url }}/submissions/" + uuid + "/files/";
     var data = {'files': file_lst};
