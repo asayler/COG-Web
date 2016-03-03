@@ -1,4 +1,3 @@
-var TABLE_ROW_LENGTH = 5; // TO-DO remove
 var NUM_ROW_ENTRIES  = 5;
 var asn_cnt      	 = null;
 var asn_uuid         = null;
@@ -77,13 +76,11 @@ function append_table_entry(data, status) {
 
 // Create the HTML for the row
 function append_row(row) {
-	// if (output.length > 100) {
-	// 	more_output = "<a href='/output.html'>...view more</a>";
-	// 	// add the uuid and set it in a cookie
-	// }
+	see_more = "<a href='/output.html'>More Information</a>";
 
 	if (row.test == tst_uuid) {
-		$("#history_table").append("<tr><td>" + row.time + "</td><td>" + row.score + "</td><td>" + row.retcode "</td><td>" + row.status + "</td></tr>");
+		$("#history_table").append("<tr><td>" + row.mtime + "</td><td>" + row.score + "</td><td>" 
+			+ row.retcode + "</td><td>" + row.status + "</td><td>" + see_more + "</td></tr>");
 	}
 
 	stop_spin();
@@ -96,124 +93,6 @@ function stop_spin() {
     ladda_submit.ladda("stop");
 
     $("button#submit").children("span.ladda-label").html("Search");
-}
-
-// function create_table_entry(data, status) {
-// 	// Add assginment name
-// 	assignment_get(append_name, submit_error_callback, data[uuid].assignment);
-	
-// 	function append_name(data, status) {
-// 		var row_name = {};
-// 		var uuid = Object.keys(data)[0];
-
-// 		var assigment_name = data[uuid].name;
-
-// 		//console.log("TEST NAME " + assigment_name);
-// 		row_name.aname = assigment_name;
-// 		row.push(row_name);
-
-// 		if (row.length == TABLE_ROW_LENGTH) {
-// 			append_row(row);
-// 		}
-// 	}
-
-// 	// Add files
-// 	submission_get_files(find_files, submit_error_callback, uuid);
-
-// 	function find_files(data, status) {
-// 		var array_length = data.files.length;
-// 		var file_array = [];
-
-// 		$.each(data.files, function(index, uuid) {
-// 			file_get(append_files, submit_error_callback, uuid);
-
-// 			function append_files(data, status) {
-// 				var f = {};
-
-// 				var uuid = Object.keys(data)[0];
-
-// 				var file_name = data[uuid].name;
-
-// 				f.name = file_name;
-// 				f.uuid = uuid;
-
-// 				file_array.push(JSON.stringify(f));
-
-// 				// Account for length of the array
-// 				if(file_array.length == array_length) {
-// 					row.push(file_array);
-
-// 					if (row.length == TABLE_ROW_LENGTH) {
-// 						append_row(row);
-// 					}
-// 				}
-
-// 				// Log Submission
-// 				//console.log("FILE NAME " + file_name);
-// 				//console.log("FILE UUID " + uuid);
-// 			}
-// 		});
-// 	}
-
-// 	// Add tests
-// 	submission_get_test(get_run_information, submit_error_callback, uuid);
-
-// 	function get_run_information(data, status) {
-// 		run_get(find_test_name, submit_error_callback, data.runs);
-
-// 		function find_test_name(data, status) {
-// 			var inner_uuid = Object.keys(data)[0];
-
-// 			test_get(append_test_name, submit_error_callback, data[inner_uuid].test);
-
-// 			function append_test_name(data, status) {
-// 				var row_test_name = {};
-// 				var test_uuid = Object.keys(data)[0];
-// 				var test_name = data[test_uuid].name;
-
-// 				row_test_name.tname = test_name;
-
-// 				row.push(row_test_name);
-				
-// 				if (row.length == TABLE_ROW_LENGTH) {
-// 					append_row(row);
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	// Add grade
-// 	submission_get_test(find_grade, submit_error_callback, uuid);
-
-// 	function find_grade(data, status) {
-// 		run_get(append_grade, submit_error_callback, data.runs);
-
-// 		function append_grade(data, status) {
-// 			var row_grade = {};
-// 			var row_output = {};
-// 			var uuid = Object.keys(data)[0];
-
-// 			var grade = data[uuid].score;
-// 			var output = data[uuid].output;
-
-// 			//console.log("GRADE " + grade);
-// 			//console.log("OUTPUT " + output);
-
-// 			row_grade.grade = grade;
-// 			row_output.output = output;
-
-// 			row.push(row_grade);
-// 			row.push(row_output);
-
-// 			if (row.length == TABLE_ROW_LENGTH) {
-// 				append_row(row);
-// 			}
-// 		}
-// 	}
-// }
-
-function isArray(x) {
-    return x.constructor.toString().indexOf("Array") > -1;
 }
 
 // Duplicate code from submit.js
