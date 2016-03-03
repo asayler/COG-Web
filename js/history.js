@@ -1,13 +1,13 @@
-var NUM_ROW_ENTRIES  = 5;
+var NUM_ROW_ENTRIES  = 7;
+var rows             = [];
+var num_disp_subm    = 0;
+var num_added_subm   = 0;
+var num_subm         = null;
 var asn_cnt      	 = null;
 var asn_uuid         = null;
 var tst_cnt          = null;
 var tst_uuid         = null;
 var ladda_submit     = null;
-
-function sort_table() {
-	console.log("Sort the table");
-}
 
 function show_history() {
     // Get previous submissions
@@ -19,21 +19,22 @@ function show_history() {
 }
 
 function display_my_history() {
-	console.log("in my history " + asn_uuid + " " + tst_uuid);
-
 	assignment_submission_get(find_submissions, submit_error_callback, asn_uuid);
 }
 
 function find_submissions(data, status) {
+	num_subm = data.submissions.length;
+
 	$.each(data.submissions, function(index, uuid) {
 		submission_get(append_table_entry, submit_error_callback, uuid);
 	});
 }
 
 function append_table_entry(data, status) {
-	console.log(JSON.stringify(data));
 	var uuid = Object.keys(data)[0];
 	var new_row = {};
+
+	new_row.uuid = uuid;
 
 	// Get the time
 	append_time(data[uuid]);
@@ -43,12 +44,10 @@ function append_table_entry(data, status) {
 		var mtime = new Date(0);
 		mtime.setUTCSeconds(mseconds);
 
-		new_row.mtime = mtime.toUTCString();
-
-		console.log(new_row.mtime);
+		new_row.mtime = mtime; //.toLocaleString();
 
 		if (Object.keys(new_row).length == NUM_ROW_ENTRIES) {
-			append_row(new_row);
+			create_row(new_row);
 		}
 	}
 
@@ -60,30 +59,103 @@ function append_table_entry(data, status) {
 
 		function append_run_info(data, status) {
 			var uuid = Object.keys(data)[0];
+			var color;
 
 			new_row.score = data[uuid].score;
 			new_row.retcode = data[uuid].retcode;
 			new_row.status = data[uuid].status;
 			new_row.test = data[uuid].test;
 
+			// Define colors for each type of status
+		    var colors = {
+		        text: {
+		            "success" : "text-success",
+		            "warning": "text-warning",
+		            "exception": "text-danger",
+		            "error": "text-danger"
+		        },
+		        bg: {
+		            "success": "#edf7f2",
+		            "warning": "#f7f7ed",
+		            "exception": "#f7edf2",
+		            "error": "#f7edf2"
+		        }
+		    };
+
+		    var color;
+
+			// Set status color
+			if (new_row.status) {
+			    var sub = new_row.status.split('-');
+
+			    if (sub.length > 1) {
+				    var type = sub[1];
+
+				    color = colors.text[type];
+				} else {
+					color = colors.text.success;
+				}
+
+			} else {
+				color = "#000000";
+			}
+
+			new_row.color = color;
 
 			if (Object.keys(new_row).length == NUM_ROW_ENTRIES) {
-				append_row(new_row);
+				create_row(new_row);
 			}
 		}
 	}
 }
 
+// Create the row array
+function create_row(row) {
+	rows.push(row);
+
+	num_added_subm++;
+
+	if (num_added_subm == num_subm) {
+		sort_table();
+	}
+}
+
 // Create the HTML for the row
 function append_row(row) {
-	see_more = "<a href='/output.html'>More Information</a>";
+	var sub = encodeURI("?sub=" + row.uuid);
+	var url = "/output.html" + sub;
+	console.log(url);
+
+	var see_more = "<a href='" + url + "'>More Information</a>";
+
+	var row_entry = "<tr><td>" + row.mtime.toLocaleString() + "</td><td>" + row.score + "</td><td>" 
+			+ row.retcode + "</td><td class='" + row.color + "'>" + row.status 
+			+ "</td><td>" + see_more + "</td></tr>";
 
 	if (row.test == tst_uuid) {
-		$("#history_table").append("<tr><td>" + row.mtime + "</td><td>" + row.score + "</td><td>" 
-			+ row.retcode + "</td><td>" + row.status + "</td><td>" + see_more + "</td></tr>");
+		$("#history_table").append(row_entry);
 	}
 
-	stop_spin();
+	num_disp_subm++;
+
+	if (num_disp_subm == num_subm) {
+		stop_spin();
+
+		rows = [];
+		num_disp_subm = 0;
+		num_added_subm = 0;
+		num_subm = 0;
+	}
+}
+
+function sort_table() {
+    rows.sort(function(x, y) {
+    	return x.mtime - y.mtime;
+	});
+
+	$.each(rows, function(index, row) {
+		append_row(row);
+	});
 }
 
 function stop_spin() {

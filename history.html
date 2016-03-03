@@ -3,6 +3,8 @@ layout: default
 
 extra_scripts:
   - /js/history.js
+  - /js/dist/jquery-latest.js
+  - /js/dist/jquery.tablesorter.js
 
 ready_script: |
   history_token_redirect();
@@ -19,7 +21,7 @@ ready_script: |
 
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
-        <h2 class="panel-title">Choose assigment and corresponding test</h2>
+        <h2 class="panel-title">Choose Assigment and Corresponding Test</h2>
       </div>
 
 	  <div class="panel-body">
@@ -55,19 +57,19 @@ ready_script: |
   <div class="panel panel-primary">
     <div class="panel-body">
 	  <div class="table-responsive">         
-  	    <table class="table table-hover" id="history_table">
-	      <thead>
-	        <tr>
-	          <th class="col-md-3">Time</th>
-	          <th class="col-md-2">Score</th>
-	          <th class="col-md-2">Return Code</th>
-	          <th class="col-md-3">Status</th>
-	          <th class="col-md-2">Results</th>
-	        </tr>
-	      </thead>
-	      <tbody>
-	      </tbody>
-	    </table>
+	  	  <table class="table table-hover" id="history_table">
+		    <thead>
+		      <tr>
+		        <th class="col-md-3">Time</th>
+		        <th class="col-md-2">Score</th>
+		        <th class="col-md-2">Return Code</th>
+		        <th class="col-md-3">Status</th>
+		        <th class="col-md-2">Results</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		    </tbody>
+		  </table>
 	  </div>
     </div>
 

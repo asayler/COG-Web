@@ -192,12 +192,14 @@ function check_result_callback(data, status) {
     var colors = {
         text: {
             "success" : "text-success",
-            "exception": "text-warning",
+            "warning": "text-warning",
+            "exception": "text-danger",
             "error": "text-danger"
         },
         bg: {
             "success": "#edf7f2",
-            "exception": "#f7f7ed",
+            "warning": "#f7f7ed",
+            "exception": "#f7edf2",
             "error": "#f7edf2"
         }
     };
