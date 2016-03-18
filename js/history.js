@@ -63,7 +63,7 @@ function get_run_info(data, status) {
 	console.log(JSON.stringify(data));
 
 	// Get run info
-	new_row.suuid = run.submssion;
+	new_row.suuid = run.submission;
 	new_row.ruuid = uuid;
 	new_row.score = run.score;
 	new_row.retcode = run.retcode;
