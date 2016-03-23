@@ -1,8 +1,10 @@
 var NUM_ROW_ENTRIES  = 8;
 var rows             = [];
-var num_disp_subm    = 0;
-var num_added_subm   = 0;
-var num_subm         = null;
+var num_disp_runs    = 0;
+var num_added_runs   = 0;
+var num_runs         = null;
+var total_subs       = null;
+var num_subs         = null;
 var asn_cnt      	 = null;
 var asn_uuid         = null;
 var tst_cnt          = null;
@@ -23,27 +25,39 @@ function display_my_history() {
 }
 
 function find_submissions(data, status) {
-	num_subm = data.submissions.length;
+	var runs = [];
+	total_subs = data.submissions.length;
+	num_runs = 0;
+	num_subs = 0;
 
-	if (num_subm == 0) {
+	if (total_subs == 0) {
 		stop_spin();
 	}
 
 	$.each(data.submissions, function(index, uuid) {
 		console.log("Getting submssion: " + uuid);
-		submission_get(get_sub_test, submit_error_callback, uuid);
+		my_submission_run_get(iterate_runs, submit_error_callback, uuid);
 	});
+
+	function iterate_runs(data, status) {	
+		num_runs += data.runs.length;
+		num_subs++;
+
+		$.each(data.runs, function(index, uuid) {
+			runs.push(uuid);
+			console.log("Getting run: " + uuid);
+
+			if (num_subs == total_subs && runs.length == num_runs) {
+				add_runs(runs);
+			}
+		});
+	}
 }
 
-function get_sub_test(data, status) {
-	var uuid = Object.keys(data)[0];
-
-	submission_get_test(get_test_run, submit_error_callback, uuid);
-}
-
-function get_test_run(data, status) {
-	$.each(data.runs, function(index, uuid) {
-		console.log("Getting run: " + uuid);
+function add_runs(runs) {
+	console.log(runs.toString());
+	console.log(num_runs);
+	$.each(runs, function(index, uuid) {
 		run_get(get_run_info, submit_error_callback, uuid);
 	});
 }
@@ -59,8 +73,6 @@ function get_run_info(data, status) {
 	mtime.setUTCSeconds(mseconds);
 
 	new_row.mtime = mtime;
-
-	console.log(JSON.stringify(data));
 
 	// Get run info
 	new_row.suuid = run.submission;
@@ -108,9 +120,9 @@ function create_row(row) {
 	console.log("Creating Row:" + JSON.stringify(row));
 	rows.push(row);
 
-	num_added_subm++;
+	num_added_runs++;
 
-	if (num_added_subm == num_subm) {
+	if (num_added_runs == num_runs) {
 		sort_table();
 	}
 }
@@ -133,15 +145,15 @@ function append_row(row) {
 		$("#history_table").append(row_entry);
 	}
 
-	num_disp_subm++;
+	num_disp_runs++;
 
-	if (num_disp_subm == num_subm) {
+	if (num_disp_runs == num_runs) {
 		stop_spin();
 
 		rows = [];
-		num_disp_subm = 0;
-		num_added_subm = 0;
-		num_subm = 0;
+		num_disp_runs = 0;
+		num_added_runs = 0;
+		num_runs = 0;
 	}
 }
 
