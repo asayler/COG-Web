@@ -1,8 +1,11 @@
-var sub_uuid = null;
-
 // Get retcode, score and status
 function show_files() {
-	sub_uuid = getParameterByName('uuid');
+	var sub_uuid = getParameterByName('uuid');
+	var downloadable = getParameterByName('file');
+
+	if (downloadable) {
+		initiate_download(downloadable);
+	}	
 
 	$("span#sub_uuid").text(sub_uuid);
 
@@ -29,24 +32,58 @@ function show_files() {
 
 				// Account for length of the array
 				if(file_array.length == array_length) {
-					$.each(file_array, function(index, fle) {
-						var url = window.location.href;
-						var fle_uri = encodeURI("&file=" + fle.uuid);
-						url += fle_uri;
-
-						console.log(url);
-						// var url_uuid = encodeURI("?uuid=" + fle.uuid);
-						// var url = "../download.html";
-						// url += url_uuid;
-						// console.log(url);
-						// $("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '" download="">' + fle.uuid + "<a></td></tr>");
-						// console.log(JSON.stringify(fle));
-					});
+					sort_files(file_array);
 				}
 			}
 		});
 	}
 }
+
+function sort_files(file_array) {
+    file_array.sort(function(x, y) {
+    	return x.name.localeCompare(y.name);
+	});
+
+	$.each(file_array, function(index, fle) {
+		var url_arr = window.location.href.split("&");
+		var fle_uri = encodeURI("&file=" + fle.uuid);
+		var url = url_arr[0] + fle_uri;
+
+		$("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '">' + fle.uuid + "<a></td></tr>");
+	});
+
+	console.log("Sorted Table");
+}
+
+function initiate_download(file_uuid) {
+    file_get(get_contents, submit_error_callback, file_uuid);
+
+    function get_contents(data, status) {
+        var filename = data[file_uuid].name;
+        file_get_contents(log_download, submit_error_callback, file_uuid);
+
+        function log_download(data, status) {
+            console.log("Downloading " + filename);
+            download(filename, data);
+        }
+    }
+}
+
+// Taken from http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+    console.log("Download done");
+}
+
 
 // Taken from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName(name, url) {
