@@ -30,12 +30,17 @@ function show_files() {
 				// Account for length of the array
 				if(file_array.length == array_length) {
 					$.each(file_array, function(index, fle) {
-						var url_uuid = encodeURI("?uuid=" + fle.uuid);
-						var url = "../download.html";
-						url += url_uuid;
+						var url = window.location.href;
+						var fle_uri = encodeURI("&file=" + fle.uuid);
+						url += fle_uri;
+
 						console.log(url);
-						$("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '" download="">' + fle.uuid + "<a></td></tr>");
-						console.log(JSON.stringify(fle));
+						// var url_uuid = encodeURI("?uuid=" + fle.uuid);
+						// var url = "../download.html";
+						// url += url_uuid;
+						// console.log(url);
+						// $("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '" download="">' + fle.uuid + "<a></td></tr>");
+						// console.log(JSON.stringify(fle));
 					});
 				}
 			}
