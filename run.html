@@ -1,0 +1,46 @@
+---
+layout: default
+
+extra_scripts:
+  - /js/run.js
+
+ready_script: |
+  run_token_redirect();
+  update_auth_state();
+  show_run_info();
+---
+<div class="container">
+  <div class="page-header">
+    <h1>Run Details</h1>
+  </div>
+
+  <div class="panel panel-primary">
+
+      <div class="panel-body results">
+        <div class="row row-stats">
+          <div class="col-md-2">
+            <strong>Score:</strong>
+            <span id="run_score">TBD</span>
+          </div>
+          <div class="col-md-2">
+            <strong>Return Code:</strong>
+            <span id="run_retcode">TBD</span>
+          </div>
+          <div class="col-md-4">
+            <strong>Status:</strong>
+            <span id="run_status">TBD</span>
+          </div>
+          <div class="col-md-4">
+            <strong>Run UUID:</strong>
+            <span id="run_uuid">TBD</span>
+          </div>
+        </div>
+        <div class="row row-output">
+          <div class="col-md-12">
+            <pre class="pre-scrollable" id="run_output">Assignment output will appear here...</pre>
+          </div>
+        </div>
+      </div>  
+  </div>
+
+</div>
