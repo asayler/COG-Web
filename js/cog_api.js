@@ -115,6 +115,11 @@ function file_get(callback, callback_error, uuid) {
     get_auth(url, callback, callback_error);
 }
 
+function file_get_uri(uuid) {
+    var uri = "{{ site.cog_api_url }}/files/" + uuid + "/contents/";
+    return uri;
+}
+
 function file_get_contents(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/files/" + uuid + "/contents/";
     get_auth(url, callback, callback_error);
