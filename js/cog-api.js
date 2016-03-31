@@ -1,6 +1,18 @@
 ---
 ---
 
+function COG(token) {
+  this.token = token;
+}
+
+COG.prototype._ajax = function(options) {
+  options.beforeSend = options.beforeSend || function(xhr) {
+    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(this.token + ':'));
+  };
+
+  return $.ajax(options);
+};
+
 function get_auth(url, callback, callback_error) {
     var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
