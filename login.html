@@ -6,25 +6,20 @@ extra_scripts:
 
 ready_script: |
   update_auth_state();
-  login_onload();
 ---
 
 <div class="container">
-  <form class="form-login" role="form" name="loginform" id="loginform" action="">
+  <form class="form-login" role="form" id="login-form">
     <h2 class="form-login-heading">Please Login</h2>
-    <p>
-      <em>
-        {{site.login_note}}
-      </em>
-    </p>
-    <input class="form-control" id="username" type="text"
-           placeholder="Username" required autofocus>
-    <input class="form-control" id="password" type="password"
-           placeholder="Password" required>
-    <button class="btn btn-primary btn-block ladda-button" id="login"
-            type="submit" data-style="expand-left">
+    <p><em>{{site.login_note}}</em></p>
+
+    <input class="form-control" id="username" type="text" placeholder="Username" required autofocus>
+    <input class="form-control" id="password" type="password" placeholder="Password" required>
+
+    <button class="btn btn-primary btn-block ladda-button" id="login-button" type="submit" data-style="expand-left">
       <span class="ladda-label">Login</span>
-	</button>
-    <p><output class="form-login-error" id="loginerror"></output></p>
+    </button>
+
+    <p><output class="form-login-error" id="login-error"></output></p>
   </form>
 </div>

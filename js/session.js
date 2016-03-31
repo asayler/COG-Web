@@ -38,4 +38,12 @@
     window.location = dest;
   }
 
+  window.session = {
+    authUser: function(user, token) {
+      var opts = { expires: 1, path: '/', secure: false };
+      $.cookie('cog_user', user, opts);
+      $.cookie('cog_token', token, opts);
+    }
+  };
+
 })(window, document);
