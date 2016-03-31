@@ -37,7 +37,7 @@ function sort_files(file_array) {
 
     $.each(file_array, function(index, fle) {
         var url = file_get_uri(fle.uuid);
-        $("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '">' + fle.uuid + "<a></td></tr>");
+        $("#files_table").append("<tr><td>" + fle.name + '</td><td><a class="auth-dl" href="' + url + '" data-name="' + fle.name + '" data-uuid="' + fle.uuid + '">' + fle.uuid + "<a></td></tr>");
     });
 
     console.log("Sorted Table");
@@ -62,3 +62,24 @@ function submit_error_callback(xhr, status, error) {
     // Log Error
     console.log("Status: " + status, ", Error: " + error);
 }
+
+$('#files_table').delegate('.auth-dl', 'click', function(event) {
+    event.preventDefault();
+
+    var uuid = $(this).data('uuid');
+    var name = $(this).data('name');
+
+    file_get_contents(function(data, status) {
+        var blob = new Blob([data], { type: 'octet/stream' });
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        a.style = 'display: none';
+        a.href = url;
+        a.download = name;
+
+        $(document.body).append(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }, submit_error_callback, uuid);
+});
