@@ -7,7 +7,6 @@ extra_scripts:
 ready_script: |
   $("li#nav_submit").addClass("active");
   update_auth_state();
-  submit_onload();
 ---
 
 <div class="container">
@@ -21,19 +20,21 @@ ready_script: |
       <h2 class="panel-title">Submission</h2>
     </div>
     <div class="panel-body">
-      <form class="form-horizontal" role="form" name="submitform" id="submitform" action="">
+      <form class="form-horizontal" role="form" name="submitform" id="submitform">
         <div class="form-group">
           <label class="col-md-2 control-label" for="assignment">Assignment:</label>
           <div class="col-md-10">
-            <select class="form-control" id="assignment"
-                    name="assignment" required autofocus disabled></select>
+            <select class="form-control" id="assignment" name="assignment" required autofocus disabled>
+              <option>Loading Assignments...</option>
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-md-2" for="test">Test:</label>
           <div class="col-md-10">
-            <select class="form-control" id="test"
-                    name="test" required disabled></select>
+            <select class="form-control" id="test" name="test" required disabled>
+              <option>Loading Tests...</option>
+            </select>
           </div>
         </div>
         <div class="form-group">

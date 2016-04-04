@@ -28,8 +28,7 @@
       log('authenticated success, received token `%s`', token);
 
       session.authUser(username, token);
-      log('redirecting user to authenticated user page default: `/submit/`');
-      window.location = '/submit/';
+      util.redirect('/submit/');
     });
 
     // callback to run for the rest of cases
@@ -51,7 +50,7 @@
   function authenticate(username, password) {
     // use the HTTP basic authentication header
     var basicAuth = function(xhr) {
-      var val = make_base_auth(username, password);
+      var val = util.generateBasicAuth(username, password);
       xhr.setRequestHeader('Authorization', val);
     };
 

@@ -1,385 +1,313 @@
-var asn_cnt      = null;
-var asn_uuid     = null;
-var tst_cnt      = null;
-var tst_uuid     = null;
-var fle_uuids    = null;
-var sub_uuid     = null;
-var run_uuid     = null;
-var timeout      = null;
-var ladda_submit = null;
+var log = debug('cog-web:page:submit');
 
-function add_option_alpha(select, option) {
-    var inserted = false;
-    select.children("option").each(function() {
-	    if (option.text() < this.text) {
-	        console.log("Inserting " + option.text());
-	        option.insertBefore(this);
-	        inserted = true;
-	        return false;
-        }
-    });
-    if ( inserted == false ) {
-	    console.log("Appending " + option.text());
-	    select.append(option);
-	    inserted = true;
-    }
-}
+$(document).ready(function() {
+  log('page initialization process started');
 
-function submit_onload() {
-    ladda_submit = $("button#submit").ladda();
-    assignments_get_submitable(update_asn_list, setup_error_callback);
-}
+  var select = $('select#assignment');
 
-function update_asn_list(data, status) {
+  // fetch all the submittable assignments from the server
+  assignments_get_submitable(function(data, status) {
+
+    // now we have an array of assignment UUIDs
     var assignments = data.assignments;
-    var select = $("select#assignment");
-    select.empty();
-    asn_cnt = assignments.length;
-    console.log("asn_cnt = " + asn_cnt);
-    console.log("assignments = " + assignments);
-    if(asn_cnt > 0) {
-        $.each(assignments, function(key, uuid) {
-            assignment_get(update_asn_list_item, setup_error_callback, uuid);
-        });
+    log('loaded %d assignment identifiers from the server', assignments.length);
+
+    // inform the user if no assignments can be currently submitted
+    if (!assignments.length) {
+      var option = $('<option>').text('No Assignments Accepting Submissions');
+      // only on initial load, no empty required
+      select.append(option);
+      return;
     }
-    else {
-	    var option = $("<option>", { value : ""}).text("No Assignments Accepting Submissions");
-        select.append(option);
-        select.prop("disabled", true);
-    }
+
+    log('fetching metadata for individual assignments');
+    async.map(assignments, function(uuid, fn) {
+      assignment_get(function(data, status) {
+        fn(null, data);
+      }, function() {
+        fn(true);
+      }, uuid);
+    }, function(err, results) {
+      log('received all assignment metadata from server');
+
+      // after receiving all the assignment objects, clear the selector
+      select.empty();
+      log('populating assignment listing with entries');
+      populateAssignmentList(results);
+    });
+
+
+  }, () => {});
+});
+
+function populateAssignmentList(list) {
+  var elements = [];
+
+  list.forEach(function(entry) {
+    var uuid = Object.keys(entry)[0];
+    var meta = entry[uuid];
+    var option = $('<option>', { value: uuid }).text(meta.name);
+    elements.push(option);
+  });
+
+  elements.sort(function(a, b) {
+    var c = a.text().toLowerCase();
+    var d = b.text().toLowerCase();
+
+    if (c < d) return -1;
+    if (c > d) return 1;
+    return 0;
+  });
+
+  var str = elements.map(function(ele) {
+    return ele.prop('outerHTML');
+  }).join('');
+
+  var select = $('select#assignment');
+  select.html(str);
+  select.prop('disabled', false);
+
+  // select the last entry, as per old behavior
+  // select.find('option:last').attr('selected', 'selected');
+  select.val(select.children('option:last').val());
+  select.change();
 }
 
-function update_asn_list_item(data, status) {
-    var keys = Object.keys(data);
-    var uuid = keys[0];
-    var assignment = data[uuid];
-    var select = $("select#assignment");
-    var option = $("<option>", { value : uuid}).text(assignment.name);
-    add_option_alpha(select, option);
-    if ( select.children("option").size() == asn_cnt ) {
-	    select.val(select.children("option:last").val());
-        select.change();
-        select.prop("disabled", false);
-    }
+function populateTestList(list) {
+  var elements = [];
+
+  list.forEach(function(entry) {
+    var uuid = Object.keys(entry)[0];
+    var meta = entry[uuid];
+    var option = $('<option>', { value: uuid }).text(meta.name);
+    elements.push(option);
+  });
+
+  elements.sort(function(a, b) {
+    var c = a.text().toLowerCase();
+    var d = b.text().toLowerCase();
+
+    if (c < d) return -1;
+    if (c > d) return 1;
+    return 0;
+  });
+
+  var str = elements.map(function(ele) {
+    return ele.prop('outerHTML');
+  }).join('');
+
+  var select = $('select#test');
+  select.html(str);
+  select.prop('disabled', false);
+
+  // select the last entry (assumed most recent)
+  select.val(select.children('option:last').val());
+  select.change();
 }
 
-function update_tst_list(data, status) {
+$('select#assignment').change(function() {
+  var sel = $(this).find(':selected');
+  var uuid = sel.val();
+  var text = sel.text();
+
+  var select = $('select#test');
+
+  log('assignment selector changed to `%s` (%s)', text, uuid.substring(0, 8));
+  assignment_tests_get(function(data, status) {
+    // array of test UUIDs
     var tests = data.tests;
-    var select = $("select#test");
-    select.empty();
-    tst_cnt = tests.length;
-    console.log("tst_cnt = " + tst_cnt);
-    console.log("tests = " + tests);
-    if(tst_cnt > 0) {
-        $.each(tests, function(key, uuid) {
-            test_get(update_tst_list_item, setup_error_callback, uuid);
-        });
-    }
-    else {
-	    var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
-        select.append(option);
-        select.prop("disabled", true);
-        $("input#file").prop("disabled", true);
-        $("button#submit").prop("disabled", true);
-    }
-}
 
-function update_tst_list_item(data, status) {
+    log('loaded %d test options for assignment `%s`', tests.length, text);
+
+    // inform the user if no tests are available
+    if (!tests.length) {
+      var option = $('<option>').text('No Tests Available');
+      // empty previous assignment selection
+      select.empty();
+      select.append(option);
+      // disable the test selector
+      select.prop('disabled', true);
+      // remove the max score, as there is no specified test
+      $('span#max_score').text(0);
+      // disable the file uploader
+      $('input#file').prop('disabled', true);
+      // disable the submit button
+      $('button#submit').prop('disabled', true);
+      return;
+    }
+
+    log('fetching metadata for individual assignments');
+    async.map(tests, function(uuid, fn) {
+      test_get(function(data, status) {
+        fn(null, data);
+      }, function() {
+        fn(true);
+      }, uuid);
+    }, function(err, results) {
+      log('received all test metadata from server');
+
+      // after receiving all the test objects, clear the selector
+      select.empty();
+      log('populating test listing with entries');
+      populateTestList(results);
+    });
+  }, () => {}, uuid);
+});
+
+$('select#test').change(function() {
+  var sel = $(this).find(':selected');
+  var uuid = sel.val();
+  var text = sel.text();
+  log('test selector changed to `%s` (%s)', text, uuid.substring(0, 8));
+
+  resetResults();
+  test_get(function(data, status) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var test = data[uuid];
-    var select = $("select#test");
-    var option = $("<option>", { value : uuid}).text(test.name);
-    add_option_alpha(select, option);
-    if (select.children("option").size() == tst_cnt) {
-	    select.val(select.children("option:last").val());
-        select.change();
-        select.prop("disabled", false);
-        $("input#file").prop("disabled", false);
-        $("button#submit").prop("disabled", false);
+
+    // update the maximum possible score indicator
+    $('span#max_score').text(test.maxscore);
+    // enable the file uploader
+    $('input#file').prop('disabled', false);
+    // enable the submit button
+    $('button#submit').prop('disabled', false);
+  }, () => {}, uuid);
+});
+
+function resetResults() {
+  // reset run status, score, return code, UUID, and output dialogues
+  $('span#run_status').text('TBD');
+  $('span#run_score').text('TBD');
+  $('span#run_retcode').text('TBD');
+  $('span#run_uuid').text('TBD');
+  $('pre#run_output').text('Grading output will appear here...');
+
+  // reset the status label color
+  $('span#run_status').removeClass(function(index, css) {
+      return (css.match(/(^|\s)text-\S+/g) || []).join(' ');
+  });
+
+  // reset background color of output
+  $('pre#run_output').css('background-color', '#f5f5f5');
+}
+
+$('form#submitform').submit(function(event) {
+  event.preventDefault();
+
+  $('button#submit').children('span.ladda-label').html('Running...');
+
+  var assignment = $('select#assignment').val();
+  var test = $('select#test').val();
+
+  var fileName = $('input#file').val();
+  var ext = fileName.split('.').pop();
+
+  var field = (ext === 'zip') ? 'extract' : 'submission';
+  $('input#file').attr('name', field);
+
+  var form = new FormData($('form#submitform')[0]);
+
+  // lock all form fields
+  $('select#assignment').prop('disabled', true);
+  $('select#test').prop('disabled', true);
+  $('input#file').prop('disabled', true);
+
+  $('div#file-progress').toggleClass('hidden');
+  $('div#file-waiting').toggleClass('hidden');
+
+  async.waterfall([
+    function(callback) {
+      file_post(function(data, status) {
+        var files = data.files;
+        callback(null, files);
+      }, () => {}, function(percent) {
+        // report file upload progress to the user
+        $('span#upload-progress').text(percent);
+      }, form);
+    },
+    function(files, callback) {
+      assignment_submission_create(function(data, status) {
+        var submission = data.submissions[0];
+        callback(null, files, submission);
+      }, () => {}, assignment);
+    },
+    function(files, submission, callback) {
+      submission_add_files(function(data, status) {
+        callback(null, submission);
+      }, () => {}, submission, files);
+    },
+    function(submission, callback) {
+      submission_run_test(function(data, status) {
+        var run = data.runs[0];
+        $('span#run_uuid').text(run);
+        callback(null, run);
+      }, () => {}, submission, test);
     }
-}
+  ], function(err, run) {
+    pollResults(run);
+  });
+});
 
-// Submission Sequence
-
-function upload_fle_callback(data, status) {
-
-    // Log Data
-    console.log("data = " + JSON.stringify(data));
-
-    // Save Files UUIDs
-    fle_uuids = data.files;
-
-    // Create Submission
-    console.log("Creating Submission...");
-    assignment_submission_create(create_sub_callback, submit_error_callback, asn_uuid);
-
-}
-
-function create_sub_callback(data, status) {
-
-    // Log Data
-    console.log("data = " + JSON.stringify(data));
-
-    // Save Submission UUID
-    sub_uuid = data.submissions[0];
-
-    // Add Files to Submission
-    var file_lst = fle_uuids;
-    console.log("Adding Files...");
-    submission_add_files(add_files_callback, submit_error_callback, sub_uuid, file_lst);
-
-}
-
-function add_files_callback(data, status) {
-
-    // Log Data
-    console.log("data = " + JSON.stringify(data));
-
-    // Check Files
-    console.log("Added files: " + data.files);
-
-    // Launch Test Run
-    console.log("Starting Test Run...");
-    submission_run_test(run_test_callback, submit_error_callback, sub_uuid, tst_uuid);
-
-}
-
-function run_test_callback(data, status) {
-
-    // Log Data
-    console.log("data = " + JSON.stringify(data));
-
-    // Save Run UUID
-    run_uuid = data.runs[0];
-
-    // Log to Console
-    console.log("asn_uuid  = " + asn_uuid);
-    console.log("tst_uuid  = " + tst_uuid);
-    console.log("fle_uuids = " + fle_uuids);
-    console.log("sub_uuid  = " + sub_uuid);
-    console.log("run_uuid  = " + run_uuid);
-
-    // Output UUID
-    $("span#run_uuid").text(run_uuid);
-
-    // Check Results
-    poll_results_callback()
-
-}
-
-function poll_results_callback() {
-
-    // Update Results
-    console.log("Getting Run Results...");
-    run_get(check_result_callback, submit_error_callback, run_uuid);
-
-}
-
-function check_result_callback(data, status) {
-    // Log Data
-    console.log("data = " + JSON.stringify(data));
-
-    // Extract Results
+function pollResults(run) {
+  run_get(function(data, status) {
+    // extract results from the run
     var keys = Object.keys(data);
     var uuid = keys[0];
     var run = data[uuid];
 
-    // Update Status
-    $("span#run_status").text(run.status);
+    // display the status of the run
+    $('span#run_status').text(run.status);
 
-    // Define colors for each type of status
+    // define colors to be associated with each run
     var colors = {
-        text: {
-            "success" : "text-success",
-            "warning": "text-warning",
-            "exception": "text-danger",
-            "error": "text-danger"
-        },
-        bg: {
-            "success": "#edf7f2",
-            "warning": "#f7f7ed",
-            "exception": "#f7edf2",
-            "error": "#f7edf2"
-        }
+      text: {
+        'success' : 'text-success',
+        'warning': 'text-warning',
+        'exception': 'text-danger',
+        'error': 'text-danger'
+      },
+      bg: {
+        'success': '#edf7f2',
+        'warning': '#f7f7ed',
+        'exception': '#f7edf2',
+        'error': '#f7edf2'
+      }
     };
 
-    // Drop text classes before another is applied
-    $("span#run_status").removeClass(function(index, css) {
-        return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
+    // clear run status of color classes before applying a new one
+    $('span#run_status').removeClass(function(index, css) {
+        return (css.match(/(^|\s)text-\S+/g) || []).join(' ');
     });
 
-    // Apply relevant background color to status
+    // apply relevant background color to status
     var sub = run.status.split('-');
     if (sub.length > 1) {
-        var type = sub[1];
-        console.log('Received completion error: ' + type);
-
-        $("span#run_status").addClass(colors.text[type]);
-        $("pre#run_output").css("background-color", colors.bg[type]);
+      var type = sub[1];
+      $('span#run_status').addClass(colors.text[type]);
+      $('pre#run_output').css('background-color', colors.bg[type]);
     } else {
-        $("span#run_status").addClass(colors.text["success"]);
-        $("pre#run_output").css("background-color", colors.bg["success"]);
+      $('span#run_status').addClass(colors.text['success']);
+      $('pre#run_output').css('background-color', colors.bg['success']);
     }
 
-    if (run.status.indexOf("complete") === 0) {
+    if (run.status.indexOf('complete') === 0) {
+      // display program output
+      $('span#run_score').text(run.score);
+      $('span#run_retcode').text(run.retcode);
+      $('pre#run_output').text(run.output);
 
-        // Output Results
-        $("span#run_score").text(run.score);
-        $("span#run_retcode").text(run.retcode);
-        $("pre#run_output").text(run.output);
+      // unlock all form elements, the run is complete
+      $('select#assignment').prop('disabled', false);
+      $('select#test').prop('disabled', false);
+      $('input#file').prop('disabled', false);
+      $('button#submit').children('span.ladda-label').html('Submit');
 
-        // Unlock Form
-        $("select#assignment").prop("disabled", false);
-        $("select#test").prop("disabled", false);
-        $("input#file").prop("disabled", false);
-	    ladda_submit.ladda("stop");
-        $("button#submit").children("span.ladda-label").html("Submit");
-
-        // Hide progress bar and revert to waiting status
-        $('div#file-progress').toggleClass('hidden');
-        $('div#file-waiting').toggleClass('hidden');
-
+      // hide progress bar and revert to waiting status
+      $('div#file-progress').toggleClass('hidden');
+      $('div#file-waiting').toggleClass('hidden');
     } else {
-        // Start Polling
-        console.log("Waiting...");
-        timeout = setTimeout(poll_results_callback, 1000);
+      setTimeout(pollResults, 1000);
     }
+  }, () => {}, run);
 }
-
-function update_max_score(data, status) {
-    var keys = Object.keys(data);
-    var uuid = keys[0];
-    var tst = data[uuid];
-    $("span#max_score").text(tst.maxscore);
-}
-
-function submit_error_callback(xhr, status, error) {
-
-    // Log Error
-    console.log("Status: " + status, ", Error: " + error);
-
-    // Update Status
-    $("span#run_status").text("API Error: " + error);
-
-    // Output Results
-    $("span#run_score").text("N/A");
-    $("span#run_retcode").text("N/A");
-    $("pre#run_output").text(xhr.responseText);
-
-    // Unlock Form
-    $("select#assignment").prop("disabled", false);
-    $("select#test").prop("disabled", false);
-    $("input#file").prop("disabled", false);
-	ladda_submit.ladda("stop");
-    $("button#submit").children("span.ladda-label").html("Submit");
-
-}
-
-function setup_error_callback(xhr, status, error) {
-
-    // Log Error
-    console.log("Status: " + status, ", Error: " + error);
-
-    // Update Status
-    $("span#run_status").text("API Error: " + error);
-
-    // Output Results
-    $("span#run_score").text("N/A");
-    $("span#run_retcode").text("N/A");
-    $("pre#run_output").text(xhr.responseText);
-
-}
-
-function clear_results() {
-    // Remove status color from previous runs
-    $("span#run_status").removeClass(function(index, css) {
-        return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
-    });
-
-    // Reset run output background
-    $("pre#run_output").css("background-color", "#f5f5f5");
-
-    $("span#run_status").text("TBD");
-    $("span#run_score").text("TBD");
-    $("span#run_retcode").text("TBD");
-    $("span#run_uuid").text("TBD");
-    $("pre#run_output").text("Grading output will appear here...");
-}
-
-$("select#assignment").change(function() {
-    var uuid = $("select#assignment").val();
-    console.log("Assignment changed to " + uuid)
-    if(uuid.length > 0) {
-        assignment_tests_get(update_tst_list, setup_error_callback, uuid);
-    }
-});
-
-$("select#test").change(function() {
-    var uuid = $("select#test").val();
-    console.log("Test changed to " + uuid)
-    if(uuid.length > 0) {
-        clear_results();
-        test_get(update_max_score, setup_error_callback, uuid);
-    }
-});
-
-$("form#submitform").submit(function(event) {
-    event.preventDefault();
-
-    // Start Button Animation
-    ladda_submit.ladda("start");
-    $("button#submit").children("span.ladda-label").html("Running...");
-
-    // Get Input
-    asn_uuid = $("select#assignment").val();
-    tst_uuid = $("select#test").val();
-
-    // Validate Data
-    if (!asn_uuid || asn_uuid.length !== 36) {
-        console.log("Valid Assignment UUID Required");
-        $("button#submit").prop("disabled", false);
-        return;
-    }
-
-    if (!tst_uuid || tst_uuid.length !== 36) {
-        console.log("Valid Test UUID Required");
-        $("button#submit").prop("disabled", false);
-        return;
-    }
-
-    if ($("input#file").val().length === 0) {
-        console.log("Valid File Required");
-        $("button#submit").prop("disabled", false);
-        return;
-    }
-
-    // Upload File
-    var file_name = $("input#file").val();
-    console.log("File Name = " + file_name);
-
-    var file_ext = file_name.split(".").pop();
-    console.log("File Extension = " + file_ext);
-
-    if (file_ext === "zip") {
-        $("input#file").attr("name", "extract")
-    } else {
-        $("input#file").attr("name", "submission")
-    }
-
-    var form_data = new FormData($("form#submitform")[0]);
-    console.log("Submitting File...");
-
-    $('div#file-progress').toggleClass('hidden');
-    $('div#file-waiting').toggleClass('hidden');
-
-    file_post(upload_fle_callback, submit_error_callback, function(percent) {
-        // Report file upload progress to the user
-        $('span#upload-progress').text(percent);
-    }, form_data);
-
-    // Lock Form
-    $("select#assignment").prop("disabled", true);
-    $("select#test").prop("disabled", true);
-    $("input#file").prop("disabled", true);
-});
