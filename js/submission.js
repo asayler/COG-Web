@@ -69,8 +69,7 @@ $('#files_table').delegate('.auth-dl', 'click', function(event) {
     var uuid = $(this).data('uuid');
     var name = $(this).data('name');
 
-    file_get_contents(function(data, status) {
-        var blob = new Blob([data], { type: 'octet/stream' });
+    file_get_contents(function(blob) {
         var url = window.URL.createObjectURL(blob);
 
         var a = document.createElement('a');
