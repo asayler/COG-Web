@@ -80,6 +80,10 @@ $('#files_table').delegate('.auth-dl', 'click', function(event) {
 
         $(document.body).append(a);
         a.click();
-        window.URL.revokeObjectURL(url);
+
+        // permit time for deferred events to execute
+        setTimeout(function() {
+          window.URL.revokeObjectURL(url);
+        }, 100);
     }, submit_error_callback, uuid);
 });
