@@ -9,19 +9,39 @@ var asn_cnt      	 = null;
 var asn_uuid         = null;
 var tst_cnt          = null;
 var tst_uuid         = null;
+var usr_cnt          = null;
+var usr_uuid         = null;
 var ladda_submit     = null;
+var is_admin         = null;
 
 function show_history() {
     // Get previous submissions
     console.log("Get previous submissions...");
 
+    $("#form_user").hide();
+
     ladda_submit = $("button#submit").ladda();
+
+    my_isadmin_get(set_admin, setup_error_callback);
+}
+
+function set_admin(data) {
+	is_admin = data.isadmin;
+
+	if(data.isadmin) {
+		$("#form_user").show();
+	}
 
     assignments_get_submitable(update_asn_list, setup_error_callback);
 }
 
 function display_my_history() {
-	my_assignment_submission_get(find_submissions, submit_error_callback, asn_uuid);
+	if(is_admin) {
+		user_assignment_submission_get(find_submissions, submit_error_callback, usr_uuid, asn_uuid);
+	}
+	else {
+		my_assignment_submission_get(find_submissions, submit_error_callback, asn_uuid);
+	}
 }
 
 function find_submissions(data, status) {
@@ -36,7 +56,12 @@ function find_submissions(data, status) {
 
 	$.each(data.submissions, function(index, uuid) {
 		console.log("Getting submssion: " + uuid);
-		my_submission_run_get(iterate_runs, submit_error_callback, uuid);
+		if(is_admin) {
+			user_submission_get_test(iterate_runs, submit_error_callback, usr_uuid, uuid);
+		}
+		else {
+			my_submission_run_get(iterate_runs, submit_error_callback, uuid);
+		}
 	});
 
 	function iterate_runs(data, status) {
@@ -172,6 +197,7 @@ function sort_table() {
 function stop_spin() {
     $("select#assignment").prop("disabled", false);
     $("select#test").prop("disabled", false);
+    $("select#user").prop("disabled", false);
 
     ladda_submit.ladda("stop");
 
@@ -257,8 +283,9 @@ function update_tst_list(data, status) {
 	    var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
         select.append(option);
         select.prop("disabled", true);
-        $("input#file").prop("disabled", true);
-        $("button#submit").prop("disabled", true);
+        if(!is_admin) {
+        	$("button#submit").prop("disabled", true);
+        }
     }
 }
 
@@ -273,9 +300,44 @@ function update_tst_list_item(data, status) {
 	    select.val(select.children("option:last").val());
         select.change();
         select.prop("disabled", false);
-        $("input#file").prop("disabled", false);
-        $("button#submit").prop("disabled", false);
+        if(!is_admin) {
+        	$("button#submit").prop("disabled", false);
+        }
+    }	
+}
+
+function update_usr_list(data, status) {
+    var users = data.usernames;
+    var select = $("select#user");
+    select.empty();
+    usr_cnt = Object.keys(users).length;
+    console.log("usr_cnt = " + usr_cnt);
+    console.log("users = " + JSON.stringify(users));
+    if(usr_cnt > 0) {
+        $.each(users, function(uuid, uname) {
+            select = $("select#user");
+		    var option = $("<option>", { value : uuid}).text(uname);
+		    add_option_alpha(select, option);
+		    if (select.children("option").size() == usr_cnt) {
+		    	my_uuid_get(select_admin, setup_error_callback);
     }
+        });
+    }
+    else {
+	    var option = $("<option>", { value : ""}).text("No Tests Accepting Submissions");
+        select.append(option);
+        select.prop("disabled", true);
+        $("button#submit").prop("disabled", true);
+    }
+}
+
+function select_admin(data, status) {
+    var select = $("select#user"); //option:[value="+ data.useruuid + ']').val();
+    $("#user").val(data.useruuid);
+    //select.val(select.children('option:[value='+ data.useruuid + ']').val());
+    select.change();
+    select.prop("disabled", false);
+    $("button#submit").prop("disabled", false);
 }
 
 function setup_error_callback(xhr, status, error) {
@@ -303,6 +365,18 @@ $("select#test").change(function() {
     if(uuid.length > 0) {
         // clear_results(); // Potentially add this back in!
         // test_get(update_max_score, setup_error_callback, uuid);
+        if(is_admin) {
+            users_and_usernames_get(update_usr_list, setup_error_callback);
+        }
+    }
+});
+
+$("select#user").change(function() {
+    var uuid = $("select#user").val();
+    console.log("User changed to " + uuid)
+    if(uuid.length > 0) {
+        // clear_results(); // Potentially add this back in!
+        // test_get(update_max_score, setup_error_callback, uuid);
     }
 });
 
@@ -316,6 +390,9 @@ $("form#submitform").submit(function(event) {
     // Get Input
     asn_uuid = $("select#assignment").val();
     tst_uuid = $("select#test").val();
+    if(is_admin) {
+	    usr_uuid = $("select#user").val();
+    }
 
     // Updated Max Score
 	get_max_score();
@@ -333,6 +410,14 @@ $("form#submitform").submit(function(event) {
         return;
     }
 
+    if(is_admin) {
+	    if (!usr_uuid || usr_uuid.length !== 36) {
+	        console.log("Valid User UUID Required");
+	        $("button#submit").prop("disabled", false);
+	        return;
+	    }
+	}
+
     //submissions_get(display_history, submit_error_callback);
 
     // Clear table
@@ -343,6 +428,6 @@ $("form#submitform").submit(function(event) {
     // Lock Form
     $("select#assignment").prop("disabled", true);
     $("select#test").prop("disabled", true);
-    $("input#file").prop("disabled", true);
+    $("select#user").prop("disabled", true);
 });
 // End code from submit.js

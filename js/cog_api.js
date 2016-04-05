@@ -145,6 +145,11 @@ function file_get_contents(callback, callback_error, uuid) {
     get_auth_binary(url, callback, callback_error);
 }
 
+function my_isadmin_get(callback, callback_error) {
+    var url = "{{ site.cog_api_url }}/my/isadmin/";
+    get_auth(url, callback, callback_error);
+}
+
 function my_assignment_submission_get(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/my/assignments/" + uuid + "/submissions/";
     var data = {};
@@ -154,6 +159,11 @@ function my_assignment_submission_get(callback, callback_error, uuid) {
 function my_submission_run_get(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/my/submissions/" + uuid + "/runs/";
     var data = {};
+    get_auth(url, callback, callback_error);
+}
+
+function my_uuid_get (callback, callback_error) {
+    var url = "{{ site.cog_api_url }}/my/useruuid/";
     get_auth(url, callback, callback_error);
 }
 
@@ -191,6 +201,31 @@ function submission_run_test(callback, callback_error, uuid_sub, uuid_tst) {
 
 function test_get(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/tests/" + uuid + "/";
+    get_auth(url, callback, callback_error);
+}
+
+function users_get(callback, callback_error) {
+    var url = "{{ site.cog_api_url }}/users/";
+    get_auth(url, callback, callback_error);
+}
+
+function user_get(callback, callback_error, uuid) {
+    var url = "{{ site.cog_api_url }}/users/" + uuid + "/";
+    get_auth(url, callback, callback_error);
+}
+
+function users_and_usernames_get(callback, callback_error) {
+    var url = "{{ site.cog_api_url }}/users/usernames/";
+    get_auth(url, callback, callback_error);
+}
+
+function user_assignment_submission_get(callback, callback_error, user_uuid, assignment_uuid) {
+    var url = "{{ site.cog_api_url }}/users/" + user_uuid + "/assignments/" + assignment_uuid + "/submissions/";
+    get_auth(url, callback, callback_error);
+}
+
+function user_submission_get_test(callback, callback_error, usr_uuid, sub_uuid) {
+    var url = "{{ site.cog_api_url }}/users/" + usr_uuid + "/submissions/" + sub_uuid + "/runs/";
     get_auth(url, callback, callback_error);
 }
 
