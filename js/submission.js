@@ -1,89 +1,47 @@
 // Get retcode, score and status
 function show_files() {
-	var sub_uuid = getParameterByName('uuid');
-	var downloadable = getParameterByName('file');
+    var sub_uuid = getParameterByName('uuid');
+    $("span#sub_uuid").text(sub_uuid);
 
-	if (downloadable) {
-		initiate_download(downloadable);
-	}	
+    var find_files = function(data, status) {
+        var array_length = data.files.length;
+        var file_array = [];
 
-	$("span#sub_uuid").text(sub_uuid);
+        $.each(data.files, function(index, uuid) {
+            file_get(function(data, status) {
+                var f = {};
 
-	submission_get_files(find_files, submit_error_callback, sub_uuid);
+                var uuid = Object.keys(data)[0];
+                var file_name = data[uuid].name;
 
-	function find_files(data, status) {
-		var array_length = data.files.length;
-		var file_array = [];
+                f.name = file_name;
+                f.uuid = uuid;
 
-		$.each(data.files, function(index, uuid) {
-			file_get(append_files, submit_error_callback, uuid);
+                file_array.push(f);
 
-			function append_files(data, status) {
-				var f = {};
+                // Account for length of the array
+                if (file_array.length === array_length) {
+                    sort_files(file_array);
+                }
+            }, submit_error_callback, uuid);
+        });
+    };
 
-				var uuid = Object.keys(data)[0];
-
-				var file_name = data[uuid].name;
-
-				f.name = file_name;
-				f.uuid = uuid;
-
-				file_array.push(f);
-
-				// Account for length of the array
-				if(file_array.length == array_length) {
-					sort_files(file_array);
-				}
-			}
-		});
-	}
+    submission_get_files(find_files, submit_error_callback, sub_uuid);
 }
 
 function sort_files(file_array) {
     file_array.sort(function(x, y) {
-    	return x.name.localeCompare(y.name);
-	});
+        return x.name.localeCompare(y.name);
+    });
 
-	$.each(file_array, function(index, fle) {
-		var url_arr = window.location.href.split("&");
-		var fle_uri = encodeURI("&file=" + fle.uuid);
-		var url = url_arr[0] + fle_uri;
+    $.each(file_array, function(index, fle) {
+        var url = file_get_uri(fle.uuid);
+        $("#files_table").append("<tr><td>" + fle.name + '</td><td><a class="auth-dl" href="' + url + '" data-name="' + fle.name + '" data-uuid="' + fle.uuid + '">' + fle.uuid + "<a></td></tr>");
+    });
 
-		$("#files_table").append("<tr><td>" + fle.name + '</td><td><a href="' + url + '">' + fle.uuid + "<a></td></tr>");
-	});
-
-	console.log("Sorted Table");
+    console.log("Sorted Table");
 }
-
-function initiate_download(file_uuid) {
-    file_get(get_contents, submit_error_callback, file_uuid);
-
-    function get_contents(data, status) {
-        var filename = data[file_uuid].name;
-        file_get_contents(log_download, submit_error_callback, file_uuid);
-
-        function log_download(data, status) {
-            console.log("Downloading " + filename);
-            download(filename, data);
-        }
-    }
-}
-
-// Taken from http://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
-function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-    console.log("Download done");
-}
-
 
 // Taken from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName(name, url) {
@@ -104,3 +62,27 @@ function submit_error_callback(xhr, status, error) {
     // Log Error
     console.log("Status: " + status, ", Error: " + error);
 }
+
+$('#files_table').delegate('.auth-dl', 'click', function(event) {
+    event.preventDefault();
+
+    var uuid = $(this).data('uuid');
+    var name = $(this).data('name');
+
+    file_get_contents(function(blob) {
+        var url = window.URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        a.style = 'display: none';
+        a.href = url;
+        a.download = name;
+
+        $(document.body).append(a);
+        a.click();
+
+        // permit time for deferred events to execute
+        setTimeout(function() {
+          window.URL.revokeObjectURL(url);
+        }, 100);
+    }, submit_error_callback, uuid);
+});

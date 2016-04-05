@@ -14,6 +14,26 @@ function get_auth(url, callback, callback_error) {
     });
 }
 
+function get_auth_binary(url, callback, callback_error) {
+    var token = $.cookie(COOKIE_TOKEN_NAME);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'blob';
+    xhr.setRequestHeader('Authorization', make_base_auth(token, ''));
+
+    xhr.onload = function() {
+      if (this.status === 200) {
+        var blob = this.response;
+        return callback(blob);
+      }
+
+      callback_error();
+    };
+
+    xhr.send();
+}
+
 function post_auth(url, callback, callback_error, data) {
     var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
@@ -115,9 +135,14 @@ function file_get(callback, callback_error, uuid) {
     get_auth(url, callback, callback_error);
 }
 
+function file_get_uri(uuid) {
+    var uri = "{{ site.cog_api_url }}/files/" + uuid + "/contents/";
+    return uri;
+}
+
 function file_get_contents(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/files/" + uuid + "/contents/";
-    get_auth(url, callback, callback_error);
+    get_auth_binary(url, callback, callback_error);
 }
 
 function my_assignment_submission_get(callback, callback_error, uuid) {

@@ -39,7 +39,7 @@ function find_submissions(data, status) {
 		my_submission_run_get(iterate_runs, submit_error_callback, uuid);
 	});
 
-	function iterate_runs(data, status) {	
+	function iterate_runs(data, status) {
 		num_runs += data.runs.length;
 		num_subs++;
 
@@ -65,7 +65,7 @@ function add_runs(runs) {
 function get_run_info(data, status) {
 	var uuid = Object.keys(data)[0];
 	var run = data[uuid];
-	var new_row = {};		
+	var new_row = {};
 
 	// Get the time
 	var mseconds= run.modified_time;
@@ -131,14 +131,14 @@ function create_row(row) {
 function append_row(row) {
 	var sub = encodeURI("?uuid=" + row.suuid);
 	var run = encodeURI("?uuid=" + row.ruuid);
-	var sub_url = "/submission.html" + sub;
-	var run_url = "/run.html" + run;
+	var sub_url = "/submission/" + sub;
+	var run_url = "/run/" + run;
 
 	var see_sub = "<a href='" + sub_url + "'>Submission</a> or ";
 	var see_run = "<a href='" + run_url + "'>Run</a>";
 
-	var row_entry = "<tr><td>" + row.mtime.toLocaleString() + "</td><td>" + row.score + "</td><td>" 
-			+ row.retcode + "</td><td class='" + row.color + "'>" + row.status 
+	var row_entry = "<tr><td>" + row.mtime.toLocaleString() + "</td><td>" + row.score + "</td><td>"
+			+ row.retcode + "</td><td class='" + row.color + "'>" + row.status
 			+ "</td><td>" + see_sub + see_run + "</td></tr>";
 
 	if (row.test == tst_uuid) {
@@ -336,7 +336,7 @@ $("form#submitform").submit(function(event) {
     //submissions_get(display_history, submit_error_callback);
 
     // Clear table
-    $("#history_table tbody tr").remove(); 
+    $("#history_table tbody tr").remove();
 
     display_my_history();
 
