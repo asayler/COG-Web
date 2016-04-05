@@ -1,18 +1,6 @@
 ---
 ---
 
-function COG(token) {
-  this.token = token;
-}
-
-COG.prototype._ajax = function(options) {
-  options.beforeSend = options.beforeSend || function(xhr) {
-    xhr.setRequestHeader('Authorization', 'Basic ' + btoa(this.token + ':'));
-  };
-
-  return $.ajax(options);
-};
-
 function get_auth(url, callback, callback_error) {
     var token = $.cookie(COOKIE_TOKEN_NAME);
     $.ajax({
@@ -245,3 +233,49 @@ function run_get(callback, callback_error, uuid) {
     var url = "{{ site.cog_api_url }}/runs/" + uuid + "/";
     get_auth(url, callback, callback_error);
 }
+
+(function(window, document) {
+
+  var log = debug('cog-web:api');
+
+  function COG(options) {
+    this.url = options.url;
+    this.token = options.token;
+    log('constructing new instance with token %s', this.token.substring(0, 8));
+  }
+
+  COG.prototype._binary = function(option) {
+
+  };
+
+  COG.prototype._ajax = function(options, callback) {
+    options.beforeSend = options.beforeSend || ((xhr) => {
+      var header = util.generateBasicAuth(this.token);
+      xhr.setRequestHeader('Authorization', header);
+    });
+
+    return $.ajax(options).then((data, status, xhr) => {
+      callback(null, data, status, xhr);
+    }, (xhr, status, err) => {
+      callback(err, null, status, xhr);
+    });
+  };
+
+  COG.prototype.getSubmittableAssignments = function(callback) {
+    var endpoint = '/assignments/submitable/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getAssignment = function(uuid, callback) {
+    var endpoint = '/assignments/' + uuid + '/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  var token = $.cookie(COOKIE_TOKEN_NAME);
+  window.cog = new COG({ url: '{{ site.cog_api_url }}', token });
+
+})(window, document);

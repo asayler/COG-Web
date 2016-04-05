@@ -2,10 +2,51 @@ var log = debug('cog-web:page:submit');
 
 $(document).ready(function() {
   log('page initialization process started');
-
   var select = $('select#assignment');
 
   // fetch all the submittable assignments from the server
+  cog.getSubmittableAssignments(function(err, data) {
+    // now we have an array of assignment UUIDs
+    var assignments = data.assignments;
+    log('loaded %d assignment identifiers from the server', assignments.length);
+
+    // inform the user if no assignments can be currently submitted
+    if (!assignments.length) {
+      var option = $('<option>').text('No Assignments Accepting Submissions');
+      // only on initial load, no empty required
+      select.append(option);
+      return;
+    }
+
+    log('fetching metadata for individual assignments');
+    async.map(assignments, cog.getAssignment.bind(cog), function(err, results) {
+      log('received all assignment metadata from server');
+
+      // after receiving all the assignment objects, clear the selector
+      select.empty();
+      log('populating assignment listing with entries');
+      populateAssignmentList(results);
+    });
+
+    /*
+    async.map(assignments, function(uuid, fn) {
+      assignment_get(function(data, status) {
+        fn(null, data);
+      }, function() {
+        fn(true);
+      }, uuid);
+    }, function(err, results) {
+      log('received all assignment metadata from server');
+
+      // after receiving all the assignment objects, clear the selector
+      select.empty();
+      log('populating assignment listing with entries');
+      populateAssignmentList(results);
+    });
+    */
+  });
+
+  /*
   assignments_get_submitable(function(data, status) {
 
     // now we have an array of assignment UUIDs
@@ -38,6 +79,7 @@ $(document).ready(function() {
 
 
   }, () => {});
+  */
 });
 
 function populateAssignmentList(list) {
