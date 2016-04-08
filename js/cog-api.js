@@ -1,7 +1,7 @@
 ---
 ---
 
-var dep = debug('cog-web:deprecation');
+var dep = debug('cog-web:deprecation:cog-api');
 
 function get_auth(url, callback, callback_error) {
     var token = $.cookie(COOKIE_TOKEN_NAME);
@@ -270,6 +270,7 @@ function run_get(callback, callback_error, uuid) {
   /* internals */
 
   COG.prototype._ajax = function(options, callback) {
+    // options.url = this.url + options.url;
     options.beforeSend = options.beforeSend || ((xhr) => {
       var header = util.generateBasicAuth(this.token);
       xhr.setRequestHeader('Authorization', header);
@@ -370,6 +371,13 @@ function run_get(callback, callback_error, uuid) {
     return this._ajax({ url }, callback);
   };
 
+  COG.prototype.getFileContents = function(uuid, callback) {
+    var endpoint = '/files/' + uuid + '/contents/';
+    var url = this.url + endpoint;
+    log('dispatching request for binary data to `%s`', endpoint);
+    return this._binary({ url }, callback);
+  };
+
   /* other */
 
   COG.prototype.getTest = function(uuid, callback) {
@@ -384,6 +392,78 @@ function run_get(callback, callback_error, uuid) {
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);
+  };
+
+  /* user-specific resources */
+
+  COG.prototype.getMyAssignmentSubmission = function(uuid, callback) {
+    var endpoint = '/my/assignments/' + uuid + '/submissions/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getMySubmissionRun = function(uuid, callback) {
+    var endpoint = '/my/submissions/' + uuid + '/runs/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  /* server-side resource creation */
+
+  COG.prototype.postFile = function(data, callback, progress) {
+    var endpoint = '/files/';
+    var url = this.url + endpoint;
+
+    var xhr = function() {
+      var req = new XMLHttpRequest();
+
+      req.upload.addEventListener('progress', function(event) {
+        if (!event.lengthComputable) return;
+
+        var percent = event.loaded / event.total;
+        percent = parseInt(percent * 100);
+
+        progress && progress(percent);
+      }, false);
+
+      return req;
+    };
+
+    return this._ajax({
+      method: 'POST',
+      url,
+      data,
+      xhr,
+      contentType: false,
+      cache: false,
+      processData: false
+    }, callback);
+  };
+
+  COG.prototype.addSubmissionFiles = function(uuid, files, callback) {
+    var endpoint = '/submissions/' + uuid + '/files/';
+    var url = this.url + endpoint;
+    var data = JSON.stringify({ files });
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ method: 'PUT', url, data }, callback);
+  };
+
+  COG.prototype.createAssignmentSubmission = function(uuid, callback) {
+    var endpoint = '/assignments/' + uuid + '/submissions/';
+    var url = this.url + endpoint;
+    var data = JSON.stringify({});
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ method: 'POST', url, data }, callback);
+  };
+
+  COG.prototype.runSubmissionTest = function(uuid, test, callback) {
+    var endpoint = '/submissions/' + uuid + '/runs/';
+    var url = this.url + endpoint;
+    var data = JSON.stringify({ test });
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ method: 'POST', url, data }, callback);
   };
 
   var token = $.cookie('cog_token');

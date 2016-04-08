@@ -3,7 +3,7 @@ var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_TOKEN_NAME = "cog_token"
 
-var dep = debug('cog-web:deprecation');
+var dep = debug('cog-web:deprecation:common');
 
 function make_base_auth(username, password) {
   dep(`call to deprecated function \`${arguments.callee.name}\``);

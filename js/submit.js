@@ -204,35 +204,37 @@ $('form#submitform').submit(function(event) {
   $('div#file-progress').toggleClass('hidden');
   $('div#file-waiting').toggleClass('hidden');
 
+  // assignment submission sequence
   async.waterfall([
     function(callback) {
-      file_post(function(data, status) {
+      cog.postFile(form, function(err, data) {
         var files = data.files;
-        callback(null, files);
-      }, () => {}, function(percent) {
+        callback(err, files);
+      }, function(percent) {
         // report file upload progress to the user
         $('span#upload-progress').text(percent);
-      }, form);
+      });
     },
     function(files, callback) {
-      assignment_submission_create(function(data, status) {
+      cog.createAssignmentSubmission(assignment, function(err, data) {
         var submission = data.submissions[0];
-        callback(null, files, submission);
-      }, () => {}, assignment);
+        callback(err, files, submission);
+      });
     },
     function(files, submission, callback) {
-      submission_add_files(function(data, status) {
-        callback(null, submission);
-      }, () => {}, submission, files);
+      cog.addSubmissionFiles(submission, files, function(err, data) {
+        callback(err, submission);
+      });
     },
     function(submission, callback) {
-      submission_run_test(function(data, status) {
+      cog.runSubmissionTest(submission, test, function(err, data) {
         var run = data.runs[0];
         $('span#run_uuid').text(run);
-        callback(null, run);
-      }, () => {}, submission, test);
+        callback(err, run);
+      });
     }
   ], function(err, run) {
+    // TODO: fail gracefully
     pollResults(run);
   });
 });
