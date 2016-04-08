@@ -5,6 +5,7 @@
 (function(window, document) {
 
   var log = debug('cog-web:page:submit');
+  var submit = $('button#submit').ladda();
 
   $(document).ready(function() {
     log('page initialization process started');
@@ -14,7 +15,7 @@
     cog.getAssignmentsSubmittable(function(err, data) {
       // now we have an array of assignment UUIDs
       var assignments = data.assignments;
-      log('loaded %d assignment identifiers from the server', assignments.length);
+      log('loaded %d assignment identifier(s) from the server', assignments.length);
 
       // inform the user if no assignments can be currently submitted
       if (!assignments.length) {
@@ -105,7 +106,7 @@
     event.preventDefault();
 
     // start the loading ticker and indicate that a run is in progress
-    $('button#submit').ladda('start');
+    submit.ladda('start');
     $('button#submit').children('span.ladda-label').html('Running...');
 
     var assignment = $('select#assignment').val();
@@ -281,7 +282,7 @@
         $('input#file').prop('disabled', false);
 
         // stop the ticker and reset the submit button label
-        $('button#submit').ladda('stop');
+        submit.ladda('stop');
         $('button#submit').children('span.ladda-label').html('Submit');
 
         // hide progress bar and revert to waiting status

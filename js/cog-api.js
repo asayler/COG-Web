@@ -287,10 +287,20 @@ function run_get(callback, callback_error, uuid) {
     var header = util.generateBasicAuth(this.token);
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
+    xhr.open('GET', options.url, true);
     xhr.responseType = 'blob';
     xhr.setRequestHeader('Authorization', header);
-    xhr.onload = function() {};
+
+    xhr.onload = function() {
+      if (this.status === 200) {
+        var blob = this.response;
+        return callback(null, blob);
+      }
+
+      var e = new Error('Server returned unexpected status');
+      callback(e);
+    };
+
     xhr.send();
   };
 

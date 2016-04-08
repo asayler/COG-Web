@@ -9,8 +9,8 @@
   $(document).ready(function() {
 
     var uuid = util.getQueryParameter('uuid');
-
     log('attempting to fetch run result record for %s', uuid);
+
     cog.getRun(uuid, function(err, data) {
       if (err) {
         log('failed to retreive run data for %s, error: %s', uuid, err);
