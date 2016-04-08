@@ -6,6 +6,7 @@
 
   var log = debug('cog-web:session');
   var token = $.cookie('cog_token');
+  var opts = { expires: 1, path: '/', secure: false };
 
   var path = window.location.pathname;
   var authRequired = {
@@ -39,12 +40,21 @@
     util.redirect('/submit/');
   }
 
+  function authUser(user, token) {
+    log('creating new session for user `%s` with token `%s`', user, token);
+    $.cookie('cog_user', user, opts);
+    $.cookie('cog_token', token, opts);
+  }
+
+  function destroy() {
+    log('destroying current active user session');
+    $.removeCookie('cog_user', opts);
+    $.removeCookie('cog_token', opts);
+  }
+
   window.session = {
-    authUser: function(user, token) {
-      var opts = { expires: 1, path: '/', secure: false };
-      $.cookie('cog_user', user, opts);
-      $.cookie('cog_token', token, opts);
-    }
+    authUser,
+    destroy
   };
 
 })(window, document);

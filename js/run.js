@@ -46,7 +46,7 @@
 
     // apply relevant color to status indicator
     var sub = entry.status.split('-');
-    var color = (sub.length > 1) ? colors[sub] : colors['success'];
+    var color = (sub.length > 1) ? colors[sub[1]] : colors.success;
     $('span#run_status').addClass(color);
   }
 

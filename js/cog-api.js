@@ -388,6 +388,42 @@ function run_get(callback, callback_error, uuid) {
     return this._binary({ url }, callback);
   };
 
+  /* users */
+  COG.prototype.getUsers = function(callback) {
+    var endpoint = '/users/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getUser = function(uuid, callback) {
+    var endpoint = '/users/' + uuid + '/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getUserNames = function(callback) {
+    var endpoint = '/users/usernames/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getUserAssignmentSubmissions = function(user, uuid, callback) {
+    var endpoint = '/users/' + user + '/assignments/' + uuid + '/submissions/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getUserSubmissionRun = function(user, uuid, callback) {
+    var endpoint = '/users/' + user + '/submissions/' + uuid + '/runs/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
   /* other */
 
   COG.prototype.getTest = function(uuid, callback) {
@@ -406,8 +442,15 @@ function run_get(callback, callback_error, uuid) {
 
   /* user-specific resources */
 
-  COG.prototype.getMyAssignmentSubmission = function(uuid, callback) {
+  COG.prototype.getMyAssignmentSubmissions = function(uuid, callback) {
     var endpoint = '/my/assignments/' + uuid + '/submissions/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  }
+
+  COG.prototype.getMyIsadmin = function(callback) {
+    var endpoint = '/my/isadmin/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);
@@ -415,6 +458,13 @@ function run_get(callback, callback_error, uuid) {
 
   COG.prototype.getMySubmissionRun = function(uuid, callback) {
     var endpoint = '/my/submissions/' + uuid + '/runs/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getMyUuid = function(callback) {
+    var endpoint = '/my/useruuid/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);

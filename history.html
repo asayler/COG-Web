@@ -3,11 +3,10 @@ layout: default
 
 extra_scripts:
   - /js/history.js
-  
+
 ready_script: |
   $("li#nav_history").addClass("active");
   update_auth_state();
-  show_history();
 ---
 
 <div class="container">
@@ -16,70 +15,70 @@ ready_script: |
     <h1>View Your Previous COG Submissions</h1>
   </div>
 
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-        <h2 class="panel-title">Choose Assigment and Corresponding Test</h2>
-      </div>
-
-	  <div class="panel-body">
-		  <form class="form-horizontal" role="form" name="submitform" id="submitform" action="">
-		    <div class="form-group">
-			  <label class="col-md-2 control-label" for="assignment">Assignment:</label>
-			  <div class="col-md-10">
-			    <select class="form-control" id="assignment"
-			            name="assignment" required autofocus disabled></select>
-			  </div>
-			</div>
-			<div class="form-group">
-			  <label class="control-label col-md-2" for="test">Test:</label>
-			  <div class="col-md-10">
-			    <select class="form-control" id="test"
-			            name="test" required disabled></select>
-			  </div>
-			</div>
-
-			<div class="form-group" id="form_user">
-			  <label class="control-label col-md-2" for="user">User:</label>
-			  <div class="col-md-10">
-			    <select class="form-control" id="user"
-			            name="user" required disabled></select>
-			  </div>
-			</div>
-
-	        <div class="form-group">
-	          <div class="col-md-offset-2 col-md-10">
-	            <button class="btn btn-primary btn-block ladda-button" id="submit"
-	                    type="submit" data-style="expand-left" disabled>
-	              <span class="ladda-label">Search</span>
-	            </button>
-	          </div>
-	        </div>
-
-		  </form>
-	  </div>
-	</div>
-
-    <div class="panel panel-info">
-	  <div class="panel-heading">
-	    <h2 class="panel-title">Results</h2>
-	  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">Choose Assigment and Corresponding Test</h2>
+    </div>
 
     <div class="panel-body">
-	  <div class="table-responsive">         
-	  	  <table class="table table-hover" id="history_table">
-		    <thead>
-		      <tr>
-		        <th class="col-md-3">Time</th>
-		        <th class="col-md-2">Score out of <span id="max_score">TBD</span></th>
-		        <th class="col-md-2">Return Code</th>
-		        <th class="col-md-3">Status</th>
-		        <th class="col-md-2">More Information</th>
-		      </tr>
-		    </thead>
-		    <tbody>
-		    </tbody>
-		  </table>
-	  </div>
+      <form class="form-horizontal" role="form" name="submitform" id="submitform">
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="assignment">Assignment:</label>
+          <div class="col-md-10">
+            <select class="form-control" id="assignment" name="assignment" required autofocus disabled></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-md-2" for="test">Test:</label>
+          <div class="col-md-10">
+            <select class="form-control" id="test" name="test" required disabled></select>
+          </div>
+        </div>
+
+        <div class="form-group" id="form_user" style="display: none;">
+          <label class="control-label col-md-2" for="user">User:</label>
+          <div class="col-md-10">
+            <select class="form-control" id="user" name="user" disabled></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <button class="btn btn-primary btn-block ladda-button" id="submit" type="submit" data-style="expand-left" disabled>
+              <span class="ladda-label">Search</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h2 class="panel-title">Results</h2>
+    </div>
+
+    <div class="panel-body">
+      <div class="table-responsive">
+
+        <table class="table table-hover" id="history-table">
+          <thead>
+            <tr>
+              <th class="col-md-3">Time</th>
+              <th class="col-md-2">Score out of <span id="max_score">TBD</span></th>
+              <th class="col-md-2">Return Code</th>
+              <th class="col-md-3">Status</th>
+              <th class="col-md-2">More Information</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+      </div>
     </div>
   </div>
 
