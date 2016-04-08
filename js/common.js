@@ -13,18 +13,21 @@ function make_base_auth(username, password) {
 }
 
 function login(data, status, username) {
+    dep(`call to deprecated function \`${arguments.callee.name}\``);
     $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
     $.cookie(COOKIE_TOKEN_NAME, data.token, COOKIE_TOKEN_PARAMS);
     window.location.replace('/submit/');
 }
 
 function logout() {
+    dep(`call to deprecated function \`${arguments.callee.name}\``);
     $.removeCookie(COOKIE_TOKEN_NAME, COOKIE_TOKEN_PARAMS);
     $.removeCookie(COOKIE_USER_NAME, COOKIE_USER_PARAMS);
     window.location.replace('/login/');
 }
 
 function update_auth_state() {
+    dep(`call to deprecated function \`${arguments.callee.name}\``);
     var token = $.cookie('cog_token');
     if (token) {
 	    $("span#auth-state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));

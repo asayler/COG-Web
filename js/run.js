@@ -1,69 +1,53 @@
-var sub_uuid = null;
+/*global
+  $, cog, util, debug
+*/
 
-// Get retcode, score and status
-function show_run_info() {
-	uuid = getParameterByName('uuid');
+(function(window, document) {
 
-	$("span#run_uuid").text(uuid);
+  var log = debug('cog-web:page:run');
 
-	run_get(append_run_info, submit_error_callback, uuid);
+  $(document).ready(function() {
 
-	function append_run_info(data, status) {
-		var uuid = Object.keys(data)[0];
-		var color;
+    var uuid = util.getQueryParameter('uuid');
 
-		console.log(JSON.stringify(data));
+    log('attempting to fetch run result record for %s', uuid);
+    cog.getRun(uuid, function(err, data) {
+      if (err) {
+        log('failed to retreive run data for %s, error: %s', uuid, err);
+        return;
+      }
 
-		$("span#run_score").text(data[uuid].score);
-		$("span#run_retcode").text(data[uuid].retcode);
-		$("span#run_status").text(data[uuid].status);
-		$("pre#run_output").text(data[uuid].output);
-		$("pre#max_score").text(data[uuid].maxscore);
+      log('successfully received data for run %s', uuid);
+      displayRun(data);
+    });
 
-	    // Define colors for each type of status
-	    var colors = {
-	        text: {
-	            "success" : "text-success",
-	            "warning": "text-warning",
-	            "exception": "text-danger",
-	            "error": "text-danger"
-	        }
-	    };
+  });
 
-	    // Drop text classes before another is applied
-	    $("span#run_status").removeClass(function(index, css) {
-	        return (css.match (/(^|\s)text-\S+/g) || []).join(' ');
-	    });
+  function displayRun(meta) {
+    var uuid = Object.keys(meta)[0];
+    var entry = meta[uuid];
 
-	    // Apply relevant background color to status
-	    var sub = data[uuid].status.split('-');
-	    if (sub.length > 1) {
-	        var type = sub[1];
-	        console.log('Received completion error: ' + type);
+    log('populating page with run data for %s', uuid);
 
-	        $("span#run_status").addClass(colors.text[type]);
-	    } else {
-	        $("span#run_status").addClass(colors.text["success"]);
-	    }
-	}
-}
+    $('span#run_uuid').text(uuid);
+		$('span#run_score').text(entry.score);
+		$('span#run_retcode').text(entry.retcode);
+		$('span#run_status').text(entry.status);
+		$('pre#run-output').text(entry.output);
+		$('pre#max_score').text(entry.maxscore);
 
-// Taken from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
+    // define colors for each type of status
+    var colors = {
+      'success' : 'text-success',
+      'warning': 'text-warning',
+      'exception': 'text-danger',
+      'error': 'text-danger'
+    };
 
-    name = name.replace(/[\[\]]/g, "\\$&");
+    // apply relevant color to status indicator
+    var sub = entry.status.split('-');
+    var color = (sub.length > 1) ? colors[sub] : colors['success'];
+    $('span#run_status').addClass(color);
+  }
 
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-
-    if (!results) return null;
-    if (!results[2]) return '';
-
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-function submit_error_callback(xhr, status, error) {
-    // Log Error
-    console.log("Status: " + status, ", Error: " + error);
-}
+})(window, document);

@@ -11,14 +11,16 @@
   var authRequired = {
     '/': true,
     '/submit/': true,
-    '/history/': true
+    '/history/': true,
+    '/run/': true
   };
 
   var sub = token ? token.substring(0, 8) : undefined;
   log('requested access to `%s` with token: %s', path, sub);
+  var restricted = authRequired[path];
 
   // if no token and not at login, redirect
-  if (!token && authRequired[path]) {
+  if (!token && restricted) {
     log('unauthenticated user, redirecting to `/login/`');
 
     log('terminating load of page `%s`', path);
@@ -26,14 +28,14 @@
 
   // pages that do not require a session can be directly loaded
   } else {
-    log('access permitted to unrestricted page `%s`', path);
+    var type = restricted ? 'restricted' : 'unrestricted';
+    log('access permitted to %s page `%s`', type, path);
   }
 
   // authenticated users can be directed to the submission page
   if (token && path === '/') {
     log('active session with token %s, redirecting to `/submit/`', token);
-
-    log('terminating load of page `%s`', path);
+    log('terminating load of page `%s` if active', path);
     util.redirect('/submit/');
   }
 

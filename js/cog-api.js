@@ -264,7 +264,7 @@ function run_get(callback, callback_error, uuid) {
     this.token = options.token;
 
     var sub = this.token ? this.token.substring(0, 8) : undefined;
-    log('constructing new instance with token %s', sub);
+    log('constructing new interface object instance with token %s', sub);
   }
 
   /* internals */
