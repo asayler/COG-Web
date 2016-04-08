@@ -1,3 +1,7 @@
+/*global
+  $, debug, util
+*/
+
 (function(window, document) {
 
   var log = debug('cog-web:session');

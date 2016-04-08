@@ -1,3 +1,7 @@
+/*global
+  $, async, debug, cog
+*/
+
 var log = debug('cog-web:page:submit');
 
 $(document).ready(function() {
@@ -5,7 +9,7 @@ $(document).ready(function() {
   var select = $('select#assignment');
 
   // fetch all the submittable assignments from the server
-  cog.getSubmittableAssignments(function(err, data) {
+  cog.getAssignmentsSubmittable(function(err, data) {
     // now we have an array of assignment UUIDs
     var assignments = data.assignments;
     log('loaded %d assignment identifiers from the server', assignments.length);
@@ -24,62 +28,10 @@ $(document).ready(function() {
 
       // after receiving all the assignment objects, clear the selector
       select.empty();
-      log('populating assignment listing with entries');
+      log('populating assignment listing with received entries');
       populateAssignmentList(results);
     });
-
-    /*
-    async.map(assignments, function(uuid, fn) {
-      assignment_get(function(data, status) {
-        fn(null, data);
-      }, function() {
-        fn(true);
-      }, uuid);
-    }, function(err, results) {
-      log('received all assignment metadata from server');
-
-      // after receiving all the assignment objects, clear the selector
-      select.empty();
-      log('populating assignment listing with entries');
-      populateAssignmentList(results);
-    });
-    */
   });
-
-  /*
-  assignments_get_submitable(function(data, status) {
-
-    // now we have an array of assignment UUIDs
-    var assignments = data.assignments;
-    log('loaded %d assignment identifiers from the server', assignments.length);
-
-    // inform the user if no assignments can be currently submitted
-    if (!assignments.length) {
-      var option = $('<option>').text('No Assignments Accepting Submissions');
-      // only on initial load, no empty required
-      select.append(option);
-      return;
-    }
-
-    log('fetching metadata for individual assignments');
-    async.map(assignments, function(uuid, fn) {
-      assignment_get(function(data, status) {
-        fn(null, data);
-      }, function() {
-        fn(true);
-      }, uuid);
-    }, function(err, results) {
-      log('received all assignment metadata from server');
-
-      // after receiving all the assignment objects, clear the selector
-      select.empty();
-      log('populating assignment listing with entries');
-      populateAssignmentList(results);
-    });
-
-
-  }, () => {});
-  */
 });
 
 function populateAssignmentList(list) {
@@ -155,7 +107,7 @@ $('select#assignment').change(function() {
   var select = $('select#test');
 
   log('assignment selector changed to `%s` (%s)', text, uuid.substring(0, 8));
-  assignment_tests_get(function(data, status) {
+  cog.getAssignmentTests(uuid, function(err, data) {
     // array of test UUIDs
     var tests = data.tests;
 
@@ -178,22 +130,16 @@ $('select#assignment').change(function() {
       return;
     }
 
-    log('fetching metadata for individual assignments');
-    async.map(tests, function(uuid, fn) {
-      test_get(function(data, status) {
-        fn(null, data);
-      }, function() {
-        fn(true);
-      }, uuid);
-    }, function(err, results) {
+    log('fetching metadata for individual tests');
+    async.map(tests, cog.getTest.bind(cog), function(err, results) {
       log('received all test metadata from server');
 
       // after receiving all the test objects, clear the selector
       select.empty();
-      log('populating test listing with entries');
+      log('populating test listing with received entries');
       populateTestList(results);
     });
-  }, () => {}, uuid);
+  });
 });
 
 $('select#test').change(function() {
@@ -203,7 +149,7 @@ $('select#test').change(function() {
   log('test selector changed to `%s` (%s)', text, uuid.substring(0, 8));
 
   resetResults();
-  test_get(function(data, status) {
+  cog.getTest(uuid, function(err, data) {
     var keys = Object.keys(data);
     var uuid = keys[0];
     var test = data[uuid];
@@ -214,7 +160,7 @@ $('select#test').change(function() {
     $('input#file').prop('disabled', false);
     // enable the submit button
     $('button#submit').prop('disabled', false);
-  }, () => {}, uuid);
+  });
 });
 
 function resetResults() {
@@ -292,7 +238,7 @@ $('form#submitform').submit(function(event) {
 });
 
 function pollResults(run) {
-  run_get(function(data, status) {
+  cog.getRun(run, function(err, data) {
     // extract results from the run
     var keys = Object.keys(data);
     var uuid = keys[0];
@@ -351,5 +297,5 @@ function pollResults(run) {
     } else {
       setTimeout(pollResults, 1000);
     }
-  }, () => {}, run);
+  });
 }

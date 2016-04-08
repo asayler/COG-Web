@@ -1,3 +1,7 @@
+/*global
+  debug, btoa
+*/
+
 (function(window, document) {
 
   var log = debug('cog-web:util');

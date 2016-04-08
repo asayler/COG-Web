@@ -3,7 +3,10 @@ var COOKIE_USER_NAME = "cog_user"
 var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
 var COOKIE_TOKEN_NAME = "cog_token"
 
+var dep = debug('cog-web:deprecation');
+
 function make_base_auth(username, password) {
+  dep(`call to deprecated function \`${arguments.callee.name}\``);
     var token = username + ':' + password;
     var hash = btoa(token);
     return 'Basic ' + hash;
@@ -23,18 +26,18 @@ function logout() {
 
 function update_auth_state() {
     var token = $.cookie('cog_token');
-    if(token) {
-	    $("span#auth_state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
-	    $("button#auth_button").text("Logout");
+    if (token) {
+	    $("span#auth-state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
+	    $("button#auth-button").text("Logout");
     }
     else {
-	    $("span#auth_state").text("");
-	    $("button#auth_button").text("Login");
+	    $("span#auth-state").text("");
+	    $("button#auth-button").text("Login");
     }
 }
 
-$("button#auth_button").click(function() {
-    console.log("Clicked auth_button");
+$("button#auth-button").click(function() {
+    console.log("Clicked auth-button");
     var token = $.cookie('cog_token');
 
     if (token) {
