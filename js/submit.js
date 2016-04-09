@@ -242,16 +242,16 @@
       // define colors to be associated with each run
       var colors = {
         text: {
-          'success' : 'text-success',
-          'warning': 'text-warning',
-          'exception': 'text-danger',
-          'error': 'text-danger'
+          success: 'text-success',
+          warning: 'text-warning',
+          exception: 'text-danger',
+          error: 'text-danger'
         },
         bg: {
-          'success': '#edf7f2',
-          'warning': '#f7f7ed',
-          'exception': '#f7edf2',
-          'error': '#f7edf2'
+          success: '#edf7f2',
+          warning: '#f7f7ed',
+          exception: '#f7edf2',
+          error: '#f7edf2'
         }
       };
 

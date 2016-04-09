@@ -340,22 +340,26 @@
     });
 
     var colors = {
-      'success' : 'text-success',
-      'warning': 'text-warning',
-      'exception': 'text-danger',
-      'error': 'text-danger'
+      success: 'text-success',
+      warning: 'text-warning',
+      exception: 'text-danger',
+      error: 'text-danger'
     };
 
     var str = elements.map(function(ele) {
-      var submission = '<a href="/submission/?uuid="' + ele.submission + '">Submission</a>';
-      var run = '<a href="/run/?uuid="' + ele.uuid + '">Run</a>';
+      var submission = '<a href="/submission/?uuid=' + ele.submission + '">Submission</a>';
+      var run = '<a href="/run/?uuid=' + ele.uuid + '">Run</a>';
 
       var sub = ele.status.split('-');
       var color = (sub.length > 1) ? colors[sub[1]] : colors.success;
 
-      return '<tr><td>' + ele.mtime.toLocaleString() + '</td><td>' + ele.score + '</td><td>'
-          + ele.retcode + '</td><td class="' + color + '">' + ele.status
-          + '</td><td>' + submission + ' or ' + run + '</td></tr>';
+      return [
+        '<tr><td>' + ele.mtime.toLocaleString() + '</td>',
+        '<td>' + ele.score + '</td>',
+        '<td>' + ele.retcode + '</td>',
+        '<td class="' + color + '">' + ele.status + '</td>',
+        '<td>' + submission + ' or ' + run + '</td></tr>'
+      ].join('');
     }).join('');
 
     $('#history-table').append(str);

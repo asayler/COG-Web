@@ -1,52 +1,32 @@
-var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
-var COOKIE_USER_NAME = "cog_user"
-var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
-var COOKIE_TOKEN_NAME = "cog_token"
+/*global
+  $, debug, util, session
+*/
 
-var dep = debug('cog-web:deprecation:common');
+(function(window, document) {
 
-function make_base_auth(username, password) {
-  dep(`call to deprecated function \`${arguments.callee.name}\``);
-    var token = username + ':' + password;
-    var hash = btoa(token);
-    return 'Basic ' + hash;
-}
+  var log = debug('cog-web:common');
 
-function login(data, status, username) {
-    dep(`call to deprecated function \`${arguments.callee.name}\``);
-    $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
-    $.cookie(COOKIE_TOKEN_NAME, data.token, COOKIE_TOKEN_PARAMS);
-    window.location.replace('/submit/');
-}
+  $(document).ready(function() {
+    log('document fully loaded, now applying authenticate state markers');
 
-function logout() {
-    dep(`call to deprecated function \`${arguments.callee.name}\``);
-    $.removeCookie(COOKIE_TOKEN_NAME, COOKIE_TOKEN_PARAMS);
-    $.removeCookie(COOKIE_USER_NAME, COOKIE_USER_PARAMS);
-    window.location.replace('/login/');
-}
+    if (session.isActive()) {
+      log('user is authenticated, populating header with user information');
 
-function update_auth_state() {
-    dep(`call to deprecated function \`${arguments.callee.name}\``);
-    var token = $.cookie('cog_token');
-    if (token) {
-	    $("span#auth-state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
-	    $("button#auth-button").text("Logout");
+      $('span#auth-state').text('Logged in as ' + $.cookie('cog_user'));
+      $('button#auth-button').text('Logout');
+    } else {
+      log('user not authenticated, leaving navigation bar untouched');
     }
-    else {
-	    $("span#auth-state").text("");
-	    $("button#auth-button").text("Login");
-    }
-}
 
-$("button#auth-button").click(function() {
-    console.log("Clicked auth-button");
-    var token = $.cookie('cog_token');
+    $('button#auth-button').click(function() {
+      log('click event fired for authentication toggle button');
+      // destroy the current active user session
+      if (session.isActive()) session.destroy();
 
-    if (token) {
-        logout();
-    }
-    else {
-        window.location.replace('/login');
-    }
-});
+      // redirect regardless of authentication state
+      util.redirect('/login/');
+    });
+
+  });
+
+})(window, document);

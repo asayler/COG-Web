@@ -52,9 +52,15 @@
     $.removeCookie('cog_token', opts);
   }
 
+  function isActive() {
+    var token = $.cookie('cog_token');
+    return !!token;
+  }
+
   window.session = {
     authUser,
-    destroy
+    destroy,
+    isActive
   };
 
 })(window, document);
