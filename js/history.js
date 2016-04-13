@@ -332,9 +332,8 @@ function update_usr_list(data, status) {
 }
 
 function select_admin(data, status) {
-    var select = $("select#user"); //option:[value="+ data.useruuid + ']').val();
+    var select = $("select#user");
     $("#user").val(data.useruuid);
-    //select.val(select.children('option:[value='+ data.useruuid + ']').val());
     select.change();
     select.prop("disabled", false);
     $("button#submit").prop("disabled", false);
