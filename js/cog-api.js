@@ -51,7 +51,7 @@
     xhr.send();
   };
 
-  /* assignment accessors */
+  /* assignments */
 
   COG.prototype.getAssignments = function(callback) {
     var endpoint = '/assignments/';
@@ -81,14 +81,14 @@
     return this._ajax({ url }, callback);
   };
 
-  COG.prototype.getAssignmentSubmission = function(uuid, callback) {
+  COG.prototype.getAssignmentSubmissions = function(uuid, callback) {
     var endpoint = '/assignments/' + uuid + '/submissions/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);
   };
 
-  /* submission accessors */
+  /* submissions */
 
   COG.prototype.getSubmissions = function(callback) {
     var endpoint = '/submissions/';
@@ -111,8 +111,7 @@
     return this._ajax({ url }, callback);
   };
 
-  // TODO: review function name
-  COG.prototype.getSubmissionTest = function(callback) {
+  COG.prototype.getSubmissionRuns = function(callback) {
     var endpoint = '/submissions/' + uuid + '/runs/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
@@ -120,6 +119,13 @@
   };
 
   /* files */
+
+  COG.prototype.getFiles = function(callback) {
+    var endpoint = '/files/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
 
   COG.prototype.getFile = function(uuid, callback) {
     var endpoint = '/files/' + uuid + '/';
@@ -136,8 +142,16 @@
   };
 
   /* users */
+
   COG.prototype.getUsers = function(callback) {
     var endpoint = '/users/';
+    var url = this.url + endpoint;
+    log('dispatching request to `%s`', endpoint);
+    return this._ajax({ url }, callback);
+  };
+
+  COG.prototype.getUsersNamelist = function(callback) {
+    var endpoint = '/users/usernames/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);
@@ -150,13 +164,6 @@
     return this._ajax({ url }, callback);
   };
 
-  COG.prototype.getUserNames = function(callback) {
-    var endpoint = '/users/usernames/';
-    var url = this.url + endpoint;
-    log('dispatching request to `%s`', endpoint);
-    return this._ajax({ url }, callback);
-  };
-
   COG.prototype.getUserAssignmentSubmissions = function(user, uuid, callback) {
     var endpoint = '/users/' + user + '/assignments/' + uuid + '/submissions/';
     var url = this.url + endpoint;
@@ -164,7 +171,7 @@
     return this._ajax({ url }, callback);
   };
 
-  COG.prototype.getUserSubmissionRun = function(user, uuid, callback) {
+  COG.prototype.getUserSubmissionRuns = function(user, uuid, callback) {
     var endpoint = '/users/' + user + '/submissions/' + uuid + '/runs/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
@@ -203,14 +210,14 @@
     return this._ajax({ url }, callback);
   };
 
-  COG.prototype.getMySubmissionRun = function(uuid, callback) {
+  COG.prototype.getMySubmissionRuns = function(uuid, callback) {
     var endpoint = '/my/submissions/' + uuid + '/runs/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);
     return this._ajax({ url }, callback);
   };
 
-  COG.prototype.getMyUuid = function(callback) {
+  COG.prototype.getMyUniqueId = function(callback) {
     var endpoint = '/my/useruuid/';
     var url = this.url + endpoint;
     log('dispatching request to `%s`', endpoint);

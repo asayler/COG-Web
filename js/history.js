@@ -16,7 +16,7 @@
 
     async.waterfall([
       function(callback) {
-        cog.getMyUuid(function(err, data) {
+        cog.getMyUniqueId(function(err, data) {
           callback(err, data.useruuid);
         });
       }, function(uuid, callback) {
@@ -134,7 +134,7 @@
       if (!admin) return;
       log('current user is of type administrator, loading usernames');
 
-      cog.getUserNames(function(err, data) {
+      cog.getUsersNamelist(function(err, data) {
         var usernames = data.usernames;
         var uuids = Object.keys(usernames);
         log('loaded %d username(s) from the server', uuids.length);
@@ -172,8 +172,8 @@
 
     var getAssignmentSubmissions = admin ? cog.getUserAssignmentSubmissions.bind(cog, user)
                                : cog.getMyAssignmentSubmissions.bind(cog);
-    var getSubmissionRun = admin ? cog.getUserSubmissionRun.bind(cog, user)
-                        : cog.getMySubmissionRun.bind(cog);
+    var getSubmissionRuns = admin ? cog.getUserSubmissionRuns.bind(cog, user)
+                        : cog.getMySubmissionRuns.bind(cog);
 
     if (admin) {
       log('currently viewing runs as administrator for user: `%s`', user.substring(0, 8));
@@ -197,7 +197,7 @@
       }
 
       log('fetching run listings for individual submissions (%d total)', submissions.length);
-      async.map(submissions, getSubmissionRun, function(err, results) {
+      async.map(submissions, getSubmissionRuns, function(err, results) {
         log('received all submission run listings from server');
 
         log('flattening all runs into single listing');
