@@ -16,10 +16,12 @@
 
     async.waterfall([
       function(callback) {
+        log('requesting unique identifier for current session from server');
         cog.getMyUniqueId(function(err, data) {
           callback(err, data.useruuid);
         });
       }, function(uuid, callback) {
+        log('requesting user administrator state from server');
         cog.getMyIsadmin(function(err, data) {
           callback(err, { uuid, admin: data.isadmin });
         });
@@ -95,8 +97,6 @@
 
         // remove the max score, as there is no specified test
         $('span#max_score').text(0);
-        // disable the file uploader
-        $('input#file').prop('disabled', true);
         // disable the submit button
         $('button#submit').prop('disabled', true);
         return;
@@ -171,9 +171,9 @@
     $('#history-table tbody tr').remove();
 
     var getAssignmentSubmissions = admin ? cog.getUserAssignmentSubmissions.bind(cog, user)
-                               : cog.getMyAssignmentSubmissions.bind(cog);
+                                         : cog.getMyAssignmentSubmissions.bind(cog);
     var getSubmissionRuns = admin ? cog.getUserSubmissionRuns.bind(cog, user)
-                        : cog.getMySubmissionRuns.bind(cog);
+                                  : cog.getMySubmissionRuns.bind(cog);
 
     if (admin) {
       log('currently viewing runs as administrator for user: `%s`', user.substring(0, 8));

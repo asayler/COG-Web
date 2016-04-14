@@ -7,7 +7,11 @@
   var log = debug('cog-web:common');
 
   $(document).ready(function() {
-    log('document fully loaded, now applying authenticate state markers');
+    log('document fully loaded, now updating navigation bar active marker');
+
+    var path = window.location.pathname;
+    var li = $('a[href="' + path + '"]').parent();
+    li.toggleClass('active');
 
     if (session.isActive()) {
       log('user is authenticated, populating header with user information');
