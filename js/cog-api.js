@@ -16,15 +16,16 @@
   /* internals */
 
   COG.prototype._ajax = function(options, callback) {
+    var self = this;
     // options.url = this.url + options.url;
-    options.beforeSend = options.beforeSend || ((xhr) => {
-      var header = util.generateBasicAuth(this.token);
+    options.beforeSend = options.beforeSend || function(xhr) {
+      var header = util.generateBasicAuth(self.token);
       xhr.setRequestHeader('Authorization', header);
-    });
+    };
 
-    return $.ajax(options).then((data, status, xhr) => {
+    return $.ajax(options).then(function(data, status, xhr) {
       callback(null, data, status, xhr);
-    }, (xhr, status, err) => {
+    }, function(xhr, status, err) {
       callback(err, null, status, xhr);
     });
   };
