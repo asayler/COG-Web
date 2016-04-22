@@ -1,68 +1,65 @@
 ---
 ---
 
-var ladda_login = null;
+(function() {
 
-function login_onload() {
-    console.log("Loaded Login");
-    ladda_login = $("button#login").ladda();
-}
+  var log = debug('cog-web:page:login');
+  var button = $('#login-button').ladda();
 
-function try_login(username, password) {
+  log('initialization of page complete');
 
-    console.log("Attempting Login: " + username);
+  $('#login-form').submit(function(event) {
+    event.preventDefault();
 
-    $.ajax({
-        type: "GET",
-        url: "{{ site.cog_api_url }}/my/token/",
-        async: true,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', make_base_auth(username, password));
-        },
-        success: function(data, status) {
-            login(data, status, username)
-        },
-        error: login_failure
+    // collect field data from the form
+    var username = $('#username').val();
+    var password = $('#password').val();
+
+    log('attempting to authenticate user `%s`', username);
+
+    // start the loading ticker and indicate that the form is busy
+    button.ladda('start');
+    $('#login-button').children('span.ladda-label').html('Logging In...');
+
+    var req = authenticate(username, password);
+
+    // run on successful sign-on
+    req.done(function(data, status, xhr) {
+      var token = data.token;
+      log('authenticated success, received token `%s`', token);
+
+      session.authUser(username, token);
+      util.redirect('/submit/');
     });
 
-}
+    // run in the rest of cases
+    req.error(function(xhr, status, err) {
+      log('user failed to authenticate, error: `%s`', error);
 
-function login_failure(xhr, status, error) {
+      // stop the loading ticker
+      button.ladda('stop');
+      $('#login-button').children('span.ladda-label').html('Login');
 
-    // Stop Login Button Animation
-    ladda_login.ladda('stop');
-    $("button#login").children("span.ladda-label").html("Login");
+      // display the error to the user
+      $('#login-error').text('Login Failed: ' + err);
 
-    // Log Error
-    console.log("Status: " + status, ", Error: " + error);
-    $("#username").val("");
-    $("#password").val("");
-    $("#loginerror").text("Login Failed: " + error);
+      // clear the password field and set focus to it
+      $('#password').val('').focus();
+    });
+  });
 
-}
+  function authenticate(username, password) {
+    // use the basic authentication header
+    var basicAuth = function(xhr) {
+      var val = util.generateBasicAuth(username, password);
+      xhr.setRequestHeader('Authorization', val);
+    };
 
-$("form#loginform").submit(function() {
+    return $.ajax({
+      type: 'GET',
+      url: '{{ site.cog_api_url }}/my/token/',
+      beforeSend: basicAuth
+    });
+  }
 
-    // Start Login Button Animation
-    ladda_login.ladda('start');
-    $("button#login").children("span.ladda-label").html("Logging In...");
-
-    // Get Input
-    var username = $("input#username").val();
-    var password = $("input#password").val();
-
-    // Validate Data
-    if(username.length == 0) {
-	    $("#loginerror").text("Username Required");
-	    return false;
-    }
-    if(password.length == 0) {
-	    $("#loginerror").text("Password Required");
-	    return false;
-    }
-
-    // Attempt Login
-    try_login(username, password);
-    return false
-    
-});
+})();

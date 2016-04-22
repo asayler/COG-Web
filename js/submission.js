@@ -1,88 +1,92 @@
-// Get retcode, score and status
-function show_files() {
-    var sub_uuid = getParameterByName('uuid');
-    $("span#sub_uuid").text(sub_uuid);
+---
+---
 
-    var find_files = function(data, status) {
-        var array_length = data.files.length;
-        var file_array = [];
+/*global
+  $, cog, util, debug, async
+*/
 
-        $.each(data.files, function(index, uuid) {
-            file_get(function(data, status) {
-                var f = {};
+(function(window, document) {
 
-                var uuid = Object.keys(data)[0];
-                var file_name = data[uuid].name;
+  var log = debug('cog-web:page:submission');
 
-                f.name = file_name;
-                f.uuid = uuid;
+  $(document).ready(function() {
 
-                file_array.push(f);
+    var uuid = util.getQueryParameter('uuid');
+    log('attempting to fetch file listing for submission %s', uuid);
 
-                // Account for length of the array
-                if (file_array.length === array_length) {
-                    sort_files(file_array);
-                }
-            }, submit_error_callback, uuid);
-        });
-    };
+    cog.getSubmissionFiles(uuid, function(err, data) {
+      // contains an array of file UUIDs
+      var files = data.files;
+      log('loaded %d file identifier(s) from the server', files.length);
 
-    submission_get_files(find_files, submit_error_callback, sub_uuid);
-}
+      log('fetching metadata for individual files');
+      async.map(files, cog.getFile.bind(cog), function(err, results) {
+        log('received all file metadata from server');
+        log('populating file listing with received entries');
+        populateFileList(results);
+      });
 
-function sort_files(file_array) {
-    file_array.sort(function(x, y) {
-        return x.name.localeCompare(y.name);
     });
 
-    $.each(file_array, function(index, fle) {
-        var url = file_get_uri(fle.uuid);
-        $("#files_table").append("<tr><td>" + fle.name + '</td><td><a class="auth-dl" href="' + url + '" data-name="' + fle.name + '" data-uuid="' + fle.uuid + '">' + fle.uuid + "<a></td></tr>");
-    });
+  });
 
-    console.log("Sorted Table");
-}
-
-// Taken from http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-
-    name = name.replace(/[\[\]]/g, "\\$&");
-
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-
-    if (!results) return null;
-    if (!results[2]) return '';
-
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-function submit_error_callback(xhr, status, error) {
-    // Log Error
-    console.log("Status: " + status, ", Error: " + error);
-}
-
-$('#files_table').delegate('.auth-dl', 'click', function(event) {
+  // delegate events off of the table for dynamic handling
+  $('#files_table').delegate('.auth-dl', 'click', function(event) {
     event.preventDefault();
 
     var uuid = $(this).data('uuid');
     var name = $(this).data('name');
 
-    file_get_contents(function(blob) {
-        var url = window.URL.createObjectURL(blob);
+    log('used requested binary contents for file %s', uuid);
+    cog.getFileContents(uuid, function(err, blob) {
+      log('blob received from server, converting to URL object');
+      var url = window.URL.createObjectURL(blob);
 
-        var a = document.createElement('a');
-        a.style = 'display: none';
-        a.href = url;
-        a.download = name;
+      var a = document.createElement('a');
+      a.style = 'display: none';
+      a.href = url;
+      a.download = name;
 
-        $(document.body).append(a);
-        a.click();
+      $(document.body).append(a);
+      a.click();
+      log('triggering download dialogue for file %s', uuid);
 
-        // permit time for deferred events to execute
-        setTimeout(function() {
-          window.URL.revokeObjectURL(url);
-        }, 100);
-    }, submit_error_callback, uuid);
-});
+      // permit time for deferred events to execute
+      setTimeout(function() {
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    });
+  });
+
+  function populateFileList(list) {
+    var elements = [];
+
+    list.forEach(function(entry) {
+      var uuid = Object.keys(entry)[0];
+      var meta = entry[uuid];
+
+      elements.push({ uuid, name: meta.name });
+    });
+
+    elements.sort(function(a, b) {
+      return a.name.localeCompare(b.name);
+    });
+
+    // interpolating the API URL outside of a constants file is not ideal
+    // TODO: fix this
+    var str = elements.map(function(ele) {
+      return [
+        '<tr><td>',
+        ele.name,
+        '</td><td><a class="auth-dl" href="',
+        '{{ site.cog_api_url }}/files/', ele.uuid, '/contents/',
+        '" data-name="', ele.name,
+        '" data-uuid="', ele.uuid,
+        '">', ele.uuid, '</a></td></tr>'
+      ].join('');
+    }).join('');
+
+    $('#files-table').append(str);
+  }
+
+})(window, document);
