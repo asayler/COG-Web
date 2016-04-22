@@ -1,131 +1,36 @@
-var SUBMIT_URL = "/submit";
-var LOGIN_URL = "/login";
-var HISTORY_URL = "/history";
-var SUBMISSION_URL = "/submission";
-var DOWNLOAD_URL = "/download";
-var RUN_URL = "/run";
-var COOKIE_USER_PARAMS = { expires: 1, path: '/', secure: false }
-var COOKIE_USER_NAME = "cog_user"
-var COOKIE_TOKEN_PARAMS = { expires: 1, path: '/', secure: false }
-var COOKIE_TOKEN_NAME = "cog_token"
+/*global
+  $, debug, util, session
+*/
 
-function make_base_auth(username, password) {
-    var token = username + ':' + password;
-    var hash = btoa(token);
-    return 'Basic ' + hash;
-}
+(function(window, document) {
 
-function token_redirect() {
-    var token = $.cookie('cog_token');
-    if(token) {
-        if(document.URL.indexOf(SUBMIT_URL) == -1) {
-            console.log("Redirecting to " + SUBMIT_URL + " from " + document.URL);
-            window.location.replace(SUBMIT_URL); 
-        }
-    }
-    else {
-        if(document.URL.indexOf(LOGIN_URL) == -1) {
-            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
-            window.location.replace(LOGIN_URL); 
-        }
-    }
-}
+  var log = debug('cog-web:common');
 
-function history_token_redirect() {
-    var token = $.cookie('cog_token');
-    if(token) {
-        if (document.URL.indexOf(HISTORY_URL) == -1) {
-            console.log("Redirecting to " + HISTORY_URL + " from " + document.URL);
-            window.location.replace(HISTORY_URL);
-        }
-    }
-    else {
-        if(document.URL.indexOf(LOGIN_URL) == -1) {
-            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
-            window.location.replace(LOGIN_URL); 
-        }
-    }
-}
+  $(document).ready(function() {
+    log('document fully loaded, now updating navigation bar active marker');
 
-function submission_token_redirect() {
-    var token = $.cookie('cog_token');
-    if(token) {
-        if (document.URL.indexOf(SUBMISSION_URL) == -1) {
-            console.log("Redirecting to " + SUBMISSION_URL + " from " + document.URL);
-            window.location.replace(SUBMISSION_URL);
-        }
-    }
-    else {
-        if(document.URL.indexOf(LOGIN_URL) == -1) {
-            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
-            window.location.replace(LOGIN_URL); 
-        }
-    }
-}
+    var path = window.location.pathname;
+    var li = $('a[href="' + path + '"]').parent();
+    li.toggleClass('active');
 
-function run_token_redirect() {
-    var token = $.cookie('cog_token');
-    if(token) {
-        if (document.URL.indexOf(RUN_URL) == -1) {
-            console.log("Redirecting to " + RUN_URL + " from " + document.URL);
-            window.location.replace(RUN_URL);
-        }
-    }
-    else {
-        if(document.URL.indexOf(LOGIN_URL) == -1) {
-            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
-            window.location.replace(LOGIN_URL); 
-        }
-    }
-}
+    if (session.isActive()) {
+      log('user is authenticated, populating header with user information');
 
-function download_token_redirect() {
-    var token = $.cookie('cog_token');
-    if(token) {
-        if (document.URL.indexOf(DOWNLOAD_URL) == -1) {
-            console.log("Redirecting to " + DOWNLOAD_URL + " from " + document.URL);
-            window.location.replace(DOWNLOAD_URL);
-        }
+      $('span#auth-state').text('Logged in as ' + $.cookie('cog_user'));
+      $('button#auth-button').text('Logout');
+    } else {
+      log('user not authenticated, leaving navigation bar untouched');
     }
-    else {
-        if(document.URL.indexOf(LOGIN_URL) == -1) {
-            console.log("Redirecting to " + LOGIN_URL + " from " + document.URL);
-            window.location.replace(LOGIN_URL); 
-        }
-    }
-}
 
-function login(data, status, username) {
-    $.cookie(COOKIE_USER_NAME, username, COOKIE_USER_PARAMS);
-    $.cookie(COOKIE_TOKEN_NAME, data.token, COOKIE_TOKEN_PARAMS);
-    window.location.replace(SUBMIT_URL);
-}
+    $('button#auth-button').click(function() {
+      log('click event fired for authentication toggle button');
+      // destroy the current active user session
+      if (session.isActive()) session.destroy();
 
-function logout() {
-    $.removeCookie(COOKIE_TOKEN_NAME, COOKIE_TOKEN_PARAMS);
-    $.removeCookie(COOKIE_USER_NAME, COOKIE_USER_PARAMS);
-    window.location.replace(LOGIN_URL);
-}
+      // redirect regardless of authentication state
+      util.redirect('/login/');
+    });
 
-function update_auth_state() {
-    var token = $.cookie('cog_token');
-    if(token) {
-	    $("span#auth_state").text("Logged in as " + $.cookie(COOKIE_USER_NAME));
-	    $("button#auth_button").text("Logout");
-    }
-    else {
-	    $("span#auth_state").text("");
-	    $("button#auth_button").text("Login");
-    }
-}
+  });
 
-$("button#auth_button").click(function() {
-    console.log("Clicked auth_button");
-    var token = $.cookie('cog_token');
-    if(token) {
-	logout();
-    }
-    else {
-        window.location.replace(LOGIN_URL); 
-    }
-});
+})(window, document);

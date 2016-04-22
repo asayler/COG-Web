@@ -3,35 +3,31 @@ layout: default
 
 extra_scripts:
   - /js/submission.js
-
-ready_script: |
-  submission_token_redirect();
-  update_auth_state();
-  show_files();
 ---
+
 <div class="container">
   <div class="page-header">
     <h1>Submission Details</h1>
   </div>
 
   <div class="panel panel-primary">
+    <div class="panel-body results">
+      <div class="table-responsive">
 
-      <div class="panel-body results">
-	    <div class="table-responsive">         
-	  	  <table class="table table-hover" id="files_table">
-		    <thead>
-		      <tr>
-		        <th class="col-md-4">File Name</th>
-		        <th class="col-md-8">Download Link</th>
-		      </tr>
-		    </thead>
-		    <tbody>
-		    </tbody>
-		  </table>
-	    </div>
+        <table class="table table-hover" id="files-table">
+          <thead>
+            <tr>
+              <th class="col-md-4">File Name</th>
+              <th class="col-md-8">Download Link</th>
+            </tr>
+          </thead>
 
-        </div>
-      </div> 
+          <tbody>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
   </div>
 
 </div>
