@@ -1,7 +1,7 @@
 COG-Web: COG Web Interface
 ================================
 
-By [Andy Sayler](https://www.andysayler.com) and [Others](CONTRIBUTORS)
+By [Andy Sayler](https://www.andysayler.com) and [Others](CONTRIBUTORS)  
 University of Colorado, Boulder
 
 Status
