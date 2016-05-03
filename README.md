@@ -1,7 +1,7 @@
 COG-Web: COG Web Interface
 ================================
 
-By [Andy Sayler](https://www.andysayler.com)  
+By [Andy Sayler](https://www.andysayler.com) and [Others](CONTRIBUTORS)
 University of Colorado, Boulder
 
 Status
@@ -24,6 +24,29 @@ Setup
 This site is built using Jekyll. To setup, copy `_defaults.yml` to
 `_config.yml`. Then run `jekyll build`. Then deploy the resulting
 `_site` directory.
+
+Debug
+-----
+
+To enable debug logging, set the following in your JS console:
+
+```
+localStorage.debug = 'cog-web:*';
+```
+
+Dependencies
+------------
+
+The COG Web interface uses the following:
+
++ [Bundler](http://bundler.io/)
++ [Bootstrap](https://getbootstrap.com/)
++ [Jekyll](https://jekyllrb.com/)
++ [jQuery](https://jquery.com/)
++ [jquery.cookie](https://github.com/carhartl/jquery-cookie)
++ [debug.js](https://github.com/visionmedia/debug)
++ [async.js](https://github.com/caolan/async)
++ [ladda.js](https://github.com/hakimel/Ladda)
 
 Related
 -------
