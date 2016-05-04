@@ -34,7 +34,7 @@
 
     // run in the rest of cases
     req.error(function(xhr, status, err) {
-      log('user failed to authenticate, error: `%s`', error);
+      log('user failed to authenticate, error: `%s`', err);
 
       // stop the loading ticker
       button.ladda('stop');
