@@ -131,7 +131,10 @@
       $('button#submit').prop('disabled', false);
 
       // for non-administrators, stop execution here
-      if (!admin) return;
+      if (!admin) {
+      	if(util.getHashParameter('search')) $("#submitform").submit();
+      	return;
+      }
       log('current user is of type administrator, loading usernames');
 
       cog.getUsersNamelist(function(err, data) {
@@ -150,6 +153,7 @@
     var uuid = sel.val();
     var text = sel.text();
     log('user selector changed to `%s` (%s)', text, uuid.substring(0, 8));
+	if(util.getHashParameter('search')) $("#submitform").submit();
   });
 
   $('form#submitform').submit(function(event) {
@@ -347,7 +351,8 @@
 
   function populateResultTable(list) {
   	location.hash = "asn=" + $('select#assignment').val() + "&tst=" +
-  					 $('select#test').val() + "&usr=" + $('select#user').val();
+  					 $('select#test').val() + "&usr=" + $('select#user').val()
+  					 + "&search=1";
     var elements = [];
 
     list.forEach(function(entry) {
