@@ -35,10 +35,26 @@
     return val;
   }
 
+  function getHashParameter(key) {
+    var myHash = location.hash;
+    key = key.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp('[#&]' + key + '(=([^&#]*)|&|#|$)', 'i');
+
+    var results = regex.exec(myHash);
+    if (!results) return null;
+    if (!results[2]) return null;
+
+    var val = decodeURIComponent(results[2].replace(/\+/g, ' '));
+    log('parsing querystring parameter `%s`, found value %s', key, val);
+
+    return val;
+  }
+
   window.util = {
     redirect,
     generateBasicAuth,
-    getQueryParameter
+    getQueryParameter,
+    getHashParameter
   };
 
 })(window, document);

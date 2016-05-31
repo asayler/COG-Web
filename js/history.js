@@ -131,7 +131,10 @@
       $('button#submit').prop('disabled', false);
 
       // for non-administrators, stop execution here
-      if (!admin) return;
+      if (!admin) {
+      	if(util.getHashParameter('search')) $("#submitform").submit();
+      	return;
+      }
       log('current user is of type administrator, loading usernames');
 
       cog.getUsersNamelist(function(err, data) {
@@ -150,6 +153,7 @@
     var uuid = sel.val();
     var text = sel.text();
     log('user selector changed to `%s` (%s)', text, uuid.substring(0, 8));
+	if(util.getHashParameter('search')) $("#submitform").submit();
   });
 
   $('form#submitform').submit(function(event) {
@@ -250,7 +254,16 @@
 
     // select the last entry, as per old behavior
     // select.find('option:last').attr('selected', 'selected');
-    select.val(select.children('option:last').val());
+    // select.val(select.children('option:last').val());
+    var asn_uuid = util.getHashParameter('asn');
+    log('attempting to fetch run result record for %s', asn_uuid);
+
+    if (asn_uuid == null) {
+    	select.val(select.children('option:last').val());
+    }
+    else {
+	    select.val(asn_uuid);
+    }
     select.change();
   }
 
@@ -283,6 +296,17 @@
 
     // select the last entry (assumed most recent)
     select.val(select.children('option:last').val());
+    var tst_uuid = util.getHashParameter('tst');
+
+    if (tst_uuid == null) {
+    	select.val(select.children('option:last').val());
+    }
+    else {
+		select.val(tst_uuid);
+		if(select.val() == null) {
+			select.val(select.children('option:last').val());
+		}
+    }
     select.change();
   }
 
@@ -313,11 +337,22 @@
     select.prop('disabled', false);
 
     // select the currently logged in user
-    select.val(uuid);
+    var usr_uuid = util.getHashParameter('usr');
+    log('attempting to fetch run result record for %s', usr_uuid);
+    
+    if (usr_uuid == null) {
+    	select.val(uuid);
+    }
+    else {
+	    select.val(usr_uuid);
+    }
     select.change();
   }
 
   function populateResultTable(list) {
+  	location.hash = "asn=" + $('select#assignment').val() + "&tst=" +
+  					 $('select#test').val() + "&usr=" + $('select#user').val()
+  					 + "&search=1";
     var elements = [];
 
     list.forEach(function(entry) {
@@ -346,7 +381,7 @@
       error: 'text-danger'
     };
 
-    var str = elements.map(function(ele) {
+    var str = elements.map(function(ele) { 
       var submission = '<a href="/submission/?uuid=' + ele.submission + '">Submission</a>';
       var run = '<a href="/run/?uuid=' + ele.uuid + '">Run</a>';
 
