@@ -20,8 +20,13 @@
       // inform the user if no assignments can be currently submitted
       if (!assignments.length) {
         var option = $('<option>').text('No Assignments Accepting Submissions');
-        // only on initial load, no empty required
-        select.append(option);
+        // clear out loading text and add single option
+        select.empty().append(option);
+
+        // repeat with test selector
+        var toption = $('<option>').text('No Tests Available');
+        $('select#test').empty().append(toption);
+
         return;
       }
 
